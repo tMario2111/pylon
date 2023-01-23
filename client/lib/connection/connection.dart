@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -9,6 +10,10 @@ import 'package:pointycastle/random/fortuna_random.dart' as pc;
 import 'package:encrypt/encrypt.dart' as enc;
 
 import 'consts.dart';
+import 'packet_processing.dart';
+import 'crypto_util.dart';
+import '../proto/clientmessage.pb.dart';
+import '../proto/servermessage.pb.dart';
 
 enum _MessagePart {
   key,
@@ -19,29 +24,47 @@ enum _MessagePart {
 }
 
 class Connection {
-  late final Socket _socket;
+  static late final Socket _socket;
 
-  final _random = Random.secure();
+  static final _random = Random.secure();
 
-  late final pc.RSAPrivateKey _privateKey;
-  late final pc.RSAPublicKey _publicKey;
-  late final pc.RSAPublicKey _serverPublicKey;
+  static final _controller = StreamController<List<int>>();
 
-  var _data = <int>[];
-  var _messagePart = _MessagePart.key;
-  var _bytesToRead = rsaCipherLength;
+  static late final pc.RSAPrivateKey _privateKey;
+  static late final pc.RSAPublicKey _publicKey;
+  static late final pc.RSAPublicKey _serverPublicKey;
 
-  var _aesKey = Uint8List(rsaCipherLength);
-  var _aesIv = Uint8List(rsaCipherLength);
-  var _signature = Uint8List(rsaCipherLength);
+  static var _data = <int>[];
+  static var _messagePart = _MessagePart.key;
+  static var _bytesToRead = rsaCipherLength;
 
-  Future<void> init() async {
+  static var _aesKey = Uint8List(rsaCipherLength);
+  static var _aesIv = Uint8List(rsaCipherLength);
+  static var _signature = Uint8List(rsaCipherLength);
+
+  static Future<void> init() async {
     _generateKeys();
 
     _socket = await Socket.connect('localhost', 8888);
+
+    _socket.add(
+      processClientMessage(
+        ClientMessage(
+          sendPublicKey: ClientMessage_sendPublicKey(
+            keyPem: encodePublicKeyToPemPKCS1(_publicKey),
+          ),
+        ),
+        _privateKey,
+        _serverPublicKey,
+      ),
+    );
+
+    _socket.listen(_read);
+
+    _controller.stream.listen(_processIncomingMessages);
   }
 
-  void _generateKeys() {
+  static void _generateKeys() {
     final fortunaRandom = pc.SecureRandom('Fortuna');
     fortunaRandom.seed(pc.KeyParameter(
         Uint8List.fromList(List.generate(32, (_) => _random.nextInt(256)))));
@@ -61,7 +84,7 @@ class Connection {
         enc.RSAKeyParser().parse(serverRsaPublicKey) as pc.RSAPublicKey;
   }
 
-  void _read(List<int> event) {
+  static void _read(List<int> event) {
     _data += event;
     while (_data.length >= _bytesToRead) {
       int newBytesToRead;
@@ -96,8 +119,42 @@ class Connection {
           break;
 
         case _MessagePart.content:
+          final output = unprocessServerMessage(
+            _aesKey,
+            _aesIv,
+            _signature,
+            Uint8List.fromList(_data.sublist(0, _bytesToRead)),
+            _privateKey,
+            _serverPublicKey,
+          );
+
+          if (output != null) {
+            _controller.add(output);
+          }
+
+          _messagePart = _MessagePart.key;
+          newBytesToRead = rsaCipherLength;
           break;
       }
+
+      _data = _data.sublist(_bytesToRead);
+      _bytesToRead = newBytesToRead;
+    }
+  }
+
+  static void _processIncomingMessages(List<int> event) {
+    final message = ServerMessage.fromBuffer(event);
+    if (message.hasGreetBack()) {
+      print(message.ensureGreetBack().content);
+      _socket.add(
+        processClientMessage(
+            ClientMessage(
+                greet: ClientMessage_Greet(
+              content: "It does work!",
+            )),
+            _privateKey,
+            _serverPublicKey),
+      );
     }
   }
 }

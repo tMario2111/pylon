@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   pointycastle: ^3.6.2
   encrypt: ^5.0.1
+  protobuf: ^2.1.0
 
 dev_dependencies:
   flutter_test:

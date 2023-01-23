@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../connection/connection.dart';
+
 class StartupRoute extends StatefulWidget {
   const StartupRoute({super.key});
 
@@ -13,7 +15,7 @@ class _StartupRouteState extends State<StartupRoute> {
   }
 
   void _startupTasks() async {
-    await Future.delayed(const Duration(seconds: 60));
+    Connection.init();
   }
 
   @override
