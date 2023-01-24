@@ -1,12 +1,15 @@
 package server
 
 import (
+	"bytes"
+	"compress/zlib"
 	"crypto"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
+	"io"
 	pb "pylon/proto"
 
 	"github.com/zenazn/pkcs7pad"
@@ -40,6 +43,17 @@ func unprocessClientMessage(key []byte, iv []byte, signature []byte, content []b
 	plaintext, err = pkcs7pad.Unpad(plaintext)
 	if err != nil {
 		return nil, err
+	}
+
+	// Decompression
+	{
+		buf := bytes.NewBuffer(plaintext)
+		r, err := zlib.NewReader(buf)
+		if err != nil {
+			return nil, err
+		}
+		io.Copy(buf, r)
+		plaintext = buf.Bytes()
 	}
 
 	if clientPublicKey != nil {
@@ -76,6 +90,15 @@ func processServerMessage(message *pb.ServerMessage, clientPublicKey *rsa.Public
 	signature, err := rsa.SignPKCS1v15(rand.Reader, serverPrivateKey, crypto.SHA256, sum)
 	if err != nil {
 		println(err.Error())
+	}
+
+	// Compression
+	{
+		var buf bytes.Buffer
+		writer := zlib.NewWriter(&buf)
+		writer.Write(serialized)
+		writer.Close()
+		serialized = buf.Bytes()
 	}
 
 	serialized = pkcs7pad.Pad(serialized, aes.BlockSize)

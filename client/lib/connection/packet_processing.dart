@@ -6,8 +6,10 @@ import 'package:pointycastle/asymmetric/rsa.dart' as pc;
 import 'package:pointycastle/digests/sha256.dart' as pc;
 import 'package:pointycastle/pointycastle.dart' as pc;
 import 'package:pointycastle/signers/rsa_signer.dart' as pc;
-import 'package:pylon/proto/clientmessage.pb.dart';
 
+import 'package:archive/archive.dart';
+
+import 'package:pylon/proto/clientmessage.pb.dart';
 import 'crypto_util.dart';
 import 'consts.dart';
 
@@ -32,11 +34,14 @@ Uint8List? unprocessServerMessage(
         null,
       ),
     );
-  final output = aesDecrypter.process(content);
+  var output = aesDecrypter.process(content);
 
   final signature = pc.RSASignature(rawSignature);
   final verifier = pc.RSASigner(pc.SHA256Digest(), '0609608648016503040201')
     ..init(false, pc.PublicKeyParameter<pc.RSAPublicKey>(serverPublicKey));
+
+  // Decompress
+  output = Uint8List.fromList(const ZLibDecoder().decodeBytes(output));
 
   try {
     verifier.verifySignature(output, signature);
@@ -54,11 +59,14 @@ List<int> processClientMessage(
 ) {
   final random = Random.secure();
 
-  final serialized = message.writeToBuffer();
+  var serialized = message.writeToBuffer();
 
   final signer = pc.RSASigner(pc.SHA256Digest(), '0609608648016503040201')
     ..init(true, pc.PrivateKeyParameter<pc.RSAPrivateKey>(clientPrivateKey));
   final signature = signer.generateSignature(serialized);
+
+  // Compress
+  serialized = Uint8List.fromList(const ZLibEncoder().encode(serialized));
 
   var key = Uint8List(aesKeyLength);
   for (int i = 0; i < key.length; i++) {
