@@ -24,25 +24,41 @@ enum _MessagePart {
 }
 
 class Connection {
-  static late final Socket _socket;
+  static final Connection _instance = Connection._internal();
 
-  static final _random = Random.secure();
+  factory Connection() {
+    return _instance;
+  }
 
-  static final _controller = StreamController<List<int>>();
+  Connection._internal() {
+    _init();
+  }
 
-  static late final pc.RSAPrivateKey _privateKey;
-  static late final pc.RSAPublicKey _publicKey;
-  static late final pc.RSAPublicKey _serverPublicKey;
+  late final Socket _socket;
 
-  static var _data = <int>[];
-  static var _messagePart = _MessagePart.key;
-  static var _bytesToRead = rsaCipherLength;
+  final _random = Random.secure();
 
-  static var _aesKey = Uint8List(rsaCipherLength);
-  static var _aesIv = Uint8List(rsaCipherLength);
-  static var _signature = Uint8List(rsaCipherLength);
+  final _controller = StreamController<List<int>>();
 
-  static Future<void> init() async {
+  late final pc.RSAPrivateKey _privateKey;
+  late final pc.RSAPublicKey _publicKey;
+  late final pc.RSAPublicKey _serverPublicKey;
+
+  var _data = <int>[];
+  var _messagePart = _MessagePart.key;
+  var _bytesToRead = rsaCipherLength;
+
+  var _aesKey = Uint8List(rsaCipherLength);
+  var _aesIv = Uint8List(rsaCipherLength);
+  var _signature = Uint8List(rsaCipherLength);
+
+  var _connected = false;
+
+  bool isConnected() {
+    return _connected;
+  }
+
+  Future<void> _init() async {
     _generateKeys();
 
     _socket = await Socket.connect('localhost', 8888);
@@ -64,7 +80,7 @@ class Connection {
     _controller.stream.listen(_processIncomingMessages);
   }
 
-  static void _generateKeys() {
+  void _generateKeys() {
     final fortunaRandom = pc.SecureRandom('Fortuna');
     fortunaRandom.seed(pc.KeyParameter(
         Uint8List.fromList(List.generate(32, (_) => _random.nextInt(256)))));
@@ -84,7 +100,7 @@ class Connection {
         enc.RSAKeyParser().parse(serverRsaPublicKey) as pc.RSAPublicKey;
   }
 
-  static void _read(List<int> event) {
+  void _read(List<int> event) {
     _data += event;
     while (_data.length >= _bytesToRead) {
       int newBytesToRead;
@@ -142,19 +158,10 @@ class Connection {
     }
   }
 
-  static void _processIncomingMessages(List<int> event) {
+  void _processIncomingMessages(List<int> event) {
     final message = ServerMessage.fromBuffer(event);
     if (message.hasGreetBack()) {
-      print(message.ensureGreetBack().content);
-      _socket.add(
-        processClientMessage(
-            ClientMessage(
-                greet: ClientMessage_Greet(
-              content: "It does work!",
-            )),
-            _privateKey,
-            _serverPublicKey),
-      );
+      _connected = true;
     }
   }
 }

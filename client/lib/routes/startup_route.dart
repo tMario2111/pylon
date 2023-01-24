@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../connection/connection.dart';
+
+import 'login_route.dart';
 
 class StartupRoute extends StatefulWidget {
   const StartupRoute({super.key});
@@ -11,11 +15,18 @@ class StartupRoute extends StatefulWidget {
 
 class _StartupRouteState extends State<StartupRoute> {
   _StartupRouteState() {
-    _startupTasks();
+    Connection();
+    _finishLoading();
   }
 
-  void _startupTasks() async {
-    Connection.init();
+  void _finishLoading() async {
+    while (!Connection().isConnected()) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+    if (mounted) {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: ((context) => const LoginRoute())));
+    }
   }
 
   @override
