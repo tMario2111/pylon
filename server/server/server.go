@@ -168,15 +168,7 @@ func (server *Server) processIncomingMessages() {
 			println(err.Error())
 		}
 		switch t := message.Variant.(type) {
-		case *pb.ClientMessage_Greet_:
-			println("Got ", t.Greet.Content)
-			if messageContainer.publicKey == nil {
-				// TODO: Handle this scenario
-				println("The client never exchanged his public key with the server!")
-				return
-			}
-		case *pb.ClientMessage_GreetWithId_:
-		case *pb.ClientMessage_SendPublicKey:
+		case *pb.ClientMessage_SendPublicKey_:
 			block, _ := pem.Decode([]byte(t.SendPublicKey.KeyPem))
 			*messageContainer.publicKey, err = x509.ParsePKCS1PublicKey(block.Bytes)
 			if err != nil {
@@ -185,8 +177,8 @@ func (server *Server) processIncomingMessages() {
 			}
 			println("Key exchange successful")
 			newMessage, err := processServerMessage(&pb.ServerMessage{
-				Variant: &pb.ServerMessage_GreetBack_{
-					GreetBack: &pb.ServerMessage_GreetBack{Content: "End to end encrypted"}}},
+				Variant: &pb.ServerMessage_ConfirmKeyExchange_{
+					ConfirmKeyExchange: &pb.ServerMessage_ConfirmKeyExchange{}}},
 				*messageContainer.publicKey, server.privateKey)
 			if err != nil {
 				log.Println(err.Error())

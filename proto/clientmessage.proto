@@ -1,0 +1,17 @@
+syntax = "proto3";
+package main;
+
+option go_package = "/proto";
+
+message ClientMessage {
+
+    message SendPublicKey {
+        string key_pem = 1;
+    }
+    message Dummy {}
+
+    oneof variant {
+        SendPublicKey send_public_key = 1;
+        Dummy dummy = 2;
+    }
+}

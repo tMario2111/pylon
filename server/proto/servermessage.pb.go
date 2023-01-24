@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.21.12
-// source: servermessage.proto
+// source: proto/servermessage.proto
 
 package proto
 
@@ -27,15 +27,15 @@ type ServerMessage struct {
 
 	// Types that are assignable to Variant:
 	//
-	//	*ServerMessage_GreetBack_
-	//	*ServerMessage_EncryptedGreet_
+	//	*ServerMessage_ConfirmKeyExchange_
+	//	*ServerMessage_Dummy_
 	Variant isServerMessage_Variant `protobuf_oneof:"variant"`
 }
 
 func (x *ServerMessage) Reset() {
 	*x = ServerMessage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_servermessage_proto_msgTypes[0]
+		mi := &file_proto_servermessage_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -48,7 +48,7 @@ func (x *ServerMessage) String() string {
 func (*ServerMessage) ProtoMessage() {}
 
 func (x *ServerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_servermessage_proto_msgTypes[0]
+	mi := &file_proto_servermessage_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -61,7 +61,7 @@ func (x *ServerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerMessage.ProtoReflect.Descriptor instead.
 func (*ServerMessage) Descriptor() ([]byte, []int) {
-	return file_servermessage_proto_rawDescGZIP(), []int{0}
+	return file_proto_servermessage_proto_rawDescGZIP(), []int{0}
 }
 
 func (m *ServerMessage) GetVariant() isServerMessage_Variant {
@@ -71,16 +71,16 @@ func (m *ServerMessage) GetVariant() isServerMessage_Variant {
 	return nil
 }
 
-func (x *ServerMessage) GetGreetBack() *ServerMessage_GreetBack {
-	if x, ok := x.GetVariant().(*ServerMessage_GreetBack_); ok {
-		return x.GreetBack
+func (x *ServerMessage) GetConfirmKeyExchange() *ServerMessage_ConfirmKeyExchange {
+	if x, ok := x.GetVariant().(*ServerMessage_ConfirmKeyExchange_); ok {
+		return x.ConfirmKeyExchange
 	}
 	return nil
 }
 
-func (x *ServerMessage) GetEncryptedGreet() *ServerMessage_EncryptedGreet {
-	if x, ok := x.GetVariant().(*ServerMessage_EncryptedGreet_); ok {
-		return x.EncryptedGreet
+func (x *ServerMessage) GetDummy() *ServerMessage_Dummy {
+	if x, ok := x.GetVariant().(*ServerMessage_Dummy_); ok {
+		return x.Dummy
 	}
 	return nil
 }
@@ -89,43 +89,41 @@ type isServerMessage_Variant interface {
 	isServerMessage_Variant()
 }
 
-type ServerMessage_GreetBack_ struct {
-	GreetBack *ServerMessage_GreetBack `protobuf:"bytes,1,opt,name=greet_back,json=greetBack,proto3,oneof"`
+type ServerMessage_ConfirmKeyExchange_ struct {
+	ConfirmKeyExchange *ServerMessage_ConfirmKeyExchange `protobuf:"bytes,1,opt,name=confirm_key_exchange,json=confirmKeyExchange,proto3,oneof"`
 }
 
-type ServerMessage_EncryptedGreet_ struct {
-	EncryptedGreet *ServerMessage_EncryptedGreet `protobuf:"bytes,2,opt,name=encrypted_greet,json=encryptedGreet,proto3,oneof"`
+type ServerMessage_Dummy_ struct {
+	Dummy *ServerMessage_Dummy `protobuf:"bytes,2,opt,name=dummy,proto3,oneof"`
 }
 
-func (*ServerMessage_GreetBack_) isServerMessage_Variant() {}
+func (*ServerMessage_ConfirmKeyExchange_) isServerMessage_Variant() {}
 
-func (*ServerMessage_EncryptedGreet_) isServerMessage_Variant() {}
+func (*ServerMessage_Dummy_) isServerMessage_Variant() {}
 
-type ServerMessage_GreetBack struct {
+type ServerMessage_ConfirmKeyExchange struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	Content string `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
 }
 
-func (x *ServerMessage_GreetBack) Reset() {
-	*x = ServerMessage_GreetBack{}
+func (x *ServerMessage_ConfirmKeyExchange) Reset() {
+	*x = ServerMessage_ConfirmKeyExchange{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_servermessage_proto_msgTypes[1]
+		mi := &file_proto_servermessage_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *ServerMessage_GreetBack) String() string {
+func (x *ServerMessage_ConfirmKeyExchange) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ServerMessage_GreetBack) ProtoMessage() {}
+func (*ServerMessage_ConfirmKeyExchange) ProtoMessage() {}
 
-func (x *ServerMessage_GreetBack) ProtoReflect() protoreflect.Message {
-	mi := &file_servermessage_proto_msgTypes[1]
+func (x *ServerMessage_ConfirmKeyExchange) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_servermessage_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -136,45 +134,34 @@ func (x *ServerMessage_GreetBack) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ServerMessage_GreetBack.ProtoReflect.Descriptor instead.
-func (*ServerMessage_GreetBack) Descriptor() ([]byte, []int) {
-	return file_servermessage_proto_rawDescGZIP(), []int{0, 0}
+// Deprecated: Use ServerMessage_ConfirmKeyExchange.ProtoReflect.Descriptor instead.
+func (*ServerMessage_ConfirmKeyExchange) Descriptor() ([]byte, []int) {
+	return file_proto_servermessage_proto_rawDescGZIP(), []int{0, 0}
 }
 
-func (x *ServerMessage_GreetBack) GetContent() string {
-	if x != nil {
-		return x.Content
-	}
-	return ""
-}
-
-type ServerMessage_EncryptedGreet struct {
+type ServerMessage_Dummy struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	Content []byte `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
-	Key     []byte `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
-	Iv      []byte `protobuf:"bytes,3,opt,name=iv,proto3" json:"iv,omitempty"`
 }
 
-func (x *ServerMessage_EncryptedGreet) Reset() {
-	*x = ServerMessage_EncryptedGreet{}
+func (x *ServerMessage_Dummy) Reset() {
+	*x = ServerMessage_Dummy{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_servermessage_proto_msgTypes[2]
+		mi := &file_proto_servermessage_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *ServerMessage_EncryptedGreet) String() string {
+func (x *ServerMessage_Dummy) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ServerMessage_EncryptedGreet) ProtoMessage() {}
+func (*ServerMessage_Dummy) ProtoMessage() {}
 
-func (x *ServerMessage_EncryptedGreet) ProtoReflect() protoreflect.Message {
-	mi := &file_servermessage_proto_msgTypes[2]
+func (x *ServerMessage_Dummy) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_servermessage_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -185,79 +172,53 @@ func (x *ServerMessage_EncryptedGreet) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ServerMessage_EncryptedGreet.ProtoReflect.Descriptor instead.
-func (*ServerMessage_EncryptedGreet) Descriptor() ([]byte, []int) {
-	return file_servermessage_proto_rawDescGZIP(), []int{0, 1}
+// Deprecated: Use ServerMessage_Dummy.ProtoReflect.Descriptor instead.
+func (*ServerMessage_Dummy) Descriptor() ([]byte, []int) {
+	return file_proto_servermessage_proto_rawDescGZIP(), []int{0, 1}
 }
 
-func (x *ServerMessage_EncryptedGreet) GetContent() []byte {
-	if x != nil {
-		return x.Content
-	}
-	return nil
-}
+var File_proto_servermessage_proto protoreflect.FileDescriptor
 
-func (x *ServerMessage_EncryptedGreet) GetKey() []byte {
-	if x != nil {
-		return x.Key
-	}
-	return nil
-}
-
-func (x *ServerMessage_EncryptedGreet) GetIv() []byte {
-	if x != nil {
-		return x.Iv
-	}
-	return nil
-}
-
-var File_servermessage_proto protoreflect.FileDescriptor
-
-var file_servermessage_proto_rawDesc = []byte{
-	0x0a, 0x13, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x04, 0x6d, 0x61, 0x69, 0x6e, 0x22, 0x9e, 0x02, 0x0a, 0x0d,
-	0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x3e, 0x0a,
-	0x0a, 0x67, 0x72, 0x65, 0x65, 0x74, 0x5f, 0x62, 0x61, 0x63, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x4d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x47, 0x72, 0x65, 0x65, 0x74, 0x42, 0x61, 0x63, 0x6b,
-	0x48, 0x00, 0x52, 0x09, 0x67, 0x72, 0x65, 0x65, 0x74, 0x42, 0x61, 0x63, 0x6b, 0x12, 0x4d, 0x0a,
-	0x0f, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x65, 0x64, 0x5f, 0x67, 0x72, 0x65, 0x65, 0x74,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x53, 0x65,
-	0x72, 0x76, 0x65, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x45, 0x6e, 0x63, 0x72,
-	0x79, 0x70, 0x74, 0x65, 0x64, 0x47, 0x72, 0x65, 0x65, 0x74, 0x48, 0x00, 0x52, 0x0e, 0x65, 0x6e,
-	0x63, 0x72, 0x79, 0x70, 0x74, 0x65, 0x64, 0x47, 0x72, 0x65, 0x65, 0x74, 0x1a, 0x25, 0x0a, 0x09,
-	0x47, 0x72, 0x65, 0x65, 0x74, 0x42, 0x61, 0x63, 0x6b, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e,
-	0x74, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74,
-	0x65, 0x6e, 0x74, 0x1a, 0x4c, 0x0a, 0x0e, 0x45, 0x6e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x65, 0x64,
-	0x47, 0x72, 0x65, 0x65, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12,
-	0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x03, 0x6b, 0x65,
-	0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x76, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x02, 0x69,
-	0x76, 0x42, 0x09, 0x0a, 0x07, 0x76, 0x61, 0x72, 0x69, 0x61, 0x6e, 0x74, 0x42, 0x08, 0x5a, 0x06,
+var file_proto_servermessage_proto_rawDesc = []byte{
+	0x0a, 0x19, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x6d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x04, 0x6d, 0x61, 0x69,
+	0x6e, 0x22, 0xc8, 0x01, 0x0a, 0x0d, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x12, 0x5a, 0x0a, 0x14, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x5f, 0x6b,
+	0x65, 0x79, 0x5f, 0x65, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x26, 0x2e, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x4b, 0x65,
+	0x79, 0x45, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x48, 0x00, 0x52, 0x12, 0x63, 0x6f, 0x6e,
+	0x66, 0x69, 0x72, 0x6d, 0x4b, 0x65, 0x79, 0x45, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x12,
+	0x31, 0x0a, 0x05, 0x64, 0x75, 0x6d, 0x6d, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19,
+	0x2e, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x2e, 0x44, 0x75, 0x6d, 0x6d, 0x79, 0x48, 0x00, 0x52, 0x05, 0x64, 0x75, 0x6d,
+	0x6d, 0x79, 0x1a, 0x14, 0x0a, 0x12, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x4b, 0x65, 0x79,
+	0x45, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x1a, 0x07, 0x0a, 0x05, 0x44, 0x75, 0x6d, 0x6d,
+	0x79, 0x42, 0x09, 0x0a, 0x07, 0x76, 0x61, 0x72, 0x69, 0x61, 0x6e, 0x74, 0x42, 0x08, 0x5a, 0x06,
 	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_servermessage_proto_rawDescOnce sync.Once
-	file_servermessage_proto_rawDescData = file_servermessage_proto_rawDesc
+	file_proto_servermessage_proto_rawDescOnce sync.Once
+	file_proto_servermessage_proto_rawDescData = file_proto_servermessage_proto_rawDesc
 )
 
-func file_servermessage_proto_rawDescGZIP() []byte {
-	file_servermessage_proto_rawDescOnce.Do(func() {
-		file_servermessage_proto_rawDescData = protoimpl.X.CompressGZIP(file_servermessage_proto_rawDescData)
+func file_proto_servermessage_proto_rawDescGZIP() []byte {
+	file_proto_servermessage_proto_rawDescOnce.Do(func() {
+		file_proto_servermessage_proto_rawDescData = protoimpl.X.CompressGZIP(file_proto_servermessage_proto_rawDescData)
 	})
-	return file_servermessage_proto_rawDescData
+	return file_proto_servermessage_proto_rawDescData
 }
 
-var file_servermessage_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_servermessage_proto_goTypes = []interface{}{
-	(*ServerMessage)(nil),                // 0: main.ServerMessage
-	(*ServerMessage_GreetBack)(nil),      // 1: main.ServerMessage.GreetBack
-	(*ServerMessage_EncryptedGreet)(nil), // 2: main.ServerMessage.EncryptedGreet
+var file_proto_servermessage_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_proto_servermessage_proto_goTypes = []interface{}{
+	(*ServerMessage)(nil),                    // 0: main.ServerMessage
+	(*ServerMessage_ConfirmKeyExchange)(nil), // 1: main.ServerMessage.ConfirmKeyExchange
+	(*ServerMessage_Dummy)(nil),              // 2: main.ServerMessage.Dummy
 }
-var file_servermessage_proto_depIdxs = []int32{
-	1, // 0: main.ServerMessage.greet_back:type_name -> main.ServerMessage.GreetBack
-	2, // 1: main.ServerMessage.encrypted_greet:type_name -> main.ServerMessage.EncryptedGreet
+var file_proto_servermessage_proto_depIdxs = []int32{
+	1, // 0: main.ServerMessage.confirm_key_exchange:type_name -> main.ServerMessage.ConfirmKeyExchange
+	2, // 1: main.ServerMessage.dummy:type_name -> main.ServerMessage.Dummy
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -265,13 +226,13 @@ var file_servermessage_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_servermessage_proto_init() }
-func file_servermessage_proto_init() {
-	if File_servermessage_proto != nil {
+func init() { file_proto_servermessage_proto_init() }
+func file_proto_servermessage_proto_init() {
+	if File_proto_servermessage_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_servermessage_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_servermessage_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ServerMessage); i {
 			case 0:
 				return &v.state
@@ -283,8 +244,8 @@ func file_servermessage_proto_init() {
 				return nil
 			}
 		}
-		file_servermessage_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServerMessage_GreetBack); i {
+		file_proto_servermessage_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ServerMessage_ConfirmKeyExchange); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -295,8 +256,8 @@ func file_servermessage_proto_init() {
 				return nil
 			}
 		}
-		file_servermessage_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServerMessage_EncryptedGreet); i {
+		file_proto_servermessage_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ServerMessage_Dummy); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -308,26 +269,26 @@ func file_servermessage_proto_init() {
 			}
 		}
 	}
-	file_servermessage_proto_msgTypes[0].OneofWrappers = []interface{}{
-		(*ServerMessage_GreetBack_)(nil),
-		(*ServerMessage_EncryptedGreet_)(nil),
+	file_proto_servermessage_proto_msgTypes[0].OneofWrappers = []interface{}{
+		(*ServerMessage_ConfirmKeyExchange_)(nil),
+		(*ServerMessage_Dummy_)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_servermessage_proto_rawDesc,
+			RawDescriptor: file_proto_servermessage_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_servermessage_proto_goTypes,
-		DependencyIndexes: file_servermessage_proto_depIdxs,
-		MessageInfos:      file_servermessage_proto_msgTypes,
+		GoTypes:           file_proto_servermessage_proto_goTypes,
+		DependencyIndexes: file_proto_servermessage_proto_depIdxs,
+		MessageInfos:      file_proto_servermessage_proto_msgTypes,
 	}.Build()
-	File_servermessage_proto = out.File
-	file_servermessage_proto_rawDesc = nil
-	file_servermessage_proto_goTypes = nil
-	file_servermessage_proto_depIdxs = nil
+	File_proto_servermessage_proto = out.File
+	file_proto_servermessage_proto_rawDesc = nil
+	file_proto_servermessage_proto_goTypes = nil
+	file_proto_servermessage_proto_depIdxs = nil
 }

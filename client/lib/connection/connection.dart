@@ -66,7 +66,7 @@ class Connection {
     _socket.add(
       processClientMessage(
         ClientMessage(
-          sendPublicKey: ClientMessage_sendPublicKey(
+          sendPublicKey: ClientMessage_SendPublicKey(
             keyPem: encodePublicKeyToPemPKCS1(_publicKey),
           ),
         ),
@@ -160,7 +160,7 @@ class Connection {
 
   void _processIncomingMessages(List<int> event) {
     final message = ServerMessage.fromBuffer(event);
-    if (message.hasGreetBack()) {
+    if (message.hasConfirmKeyExchange()) {
       _connected = true;
     }
   }

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package main;
+
+option go_package = "/proto";
+
+message ServerMessage {
+
+    message ConfirmKeyExchange {}
+    message Dummy {}
+
+    oneof variant {
+        ConfirmKeyExchange confirm_key_exchange = 1;
+        Dummy dummy = 2;
+    }
+}
