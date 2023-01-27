@@ -13,8 +13,9 @@ const ServerMessage$json = const {
   '1': 'ServerMessage',
   '2': const [
     const {'1': 'confirm_key_exchange', '3': 1, '4': 1, '5': 11, '6': '.main.ServerMessage.ConfirmKeyExchange', '9': 0, '10': 'confirmKeyExchange'},
+    const {'1': 'confirm_log_in', '3': 2, '4': 1, '5': 11, '6': '.main.ServerMessage.ConfirmLogIn', '9': 0, '10': 'confirmLogIn'},
   ],
-  '3': const [ServerMessage_ConfirmKeyExchange$json],
+  '3': const [ServerMessage_ConfirmKeyExchange$json, ServerMessage_ConfirmLogIn$json],
   '8': const [
     const {'1': 'variant'},
   ],
@@ -25,5 +26,13 @@ const ServerMessage_ConfirmKeyExchange$json = const {
   '1': 'ConfirmKeyExchange',
 };
 
+@$core.Deprecated('Use serverMessageDescriptor instead')
+const ServerMessage_ConfirmLogIn$json = const {
+  '1': 'ConfirmLogIn',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 5, '10': 'id'},
+  ],
+};
+
 /// Descriptor for `ServerMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List serverMessageDescriptor = $convert.base64Decode('Cg1TZXJ2ZXJNZXNzYWdlEloKFGNvbmZpcm1fa2V5X2V4Y2hhbmdlGAEgASgLMiYubWFpbi5TZXJ2ZXJNZXNzYWdlLkNvbmZpcm1LZXlFeGNoYW5nZUgAUhJjb25maXJtS2V5RXhjaGFuZ2UaFAoSQ29uZmlybUtleUV4Y2hhbmdlQgkKB3ZhcmlhbnQ=');
+final $typed_data.Uint8List serverMessageDescriptor = $convert.base64Decode('Cg1TZXJ2ZXJNZXNzYWdlEloKFGNvbmZpcm1fa2V5X2V4Y2hhbmdlGAEgASgLMiYubWFpbi5TZXJ2ZXJNZXNzYWdlLkNvbmZpcm1LZXlFeGNoYW5nZUgAUhJjb25maXJtS2V5RXhjaGFuZ2USSAoOY29uZmlybV9sb2dfaW4YAiABKAsyIC5tYWluLlNlcnZlck1lc3NhZ2UuQ29uZmlybUxvZ0luSABSDGNvbmZpcm1Mb2dJbhoUChJDb25maXJtS2V5RXhjaGFuZ2UaHgoMQ29uZmlybUxvZ0luEg4KAmlkGAEgASgFUgJpZEIJCgd2YXJpYW50');

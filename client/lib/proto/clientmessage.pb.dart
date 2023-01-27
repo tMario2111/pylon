@@ -56,29 +56,97 @@ class ClientMessage_SendPublicKey extends $pb.GeneratedMessage {
   void clearKeyPem() => clearField(1);
 }
 
+class ClientMessage_LogIn extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.LogIn', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'email')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'password')
+    ..hasRequiredFields = false
+  ;
+
+  ClientMessage_LogIn._() : super();
+  factory ClientMessage_LogIn({
+    $core.String? email,
+    $core.String? password,
+  }) {
+    final _result = create();
+    if (email != null) {
+      _result.email = email;
+    }
+    if (password != null) {
+      _result.password = password;
+    }
+    return _result;
+  }
+  factory ClientMessage_LogIn.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientMessage_LogIn.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ClientMessage_LogIn clone() => ClientMessage_LogIn()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ClientMessage_LogIn copyWith(void Function(ClientMessage_LogIn) updates) => super.copyWith((message) => updates(message as ClientMessage_LogIn)) as ClientMessage_LogIn; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_LogIn create() => ClientMessage_LogIn._();
+  ClientMessage_LogIn createEmptyInstance() => create();
+  static $pb.PbList<ClientMessage_LogIn> createRepeated() => $pb.PbList<ClientMessage_LogIn>();
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_LogIn getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientMessage_LogIn>(create);
+  static ClientMessage_LogIn? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get email => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set email($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasEmail() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearEmail() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get password => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set password($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPassword() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPassword() => clearField(2);
+}
+
 enum ClientMessage_Variant {
   sendPublicKey, 
+  logIn, 
   notSet
 }
 
 class ClientMessage extends $pb.GeneratedMessage {
   static const $core.Map<$core.int, ClientMessage_Variant> _ClientMessage_VariantByTag = {
     1 : ClientMessage_Variant.sendPublicKey,
+    2 : ClientMessage_Variant.logIn,
     0 : ClientMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1])
+    ..oo(0, [1, 2])
     ..aOM<ClientMessage_SendPublicKey>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendPublicKey', subBuilder: ClientMessage_SendPublicKey.create)
+    ..aOM<ClientMessage_LogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'logIn', subBuilder: ClientMessage_LogIn.create)
     ..hasRequiredFields = false
   ;
 
   ClientMessage._() : super();
   factory ClientMessage({
     ClientMessage_SendPublicKey? sendPublicKey,
+    ClientMessage_LogIn? logIn,
   }) {
     final _result = create();
     if (sendPublicKey != null) {
       _result.sendPublicKey = sendPublicKey;
+    }
+    if (logIn != null) {
+      _result.logIn = logIn;
     }
     return _result;
   }
@@ -116,5 +184,16 @@ class ClientMessage extends $pb.GeneratedMessage {
   void clearSendPublicKey() => clearField(1);
   @$pb.TagNumber(1)
   ClientMessage_SendPublicKey ensureSendPublicKey() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  ClientMessage_LogIn get logIn => $_getN(1);
+  @$pb.TagNumber(2)
+  set logIn(ClientMessage_LogIn v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasLogIn() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLogIn() => clearField(2);
+  @$pb.TagNumber(2)
+  ClientMessage_LogIn ensureLogIn() => $_ensure(1);
 }
 

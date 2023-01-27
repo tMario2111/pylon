@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:pylon/main.dart';
 
 import '../constants.dart';
 
 class PylonTextField extends StatelessWidget {
   const PylonTextField({
     required this.label,
+    this.controller,
+    this.obscureText = false,
     super.key,
   });
 
   final String label;
+  final TextEditingController? controller;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +33,9 @@ class PylonTextField extends StatelessWidget {
               ),
             ),
           ),
-          child: const TextField(
-            style: TextStyle(color: Constants.mainColor),
-            decoration: InputDecoration(
+          child: TextField(
+            style: const TextStyle(color: Constants.mainColor),
+            decoration: const InputDecoration(
               isDense: true,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
@@ -40,6 +43,8 @@ class PylonTextField extends StatelessWidget {
               focusedErrorBorder: InputBorder.none,
             ),
             cursorColor: Constants.mainColor,
+            obscureText: obscureText,
+            controller: controller,
           ),
         ),
       ],

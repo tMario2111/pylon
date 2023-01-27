@@ -38,29 +38,83 @@ class ServerMessage_ConfirmKeyExchange extends $pb.GeneratedMessage {
   static ServerMessage_ConfirmKeyExchange? _defaultInstance;
 }
 
+class ServerMessage_ConfirmLogIn extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.ConfirmLogIn', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
+  ServerMessage_ConfirmLogIn._() : super();
+  factory ServerMessage_ConfirmLogIn({
+    $core.int? id,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory ServerMessage_ConfirmLogIn.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ServerMessage_ConfirmLogIn.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ServerMessage_ConfirmLogIn clone() => ServerMessage_ConfirmLogIn()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ServerMessage_ConfirmLogIn copyWith(void Function(ServerMessage_ConfirmLogIn) updates) => super.copyWith((message) => updates(message as ServerMessage_ConfirmLogIn)) as ServerMessage_ConfirmLogIn; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_ConfirmLogIn create() => ServerMessage_ConfirmLogIn._();
+  ServerMessage_ConfirmLogIn createEmptyInstance() => create();
+  static $pb.PbList<ServerMessage_ConfirmLogIn> createRepeated() => $pb.PbList<ServerMessage_ConfirmLogIn>();
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_ConfirmLogIn getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServerMessage_ConfirmLogIn>(create);
+  static ServerMessage_ConfirmLogIn? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get id => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set id($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
 enum ServerMessage_Variant {
   confirmKeyExchange, 
+  confirmLogIn, 
   notSet
 }
 
 class ServerMessage extends $pb.GeneratedMessage {
   static const $core.Map<$core.int, ServerMessage_Variant> _ServerMessage_VariantByTag = {
     1 : ServerMessage_Variant.confirmKeyExchange,
+    2 : ServerMessage_Variant.confirmLogIn,
     0 : ServerMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1])
+    ..oo(0, [1, 2])
     ..aOM<ServerMessage_ConfirmKeyExchange>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmKeyExchange', subBuilder: ServerMessage_ConfirmKeyExchange.create)
+    ..aOM<ServerMessage_ConfirmLogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmLogIn', subBuilder: ServerMessage_ConfirmLogIn.create)
     ..hasRequiredFields = false
   ;
 
   ServerMessage._() : super();
   factory ServerMessage({
     ServerMessage_ConfirmKeyExchange? confirmKeyExchange,
+    ServerMessage_ConfirmLogIn? confirmLogIn,
   }) {
     final _result = create();
     if (confirmKeyExchange != null) {
       _result.confirmKeyExchange = confirmKeyExchange;
+    }
+    if (confirmLogIn != null) {
+      _result.confirmLogIn = confirmLogIn;
     }
     return _result;
   }
@@ -98,5 +152,16 @@ class ServerMessage extends $pb.GeneratedMessage {
   void clearConfirmKeyExchange() => clearField(1);
   @$pb.TagNumber(1)
   ServerMessage_ConfirmKeyExchange ensureConfirmKeyExchange() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  ServerMessage_ConfirmLogIn get confirmLogIn => $_getN(1);
+  @$pb.TagNumber(2)
+  set confirmLogIn(ServerMessage_ConfirmLogIn v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasConfirmLogIn() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConfirmLogIn() => clearField(2);
+  @$pb.TagNumber(2)
+  ServerMessage_ConfirmLogIn ensureConfirmLogIn() => $_ensure(1);
 }
 

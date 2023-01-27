@@ -58,6 +58,10 @@ class Connection {
     return _connected;
   }
 
+  void sendMessage(ClientMessage message) {
+    _socket.add(processClientMessage(message, _privateKey, _serverPublicKey));
+  }
+
   Future<void> _init() async {
     _generateKeys();
 

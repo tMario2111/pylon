@@ -13,8 +13,9 @@ const ClientMessage$json = const {
   '1': 'ClientMessage',
   '2': const [
     const {'1': 'send_public_key', '3': 1, '4': 1, '5': 11, '6': '.main.ClientMessage.SendPublicKey', '9': 0, '10': 'sendPublicKey'},
+    const {'1': 'log_in', '3': 2, '4': 1, '5': 11, '6': '.main.ClientMessage.LogIn', '9': 0, '10': 'logIn'},
   ],
-  '3': const [ClientMessage_SendPublicKey$json],
+  '3': const [ClientMessage_SendPublicKey$json, ClientMessage_LogIn$json],
   '8': const [
     const {'1': 'variant'},
   ],
@@ -28,5 +29,14 @@ const ClientMessage_SendPublicKey$json = const {
   ],
 };
 
+@$core.Deprecated('Use clientMessageDescriptor instead')
+const ClientMessage_LogIn$json = const {
+  '1': 'LogIn',
+  '2': const [
+    const {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+    const {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
+  ],
+};
+
 /// Descriptor for `ClientMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List clientMessageDescriptor = $convert.base64Decode('Cg1DbGllbnRNZXNzYWdlEksKD3NlbmRfcHVibGljX2tleRgBIAEoCzIhLm1haW4uQ2xpZW50TWVzc2FnZS5TZW5kUHVibGljS2V5SABSDXNlbmRQdWJsaWNLZXkaKAoNU2VuZFB1YmxpY0tleRIXCgdrZXlfcGVtGAEgASgJUgZrZXlQZW1CCQoHdmFyaWFudA==');
+final $typed_data.Uint8List clientMessageDescriptor = $convert.base64Decode('Cg1DbGllbnRNZXNzYWdlEksKD3NlbmRfcHVibGljX2tleRgBIAEoCzIhLm1haW4uQ2xpZW50TWVzc2FnZS5TZW5kUHVibGljS2V5SABSDXNlbmRQdWJsaWNLZXkSMgoGbG9nX2luGAIgASgLMhkubWFpbi5DbGllbnRNZXNzYWdlLkxvZ0luSABSBWxvZ0luGigKDVNlbmRQdWJsaWNLZXkSFwoHa2V5X3BlbRgBIAEoCVIGa2V5UGVtGjkKBUxvZ0luEhQKBWVtYWlsGAEgASgJUgVlbWFpbBIaCghwYXNzd29yZBgCIAEoCVIIcGFzc3dvcmRCCQoHdmFyaWFudA==');

@@ -6,10 +6,13 @@ option go_package = "/proto";
 message ServerMessage {
 
     message ConfirmKeyExchange {}
-    message Dummy {}
+
+    message ConfirmLogIn {
+        int32 id = 1;
+    }
 
     oneof variant {
         ConfirmKeyExchange confirm_key_exchange = 1;
-        Dummy dummy = 2;
+        ConfirmLogIn confirm_log_in = 2;
     }
 }

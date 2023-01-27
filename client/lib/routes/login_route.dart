@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pylon/connection/connection.dart';
+import 'package:pylon/proto/clientmessage.pb.dart';
 
 import '../constants.dart';
 
@@ -13,6 +15,9 @@ class LoginRoute extends StatefulWidget {
 }
 
 class _LoginRouteState extends State<LoginRoute> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,16 +49,23 @@ class _LoginRouteState extends State<LoginRoute> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 250.0,
-                    child: PylonTextField(label: 'EMAIL'),
+                    child: PylonTextField(
+                      label: 'EMAIL',
+                      controller: _emailController,
+                    ),
                   ),
                   const SizedBox(
                     height: 15.0,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 250.0,
-                    child: PylonTextField(label: 'PASSWORD'),
+                    child: PylonTextField(
+                      label: 'PASSWORD',
+                      controller: _passwordController,
+                      obscureText: true,
+                    ),
                   ),
                   const SizedBox(
                     height: 20.0,
@@ -63,7 +75,16 @@ class _LoginRouteState extends State<LoginRoute> {
                     height: 50.0,
                     child: PylonButton(
                       label: "Log in",
-                      onPressed: () {},
+                      onPressed: () {
+                        Connection().sendMessage(
+                          ClientMessage(
+                            logIn: ClientMessage_LogIn(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(
