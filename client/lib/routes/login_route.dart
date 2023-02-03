@@ -7,6 +7,8 @@ import '../constants.dart';
 import '../widgets/pylon_text_field.dart';
 import '../widgets/pylon_button.dart';
 
+import 'register_route.dart';
+
 class LoginRoute extends StatefulWidget {
   const LoginRoute({super.key});
 
@@ -21,7 +23,8 @@ class _LoginRouteState extends State<LoginRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Constants.backgroundColor,
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -104,7 +107,14 @@ class _LoginRouteState extends State<LoginRoute> {
                               fontWeight: FontWeight.normal,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterRoute(),
+                              ),
+                            );
+                          },
                         ),
                         TextButton(
                           child: const Text("Forgot password",
