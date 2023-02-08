@@ -14,8 +14,15 @@ message ClientMessage {
         string password = 2;
     }
 
+    message AccountRegistration {
+        string email = 1;
+        string username = 2;
+        string password = 3;
+    }
+
     oneof variant {
         SendPublicKey send_public_key = 1;
         LogIn log_in = 2;
+        AccountRegistration account_registration = 3;
     }
 }

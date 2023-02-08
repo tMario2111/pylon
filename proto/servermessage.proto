@@ -11,6 +11,11 @@ message ServerMessage {
         int32 id = 1;
     }
 
+    message AccountRegistrationResult {
+        bool successful = 1;
+        string error = 2;
+    }
+
     oneof variant {
         ConfirmKeyExchange confirm_key_exchange = 1;
         ConfirmLogIn confirm_log_in = 2;

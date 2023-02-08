@@ -18,6 +18,7 @@ type Message struct {
 	content    []byte
 	connection net.Conn
 	publicKey  **rsa.PublicKey
+	storage    *map[string]string
 }
 
 type Server struct {
@@ -35,6 +36,8 @@ func NewServer() (server *Server) {
 
 	server.quitChannel = make(chan struct{})
 	server.messageChannel = make(chan Message, 100) // TODO: No magic numbers
+
+	//auth := smtp.PlainAuth()
 
 	return server
 }
@@ -97,6 +100,8 @@ func (server *Server) read(connection net.Conn) {
 	iv := make([]byte, RSA_CIPHER_LEN)
 	signature := make([]byte, RSA_CIPHER_LEN)
 
+	var storage = make(map[string]string)
+
 	var clientPublicKey *rsa.PublicKey = nil
 
 	for {
@@ -143,7 +148,8 @@ func (server *Server) read(connection net.Conn) {
 					log.Println(err.Error())
 					continue
 				}
-				server.messageChannel <- Message{content: plaintext, connection: connection, publicKey: &clientPublicKey}
+				server.messageChannel <- Message{
+					content: plaintext, connection: connection, publicKey: &clientPublicKey, storage: &storage}
 				newBytesToRead = RSA_CIPHER_LEN
 			}
 
@@ -162,6 +168,7 @@ func (server *Server) processIncomingMessages() {
 	for messageContainer := range server.messageChannel {
 		connection := messageContainer.connection
 		messageBytes := messageContainer.content
+		// storage := messageContainer.storage
 
 		message := &pb.ClientMessage{}
 		err := proto.Unmarshal(messageBytes, message)
@@ -200,6 +207,9 @@ func (server *Server) processIncomingMessages() {
 			// Pretty crude clear but w/e
 			t.LogIn.Email = ""
 			t.LogIn.Password = ""
+
+		case *pb.ClientMessage_AccountRegistration_:
+			server.registerAccount(&messageContainer, t.AccountRegistration)
 		}
 	}
 }

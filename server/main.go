@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"log"
+	"math/rand"
 	"pylon/server"
+	"time"
 
 	_ "github.com/glebarez/go-sqlite"
 )
@@ -59,6 +61,7 @@ func test() {
 
 func main() {
 	log.SetFlags(0) // Temporary
+	rand.Seed(time.Now().UnixNano())
 
 	s := server.NewServer()
 	s.Run()

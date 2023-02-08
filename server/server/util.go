@@ -1,6 +1,9 @@
 package server
 
-import "strconv"
+import (
+	"math/rand"
+	"strconv"
+)
 
 const (
 	MESSAGE_HEADER_BASE = 16
@@ -32,4 +35,13 @@ func getLenghtAsBase16(str []byte) []byte {
 		size = "0" + size
 	}
 	return []byte(size)
+}
+
+func GenerateEmailCode() string {
+	characters := "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+	code := make([]byte, 8)
+	for i := 0; i < 8; i++ {
+		code[i] = characters[rand.Intn(len(characters))]
+	}
+	return string(code)
 }

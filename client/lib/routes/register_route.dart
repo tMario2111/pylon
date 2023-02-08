@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:email_validator/email_validator.dart';
+import 'package:pylon/proto/clientmessage.pb.dart';
+
+import '../connection/connection.dart';
 
 import '../constants.dart';
 
@@ -83,30 +86,33 @@ class _RegisterRouteState extends State<RegisterRoute> {
                   const SizedBox(
                     height: 20.0,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 250.0,
                     child: PylonTextField(
                       label: 'USERNAME',
+                      controller: _usernameController,
                     ),
                   ),
                   const SizedBox(
                     height: 20.0,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 250.0,
                     child: PylonTextField(
                       label: 'PASSWORD',
                       obscureText: true,
+                      controller: _passwordController,
                     ),
                   ),
                   const SizedBox(
                     height: 20.0,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 250.0,
                     child: PylonTextField(
                       label: 'CONFIRM PASSWORD',
                       obscureText: true,
+                      controller: _confirmedPasswordController,
                     ),
                   ),
                   const SizedBox(
@@ -117,7 +123,18 @@ class _RegisterRouteState extends State<RegisterRoute> {
                     height: 50.0,
                     child: PylonButton(
                       label: "CREATE ACCOUNT",
-                      onPressed: () {},
+                      onPressed: () {
+                        Connection().sendMessage(
+                          ClientMessage(
+                            accountRegistration:
+                                ClientMessage_AccountRegistration(
+                              email: _emailController.text,
+                              username: _usernameController.text,
+                              password: _passwordController.text,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(

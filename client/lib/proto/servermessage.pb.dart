@@ -85,6 +85,67 @@ class ServerMessage_ConfirmLogIn extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
+class ServerMessage_AccountRegistrationResult extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.AccountRegistrationResult', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'successful')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error')
+    ..hasRequiredFields = false
+  ;
+
+  ServerMessage_AccountRegistrationResult._() : super();
+  factory ServerMessage_AccountRegistrationResult({
+    $core.bool? successful,
+    $core.String? error,
+  }) {
+    final _result = create();
+    if (successful != null) {
+      _result.successful = successful;
+    }
+    if (error != null) {
+      _result.error = error;
+    }
+    return _result;
+  }
+  factory ServerMessage_AccountRegistrationResult.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ServerMessage_AccountRegistrationResult.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ServerMessage_AccountRegistrationResult clone() => ServerMessage_AccountRegistrationResult()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ServerMessage_AccountRegistrationResult copyWith(void Function(ServerMessage_AccountRegistrationResult) updates) => super.copyWith((message) => updates(message as ServerMessage_AccountRegistrationResult)) as ServerMessage_AccountRegistrationResult; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_AccountRegistrationResult create() => ServerMessage_AccountRegistrationResult._();
+  ServerMessage_AccountRegistrationResult createEmptyInstance() => create();
+  static $pb.PbList<ServerMessage_AccountRegistrationResult> createRepeated() => $pb.PbList<ServerMessage_AccountRegistrationResult>();
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_AccountRegistrationResult getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServerMessage_AccountRegistrationResult>(create);
+  static ServerMessage_AccountRegistrationResult? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get successful => $_getBF(0);
+  @$pb.TagNumber(1)
+  set successful($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSuccessful() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccessful() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get error => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set error($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => clearField(2);
+}
+
 enum ServerMessage_Variant {
   confirmKeyExchange, 
   confirmLogIn, 
