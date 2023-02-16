@@ -28,6 +28,20 @@ class _RegisterRouteState extends State<RegisterRoute> {
   String? _passwordErrorMessage;
   String? _confirmPasswordErrorMessage;
 
+  _RegisterRouteState() {
+    Connection().messageHandler = (message) {
+      if (message.hasAccountRegistrationResult()) {
+        if (!message.accountRegistrationResult.successful) {
+          if (message.accountRegistrationResult.hasPasswordError()) {
+            _passwordErrorMessage =
+                message.accountRegistrationResult.passwordError;
+            setState(() {});
+          }
+        }
+      }
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +116,11 @@ class _RegisterRouteState extends State<RegisterRoute> {
                       label: 'PASSWORD',
                       obscureText: true,
                       controller: _passwordController,
+                      errorBorder: _passwordErrorMessage != null,
+                      onFocusChange: (focused) {
+                        _passwordErrorMessage = null;
+                        setState(() {});
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -154,7 +173,12 @@ class _RegisterRouteState extends State<RegisterRoute> {
                       if (_usernameErrorMessage != null)
                         Text(_usernameErrorMessage!),
                       if (_passwordErrorMessage != null)
-                        Text(_passwordErrorMessage!),
+                        Text(
+                          _passwordErrorMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
                       if (_confirmPasswordErrorMessage != null)
                         Text(_confirmPasswordErrorMessage!),
                     ],

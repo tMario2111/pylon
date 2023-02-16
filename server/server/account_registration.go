@@ -6,10 +6,71 @@ import (
 	"log"
 	"net/http"
 	pb "pylon/proto"
+	"unicode"
 )
 
-func (*Server) registerAccount(messageContainer *Message, message *pb.ClientMessage_AccountRegistration) {
+func (server *Server) registerAccount(messageContainer *Message, message *pb.ClientMessage_AccountRegistration) {
+	passwordValid, passwordErr := isPasswordValid(message.Password)
+	if !passwordValid {
+		newMessage, err := processServerMessage(&pb.ServerMessage{
+			Variant: &pb.ServerMessage_AccountRegistrationResult_{
+				AccountRegistrationResult: &pb.ServerMessage_AccountRegistrationResult{
+					Successful: false, PasswordError: &passwordErr}}}, *messageContainer.publicKey, server.privateKey)
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+		messageContainer.connection.Write(newMessage)
+		return
+	}
+
 	sendCodeVerificationEmail(message.Email)
+}
+
+func isUsernameValid(username string) bool {
+	// TODO
+	return true
+}
+
+func isPasswordValid(password string) (bool, string) {
+	if len(password) < 12 {
+		return false, "Password must be at least 12 characters"
+	}
+
+	hasUpper := false
+	for _, r := range password {
+		if unicode.IsUpper(r) {
+			hasUpper = true
+			break
+		}
+	}
+	if !hasUpper {
+		return false, "Password must contain upper case characters"
+	}
+
+	hasLower := false
+	for _, r := range password {
+		if unicode.IsLower(r) {
+			hasLower = true
+			break
+		}
+	}
+	if !hasLower {
+		return false, "Password must contain lower case characters"
+	}
+
+	hasDigit := false
+	for _, r := range password {
+		if unicode.IsDigit(r) {
+			hasDigit = true
+			break
+		}
+	}
+	if !hasDigit {
+		return false, "Password must contain digits"
+	}
+
+	return true, ""
 }
 
 func sendCodeVerificationEmail(email string) (string, error) {

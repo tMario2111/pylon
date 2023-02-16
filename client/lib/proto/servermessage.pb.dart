@@ -88,21 +88,26 @@ class ServerMessage_ConfirmLogIn extends $pb.GeneratedMessage {
 class ServerMessage_AccountRegistrationResult extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.AccountRegistrationResult', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
     ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'successful')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'usernameError')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'passwordError')
     ..hasRequiredFields = false
   ;
 
   ServerMessage_AccountRegistrationResult._() : super();
   factory ServerMessage_AccountRegistrationResult({
     $core.bool? successful,
-    $core.String? error,
+    $core.String? usernameError,
+    $core.String? passwordError,
   }) {
     final _result = create();
     if (successful != null) {
       _result.successful = successful;
     }
-    if (error != null) {
-      _result.error = error;
+    if (usernameError != null) {
+      _result.usernameError = usernameError;
+    }
+    if (passwordError != null) {
+      _result.passwordError = passwordError;
     }
     return _result;
   }
@@ -137,18 +142,28 @@ class ServerMessage_AccountRegistrationResult extends $pb.GeneratedMessage {
   void clearSuccessful() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get error => $_getSZ(1);
+  $core.String get usernameError => $_getSZ(1);
   @$pb.TagNumber(2)
-  set error($core.String v) { $_setString(1, v); }
+  set usernameError($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasError() => $_has(1);
+  $core.bool hasUsernameError() => $_has(1);
   @$pb.TagNumber(2)
-  void clearError() => clearField(2);
+  void clearUsernameError() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get passwordError => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set passwordError($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasPasswordError() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPasswordError() => clearField(3);
 }
 
 enum ServerMessage_Variant {
   confirmKeyExchange, 
   confirmLogIn, 
+  accountRegistrationResult, 
   notSet
 }
 
@@ -156,12 +171,14 @@ class ServerMessage extends $pb.GeneratedMessage {
   static const $core.Map<$core.int, ServerMessage_Variant> _ServerMessage_VariantByTag = {
     1 : ServerMessage_Variant.confirmKeyExchange,
     2 : ServerMessage_Variant.confirmLogIn,
+    3 : ServerMessage_Variant.accountRegistrationResult,
     0 : ServerMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2])
+    ..oo(0, [1, 2, 3])
     ..aOM<ServerMessage_ConfirmKeyExchange>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmKeyExchange', subBuilder: ServerMessage_ConfirmKeyExchange.create)
     ..aOM<ServerMessage_ConfirmLogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmLogIn', subBuilder: ServerMessage_ConfirmLogIn.create)
+    ..aOM<ServerMessage_AccountRegistrationResult>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationResult', subBuilder: ServerMessage_AccountRegistrationResult.create)
     ..hasRequiredFields = false
   ;
 
@@ -169,6 +186,7 @@ class ServerMessage extends $pb.GeneratedMessage {
   factory ServerMessage({
     ServerMessage_ConfirmKeyExchange? confirmKeyExchange,
     ServerMessage_ConfirmLogIn? confirmLogIn,
+    ServerMessage_AccountRegistrationResult? accountRegistrationResult,
   }) {
     final _result = create();
     if (confirmKeyExchange != null) {
@@ -176,6 +194,9 @@ class ServerMessage extends $pb.GeneratedMessage {
     }
     if (confirmLogIn != null) {
       _result.confirmLogIn = confirmLogIn;
+    }
+    if (accountRegistrationResult != null) {
+      _result.accountRegistrationResult = accountRegistrationResult;
     }
     return _result;
   }
@@ -224,5 +245,16 @@ class ServerMessage extends $pb.GeneratedMessage {
   void clearConfirmLogIn() => clearField(2);
   @$pb.TagNumber(2)
   ServerMessage_ConfirmLogIn ensureConfirmLogIn() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  ServerMessage_AccountRegistrationResult get accountRegistrationResult => $_getN(2);
+  @$pb.TagNumber(3)
+  set accountRegistrationResult(ServerMessage_AccountRegistrationResult v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasAccountRegistrationResult() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAccountRegistrationResult() => clearField(3);
+  @$pb.TagNumber(3)
+  ServerMessage_AccountRegistrationResult ensureAccountRegistrationResult() => $_ensure(2);
 }
 

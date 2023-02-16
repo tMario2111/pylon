@@ -54,6 +54,8 @@ class Connection {
 
   var _connected = false;
 
+  void Function(ServerMessage message)? messageHandler;
+
   bool isConnected() {
     return _connected;
   }
@@ -166,6 +168,10 @@ class Connection {
     final message = ServerMessage.fromBuffer(event);
     if (message.hasConfirmKeyExchange()) {
       _connected = true;
+    }
+
+    if (messageHandler != null) {
+      messageHandler!(message);
     }
   }
 }
