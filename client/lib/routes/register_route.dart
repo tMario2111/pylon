@@ -32,12 +32,19 @@ class _RegisterRouteState extends State<RegisterRoute> {
     Connection().messageHandler = (message) {
       if (message.hasAccountRegistrationResult()) {
         if (!message.accountRegistrationResult.successful) {
+          if (message.accountRegistrationResult.hasEmailError()) {
+            _emailErrorMessage = message.accountRegistrationResult.emailError;
+          }
+          if (message.accountRegistrationResult.hasUsernameError()) {
+            _usernameErrorMessage =
+                message.accountRegistrationResult.usernameError;
+          }
           if (message.accountRegistrationResult.hasPasswordError()) {
             _passwordErrorMessage =
                 message.accountRegistrationResult.passwordError;
-            setState(() {});
           }
         }
+        setState(() {});
       }
     };
   }
@@ -105,6 +112,11 @@ class _RegisterRouteState extends State<RegisterRoute> {
                     child: PylonTextField(
                       label: 'USERNAME',
                       controller: _usernameController,
+                      errorBorder: _usernameErrorMessage != null,
+                      onFocusChange: (focused) {
+                        _usernameErrorMessage = null;
+                        setState(() {});
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -132,6 +144,18 @@ class _RegisterRouteState extends State<RegisterRoute> {
                       label: 'CONFIRM PASSWORD',
                       obscureText: true,
                       controller: _confirmedPasswordController,
+                      errorBorder: _confirmPasswordErrorMessage != null,
+                      onFocusChange: (focus) {
+                        if (!focus &&
+                            _passwordController.text !=
+                                _confirmedPasswordController.text) {
+                          _confirmPasswordErrorMessage =
+                              "Password does not match";
+                        } else {
+                          _confirmPasswordErrorMessage = null;
+                        }
+                        setState(() {});
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -171,7 +195,12 @@ class _RegisterRouteState extends State<RegisterRoute> {
                           ),
                         ),
                       if (_usernameErrorMessage != null)
-                        Text(_usernameErrorMessage!),
+                        Text(
+                          _usernameErrorMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
                       if (_passwordErrorMessage != null)
                         Text(
                           _passwordErrorMessage!,
@@ -180,7 +209,12 @@ class _RegisterRouteState extends State<RegisterRoute> {
                           ),
                         ),
                       if (_confirmPasswordErrorMessage != null)
-                        Text(_confirmPasswordErrorMessage!),
+                        Text(
+                          _confirmPasswordErrorMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
                     ],
                   )
                 ],

@@ -40,14 +40,16 @@ const ServerMessage_AccountRegistrationResult$json = const {
   '1': 'AccountRegistrationResult',
   '2': const [
     const {'1': 'successful', '3': 1, '4': 1, '5': 8, '10': 'successful'},
-    const {'1': 'username_error', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'usernameError', '17': true},
-    const {'1': 'password_error', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'passwordError', '17': true},
+    const {'1': 'email_error', '3': 2, '4': 1, '5': 9, '9': 0, '10': 'emailError', '17': true},
+    const {'1': 'username_error', '3': 3, '4': 1, '5': 9, '9': 1, '10': 'usernameError', '17': true},
+    const {'1': 'password_error', '3': 4, '4': 1, '5': 9, '9': 2, '10': 'passwordError', '17': true},
   ],
   '8': const [
+    const {'1': '_email_error'},
     const {'1': '_username_error'},
     const {'1': '_password_error'},
   ],
 };
 
 /// Descriptor for `ServerMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List serverMessageDescriptor = $convert.base64Decode('Cg1TZXJ2ZXJNZXNzYWdlEloKFGNvbmZpcm1fa2V5X2V4Y2hhbmdlGAEgASgLMiYubWFpbi5TZXJ2ZXJNZXNzYWdlLkNvbmZpcm1LZXlFeGNoYW5nZUgAUhJjb25maXJtS2V5RXhjaGFuZ2USSAoOY29uZmlybV9sb2dfaW4YAiABKAsyIC5tYWluLlNlcnZlck1lc3NhZ2UuQ29uZmlybUxvZ0luSABSDGNvbmZpcm1Mb2dJbhJvChthY2NvdW50X3JlZ2lzdHJhdGlvbl9yZXN1bHQYAyABKAsyLS5tYWluLlNlcnZlck1lc3NhZ2UuQWNjb3VudFJlZ2lzdHJhdGlvblJlc3VsdEgAUhlhY2NvdW50UmVnaXN0cmF0aW9uUmVzdWx0GhQKEkNvbmZpcm1LZXlFeGNoYW5nZRoeCgxDb25maXJtTG9nSW4SDgoCaWQYASABKAVSAmlkGrkBChlBY2NvdW50UmVnaXN0cmF0aW9uUmVzdWx0Eh4KCnN1Y2Nlc3NmdWwYASABKAhSCnN1Y2Nlc3NmdWwSKgoOdXNlcm5hbWVfZXJyb3IYAiABKAlIAFINdXNlcm5hbWVFcnJvcogBARIqCg5wYXNzd29yZF9lcnJvchgDIAEoCUgBUg1wYXNzd29yZEVycm9yiAEBQhEKD191c2VybmFtZV9lcnJvckIRCg9fcGFzc3dvcmRfZXJyb3JCCQoHdmFyaWFudA==');
+final $typed_data.Uint8List serverMessageDescriptor = $convert.base64Decode('Cg1TZXJ2ZXJNZXNzYWdlEloKFGNvbmZpcm1fa2V5X2V4Y2hhbmdlGAEgASgLMiYubWFpbi5TZXJ2ZXJNZXNzYWdlLkNvbmZpcm1LZXlFeGNoYW5nZUgAUhJjb25maXJtS2V5RXhjaGFuZ2USSAoOY29uZmlybV9sb2dfaW4YAiABKAsyIC5tYWluLlNlcnZlck1lc3NhZ2UuQ29uZmlybUxvZ0luSABSDGNvbmZpcm1Mb2dJbhJvChthY2NvdW50X3JlZ2lzdHJhdGlvbl9yZXN1bHQYAyABKAsyLS5tYWluLlNlcnZlck1lc3NhZ2UuQWNjb3VudFJlZ2lzdHJhdGlvblJlc3VsdEgAUhlhY2NvdW50UmVnaXN0cmF0aW9uUmVzdWx0GhQKEkNvbmZpcm1LZXlFeGNoYW5nZRoeCgxDb25maXJtTG9nSW4SDgoCaWQYASABKAVSAmlkGu8BChlBY2NvdW50UmVnaXN0cmF0aW9uUmVzdWx0Eh4KCnN1Y2Nlc3NmdWwYASABKAhSCnN1Y2Nlc3NmdWwSJAoLZW1haWxfZXJyb3IYAiABKAlIAFIKZW1haWxFcnJvcogBARIqCg51c2VybmFtZV9lcnJvchgDIAEoCUgBUg11c2VybmFtZUVycm9yiAEBEioKDnBhc3N3b3JkX2Vycm9yGAQgASgJSAJSDXBhc3N3b3JkRXJyb3KIAQFCDgoMX2VtYWlsX2Vycm9yQhEKD191c2VybmFtZV9lcnJvckIRCg9fcGFzc3dvcmRfZXJyb3JCCQoHdmFyaWFudA==');

@@ -88,20 +88,25 @@ class ServerMessage_ConfirmLogIn extends $pb.GeneratedMessage {
 class ServerMessage_AccountRegistrationResult extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.AccountRegistrationResult', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
     ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'successful')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'usernameError')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'passwordError')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'emailError')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'usernameError')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'passwordError')
     ..hasRequiredFields = false
   ;
 
   ServerMessage_AccountRegistrationResult._() : super();
   factory ServerMessage_AccountRegistrationResult({
     $core.bool? successful,
+    $core.String? emailError,
     $core.String? usernameError,
     $core.String? passwordError,
   }) {
     final _result = create();
     if (successful != null) {
       _result.successful = successful;
+    }
+    if (emailError != null) {
+      _result.emailError = emailError;
     }
     if (usernameError != null) {
       _result.usernameError = usernameError;
@@ -142,22 +147,31 @@ class ServerMessage_AccountRegistrationResult extends $pb.GeneratedMessage {
   void clearSuccessful() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get usernameError => $_getSZ(1);
+  $core.String get emailError => $_getSZ(1);
   @$pb.TagNumber(2)
-  set usernameError($core.String v) { $_setString(1, v); }
+  set emailError($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasUsernameError() => $_has(1);
+  $core.bool hasEmailError() => $_has(1);
   @$pb.TagNumber(2)
-  void clearUsernameError() => clearField(2);
+  void clearEmailError() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get passwordError => $_getSZ(2);
+  $core.String get usernameError => $_getSZ(2);
   @$pb.TagNumber(3)
-  set passwordError($core.String v) { $_setString(2, v); }
+  set usernameError($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasPasswordError() => $_has(2);
+  $core.bool hasUsernameError() => $_has(2);
   @$pb.TagNumber(3)
-  void clearPasswordError() => clearField(3);
+  void clearUsernameError() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get passwordError => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set passwordError($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasPasswordError() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPasswordError() => clearField(4);
 }
 
 enum ServerMessage_Variant {

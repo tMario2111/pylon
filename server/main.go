@@ -57,6 +57,21 @@ func test() {
 		}
 		println(name, " ", email, " ", password, " ", key)
 	}
+
+	rows, err = db.Query("SELECT COUNT(*) FROM users WHERE username = ?", "costel")
+	if err != nil {
+		log.Println(err.Error())
+	}
+	defer rows.Close()
+
+	count := 0
+	for rows.Next() {
+		err := rows.Scan(&count)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}
+	println(count)
 }
 
 func main() {

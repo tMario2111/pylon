@@ -2,6 +2,7 @@ package server
 
 import (
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -10,12 +11,27 @@ import (
 )
 
 func (server *Server) registerAccount(messageContainer *Message, message *pb.ClientMessage_AccountRegistration) {
+
+	emailValid, emailErr := isEmailValid(message.Email, server.db)
+	usernameValid, usernameErr := isUsernameValid(message.Username, server.db)
 	passwordValid, passwordErr := isPasswordValid(message.Password)
-	if !passwordValid {
+
+	if !emailValid || !usernameValid || !passwordValid {
+		regResult := pb.ServerMessage_AccountRegistrationResult{}
+		regResult.Successful = false
+		if !emailValid {
+			regResult.EmailError = &emailErr
+		}
+		if !usernameValid {
+			regResult.UsernameError = &usernameErr
+		}
+		if !passwordValid {
+			regResult.PasswordError = &passwordErr
+		}
 		newMessage, err := processServerMessage(&pb.ServerMessage{
 			Variant: &pb.ServerMessage_AccountRegistrationResult_{
-				AccountRegistrationResult: &pb.ServerMessage_AccountRegistrationResult{
-					Successful: false, PasswordError: &passwordErr}}}, *messageContainer.publicKey, server.privateKey)
+				AccountRegistrationResult: &regResult,
+			}}, *messageContainer.publicKey, server.privateKey)
 		if err != nil {
 			log.Println(err.Error())
 			return
@@ -24,12 +40,70 @@ func (server *Server) registerAccount(messageContainer *Message, message *pb.Cli
 		return
 	}
 
-	sendCodeVerificationEmail(message.Email)
+	/*
+		if !passwordValid {
+			newMessage, err := processServerMessage(&pb.ServerMessage{
+				Variant: &pb.ServerMessage_AccountRegistrationResult_{
+					AccountRegistrationResult: &pb.ServerMessage_AccountRegistrationResult{
+						Successful: false, PasswordError: &passwordErr}}}, *messageContainer.publicKey, server.privateKey)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			messageContainer.connection.Write(newMessage)
+			return
+		}
+	*/
+
+	// sendCodeVerificationEmail(message.Email)
 }
 
-func isUsernameValid(username string) bool {
-	// TODO
-	return true
+func isEmailValid(email string, db *sql.DB) (bool, string) {
+	rows, err := db.Query("SELECT COUNT(*) FROM users WHERE email = ?", email)
+	if err != nil {
+		log.Println(err.Error())
+		return false, ""
+	}
+	defer rows.Close()
+
+	count := 0
+	for rows.Next() {
+		err := rows.Scan(&count)
+		if err != nil {
+			log.Println(err.Error())
+			return false, ""
+		}
+	}
+	if count != 0 {
+		return false, "Email is already in use"
+	}
+	return true, ""
+}
+
+func isUsernameValid(username string, db *sql.DB) (bool, string) {
+	if len(username) < 3 || len(username) > 30 {
+		return false, "Username must be between 3 and 30 characters"
+	}
+
+	rows, err := db.Query("SELECT COUNT(*) FROM users WHERE username = ?", username)
+	if err != nil {
+		log.Println(err.Error())
+		return false, ""
+	}
+	defer rows.Close()
+
+	count := 0
+	for rows.Next() {
+		err := rows.Scan(&count)
+		if err != nil {
+			log.Println(err.Error())
+			return false, ""
+		}
+	}
+	if count != 0 {
+		return false, "Username is already in use"
+	}
+	return true, ""
 }
 
 func isPasswordValid(password string) (bool, string) {

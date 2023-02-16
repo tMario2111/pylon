@@ -3,6 +3,7 @@ package server
 import (
 	"crypto/rsa"
 	"crypto/x509"
+	"database/sql"
 	"encoding/pem"
 	"io"
 	"log"
@@ -27,10 +28,17 @@ type Server struct {
 	messageChannel chan Message
 	privateKey     *rsa.PrivateKey
 	publicKey      *rsa.PublicKey
+	db             *sql.DB
 }
 
 func NewServer() (server *Server) {
 	server = new(Server)
+
+	db, err := newDb()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	server.db = db
 
 	server.loadKeys()
 
