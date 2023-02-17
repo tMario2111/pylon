@@ -7,8 +7,14 @@ import (
 	"log"
 	"net/http"
 	pb "pylon/proto"
+	"strconv"
+	"time"
 	"unicode"
+
+	"golang.org/x/crypto/bcrypt"
 )
+
+const EMAIL_VERIFICATION_CODE_EXPIRATION_TIME = 300 // in seconds
 
 func (server *Server) registerAccount(messageContainer *Message, message *pb.ClientMessage_AccountRegistration) {
 
@@ -40,22 +46,34 @@ func (server *Server) registerAccount(messageContainer *Message, message *pb.Cli
 		return
 	}
 
-	/*
-		if !passwordValid {
-			newMessage, err := processServerMessage(&pb.ServerMessage{
-				Variant: &pb.ServerMessage_AccountRegistrationResult_{
-					AccountRegistrationResult: &pb.ServerMessage_AccountRegistrationResult{
-						Successful: false, PasswordError: &passwordErr}}}, *messageContainer.publicKey, server.privateKey)
-			if err != nil {
-				log.Println(err.Error())
-				return
-			}
-			messageContainer.connection.Write(newMessage)
-			return
-		}
-	*/
+	code, err := sendCodeVerificationEmail(message.Email)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 
-	// sendCodeVerificationEmail(message.Email)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(message.Password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+
+	storage := messageContainer.storage
+	(*storage)["code"] = code
+	(*storage)["password"] = string(hashedPassword)
+	(*storage)["email"] = message.Email
+	(*storage)["username"] = message.Username
+	(*storage)["timestamp"] = strconv.FormatInt(time.Now().Unix(), 10)
+
+	newMessage, err := processServerMessage(&pb.ServerMessage{
+		Variant: &pb.ServerMessage_AccountRegistrationResult_{
+			AccountRegistrationResult: &pb.ServerMessage_AccountRegistrationResult{Successful: true}}},
+		*messageContainer.publicKey, server.privateKey)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	messageContainer.connection.Write(newMessage)
 }
 
 func isEmailValid(email string, db *sql.DB) (bool, string) {

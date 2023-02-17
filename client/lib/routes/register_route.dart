@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:pylon/proto/clientmessage.pb.dart';
 
+import 'email_verification_route.dart';
+
 import '../connection/connection.dart';
 
 import '../constants.dart';
@@ -43,6 +45,13 @@ class _RegisterRouteState extends State<RegisterRoute> {
             _passwordErrorMessage =
                 message.accountRegistrationResult.passwordError;
           }
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const EmailVerificationRoute(),
+            ),
+          );
         }
         setState(() {});
       }
