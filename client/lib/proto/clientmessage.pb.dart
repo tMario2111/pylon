@@ -122,6 +122,7 @@ class ClientMessage_AccountRegistration extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'email')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'username')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'password')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'publicKey')
     ..hasRequiredFields = false
   ;
 
@@ -130,6 +131,7 @@ class ClientMessage_AccountRegistration extends $pb.GeneratedMessage {
     $core.String? email,
     $core.String? username,
     $core.String? password,
+    $core.String? publicKey,
   }) {
     final _result = create();
     if (email != null) {
@@ -140,6 +142,9 @@ class ClientMessage_AccountRegistration extends $pb.GeneratedMessage {
     }
     if (password != null) {
       _result.password = password;
+    }
+    if (publicKey != null) {
+      _result.publicKey = publicKey;
     }
     return _result;
   }
@@ -190,12 +195,69 @@ class ClientMessage_AccountRegistration extends $pb.GeneratedMessage {
   $core.bool hasPassword() => $_has(2);
   @$pb.TagNumber(3)
   void clearPassword() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get publicKey => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set publicKey($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasPublicKey() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPublicKey() => clearField(4);
+}
+
+class ClientMessage_AccountRegistrationCode extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.AccountRegistrationCode', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'code')
+    ..hasRequiredFields = false
+  ;
+
+  ClientMessage_AccountRegistrationCode._() : super();
+  factory ClientMessage_AccountRegistrationCode({
+    $core.String? code,
+  }) {
+    final _result = create();
+    if (code != null) {
+      _result.code = code;
+    }
+    return _result;
+  }
+  factory ClientMessage_AccountRegistrationCode.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientMessage_AccountRegistrationCode.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ClientMessage_AccountRegistrationCode clone() => ClientMessage_AccountRegistrationCode()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ClientMessage_AccountRegistrationCode copyWith(void Function(ClientMessage_AccountRegistrationCode) updates) => super.copyWith((message) => updates(message as ClientMessage_AccountRegistrationCode)) as ClientMessage_AccountRegistrationCode; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_AccountRegistrationCode create() => ClientMessage_AccountRegistrationCode._();
+  ClientMessage_AccountRegistrationCode createEmptyInstance() => create();
+  static $pb.PbList<ClientMessage_AccountRegistrationCode> createRepeated() => $pb.PbList<ClientMessage_AccountRegistrationCode>();
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_AccountRegistrationCode getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientMessage_AccountRegistrationCode>(create);
+  static ClientMessage_AccountRegistrationCode? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get code => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set code($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasCode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCode() => clearField(1);
 }
 
 enum ClientMessage_Variant {
   sendPublicKey, 
   logIn, 
   accountRegistration, 
+  accountRegistrationCode, 
   notSet
 }
 
@@ -204,13 +266,15 @@ class ClientMessage extends $pb.GeneratedMessage {
     1 : ClientMessage_Variant.sendPublicKey,
     2 : ClientMessage_Variant.logIn,
     3 : ClientMessage_Variant.accountRegistration,
+    4 : ClientMessage_Variant.accountRegistrationCode,
     0 : ClientMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3])
+    ..oo(0, [1, 2, 3, 4])
     ..aOM<ClientMessage_SendPublicKey>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendPublicKey', subBuilder: ClientMessage_SendPublicKey.create)
     ..aOM<ClientMessage_LogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'logIn', subBuilder: ClientMessage_LogIn.create)
     ..aOM<ClientMessage_AccountRegistration>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistration', subBuilder: ClientMessage_AccountRegistration.create)
+    ..aOM<ClientMessage_AccountRegistrationCode>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationCode', subBuilder: ClientMessage_AccountRegistrationCode.create)
     ..hasRequiredFields = false
   ;
 
@@ -219,6 +283,7 @@ class ClientMessage extends $pb.GeneratedMessage {
     ClientMessage_SendPublicKey? sendPublicKey,
     ClientMessage_LogIn? logIn,
     ClientMessage_AccountRegistration? accountRegistration,
+    ClientMessage_AccountRegistrationCode? accountRegistrationCode,
   }) {
     final _result = create();
     if (sendPublicKey != null) {
@@ -229,6 +294,9 @@ class ClientMessage extends $pb.GeneratedMessage {
     }
     if (accountRegistration != null) {
       _result.accountRegistration = accountRegistration;
+    }
+    if (accountRegistrationCode != null) {
+      _result.accountRegistrationCode = accountRegistrationCode;
     }
     return _result;
   }
@@ -288,5 +356,16 @@ class ClientMessage extends $pb.GeneratedMessage {
   void clearAccountRegistration() => clearField(3);
   @$pb.TagNumber(3)
   ClientMessage_AccountRegistration ensureAccountRegistration() => $_ensure(2);
+
+  @$pb.TagNumber(4)
+  ClientMessage_AccountRegistrationCode get accountRegistrationCode => $_getN(3);
+  @$pb.TagNumber(4)
+  set accountRegistrationCode(ClientMessage_AccountRegistrationCode v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasAccountRegistrationCode() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAccountRegistrationCode() => clearField(4);
+  @$pb.TagNumber(4)
+  ClientMessage_AccountRegistrationCode ensureAccountRegistrationCode() => $_ensure(3);
 }
 

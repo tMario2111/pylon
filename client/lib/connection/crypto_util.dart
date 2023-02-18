@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:pointycastle/pointycastle.dart' as pc;
+import 'package:pointycastle/random/fortuna_random.dart' as pc;
+
+import 'consts.dart';
 
 Uint8List getLenghtAsBase16(Uint8List str) {
   var len = str.length.toRadixString(16);
@@ -77,4 +81,24 @@ String encodePrivateKeyToPemPKCS1(pc.RSAPrivateKey key) {
 
   final dataBase64 = base64.encode(topLevel.encodedBytes!);
   return """-----BEGIN RSA PRIVATE KEY-----\r\n$dataBase64\r\n-----END RSA PRIVATE KEY-----""";
+}
+
+pc.AsymmetricKeyPair<pc.PublicKey, pc.PrivateKey> generateKeysFromPassword(
+    String password) {
+  // Hope that flutter's hashCode is alright
+  final random = Random(password.hashCode);
+
+  final fortunaRandom = pc.SecureRandom('Fortuna');
+  fortunaRandom.seed(pc.KeyParameter(
+      Uint8List.fromList(List.generate(32, (_) => random.nextInt(256)))));
+
+  final keyGenerator = pc.KeyGenerator('RSA')
+    ..init(
+      pc.ParametersWithRandom(
+          pc.RSAKeyGeneratorParameters(
+              BigInt.parse('65537'), rsaBitStrength, rsaCertainityFactor),
+          fortunaRandom),
+    );
+
+  return keyGenerator.generateKeyPair();
 }

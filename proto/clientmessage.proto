@@ -18,11 +18,17 @@ message ClientMessage {
         string email = 1;
         string username = 2;
         string password = 3;
+        string public_key = 4;
+    }
+
+    message AccountRegistrationCode {
+        string code = 1;
     }
 
     oneof variant {
         SendPublicKey send_public_key = 1;
         LogIn log_in = 2;
         AccountRegistration account_registration = 3;
+        AccountRegistrationCode account_registration_code = 4;
     }
 }

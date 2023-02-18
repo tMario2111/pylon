@@ -14,9 +14,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const EMAIL_VERIFICATION_CODE_EXPIRATION_TIME = 300 // in seconds
+const (
+	EMAIL_VERIFICATION_CODE_EXPIRATION_TIME = 300 // in seconds
+	VERIFICATION_CODE_TRIES                 = 5
+)
 
-func (server *Server) registerAccount(messageContainer *Message, message *pb.ClientMessage_AccountRegistration) {
+func (server *Server) accountRegistrationResponse(
+	messageContainer *Message, message *pb.ClientMessage_AccountRegistration) {
 
 	emailValid, emailErr := isEmailValid(message.Email, server.db)
 	usernameValid, usernameErr := isUsernameValid(message.Username, server.db)
@@ -59,11 +63,17 @@ func (server *Server) registerAccount(messageContainer *Message, message *pb.Cli
 	}
 
 	storage := messageContainer.storage
+
 	(*storage)["code"] = code
 	(*storage)["password"] = string(hashedPassword)
 	(*storage)["email"] = message.Email
 	(*storage)["username"] = message.Username
+	(*storage)["public_key"] = message.PublicKey
+
+	log.Println(message.PublicKey)
+
 	(*storage)["timestamp"] = strconv.FormatInt(time.Now().Unix(), 10)
+	(*storage)["tries"] = strconv.FormatInt(VERIFICATION_CODE_TRIES, 10)
 
 	newMessage, err := processServerMessage(&pb.ServerMessage{
 		Variant: &pb.ServerMessage_AccountRegistrationResult_{
@@ -210,4 +220,72 @@ func sendCodeVerificationEmail(email string) (string, error) {
 	}
 
 	return code, nil
+}
+
+func (server *Server) accountRegistrationVerificationCode(messageContainer *Message,
+	message *pb.ClientMessage_AccountRegistrationCode) {
+
+	successful, critical, errMessage := isVerificationCodeValid(message.Code, messageContainer.storage)
+
+	if successful {
+
+	}
+
+	newMessage, err := processServerMessage(&pb.ServerMessage{
+		Variant: &pb.ServerMessage_AccountRegistrationCodeResult_{
+			AccountRegistrationCodeResult: &pb.ServerMessage_AccountRegistrationCodeResult{
+				Successful: successful, CriticalError: critical, Error: &errMessage}}},
+		*messageContainer.publicKey, server.privateKey)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	messageContainer.connection.Write(newMessage)
+}
+
+func isVerificationCodeValid(code string, storage *map[string]string) (
+	successful bool, critical bool, errMessage string) {
+
+	const defaultErrorMessage = "An error has occurred, please try again"
+
+	timestampStr, ok := (*storage)["timestamp"]
+	if !ok {
+		successful, critical, errMessage = false, true, defaultErrorMessage
+		return
+	}
+	timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
+	if err != nil {
+		log.Println(err.Error())
+		successful, critical, errMessage = false, true, defaultErrorMessage
+		return
+	}
+	if time.Now().Unix()-timestamp > EMAIL_VERIFICATION_CODE_EXPIRATION_TIME {
+		successful, critical, errMessage = false, true, "The code has expired, please try again"
+		return
+	}
+
+	storedCode, ok := (*storage)["code"]
+	if !ok {
+		successful, critical, errMessage = false, true, defaultErrorMessage
+		return
+	}
+	if code != storedCode {
+		triesStr := (*storage)["tries"]
+		tries, err := strconv.ParseInt(triesStr, 10, 32)
+		if err != nil {
+			successful, critical, errMessage = false, true, defaultErrorMessage
+			return
+		}
+		if tries == 0 {
+			successful, critical, errMessage = false, true, "Number of tries exceeded, please try again"
+			return
+		}
+		tries--
+		(*storage)["tries"] = strconv.FormatInt(tries, 10)
+		successful, critical, errMessage = false, false, "Incorrect code, "+(*storage)["tries"]+" remaining tries"
+		return
+	}
+
+	successful, critical, errMessage = true, false, ""
+	return
 }

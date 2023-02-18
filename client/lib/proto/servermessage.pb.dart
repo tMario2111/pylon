@@ -174,10 +174,86 @@ class ServerMessage_AccountRegistrationResult extends $pb.GeneratedMessage {
   void clearPasswordError() => clearField(4);
 }
 
+class ServerMessage_AccountRegistrationCodeResult extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.AccountRegistrationCodeResult', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'successful')
+    ..aOB(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'criticalError', protoName: 'criticalError')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'error')
+    ..hasRequiredFields = false
+  ;
+
+  ServerMessage_AccountRegistrationCodeResult._() : super();
+  factory ServerMessage_AccountRegistrationCodeResult({
+    $core.bool? successful,
+    $core.bool? criticalError,
+    $core.String? error,
+  }) {
+    final _result = create();
+    if (successful != null) {
+      _result.successful = successful;
+    }
+    if (criticalError != null) {
+      _result.criticalError = criticalError;
+    }
+    if (error != null) {
+      _result.error = error;
+    }
+    return _result;
+  }
+  factory ServerMessage_AccountRegistrationCodeResult.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ServerMessage_AccountRegistrationCodeResult.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ServerMessage_AccountRegistrationCodeResult clone() => ServerMessage_AccountRegistrationCodeResult()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ServerMessage_AccountRegistrationCodeResult copyWith(void Function(ServerMessage_AccountRegistrationCodeResult) updates) => super.copyWith((message) => updates(message as ServerMessage_AccountRegistrationCodeResult)) as ServerMessage_AccountRegistrationCodeResult; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_AccountRegistrationCodeResult create() => ServerMessage_AccountRegistrationCodeResult._();
+  ServerMessage_AccountRegistrationCodeResult createEmptyInstance() => create();
+  static $pb.PbList<ServerMessage_AccountRegistrationCodeResult> createRepeated() => $pb.PbList<ServerMessage_AccountRegistrationCodeResult>();
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_AccountRegistrationCodeResult getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServerMessage_AccountRegistrationCodeResult>(create);
+  static ServerMessage_AccountRegistrationCodeResult? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get successful => $_getBF(0);
+  @$pb.TagNumber(1)
+  set successful($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSuccessful() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccessful() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get criticalError => $_getBF(1);
+  @$pb.TagNumber(2)
+  set criticalError($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCriticalError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCriticalError() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get error => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set error($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasError() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearError() => clearField(3);
+}
+
 enum ServerMessage_Variant {
   confirmKeyExchange, 
   confirmLogIn, 
   accountRegistrationResult, 
+  accountRegistrationCodeResult, 
   notSet
 }
 
@@ -186,13 +262,15 @@ class ServerMessage extends $pb.GeneratedMessage {
     1 : ServerMessage_Variant.confirmKeyExchange,
     2 : ServerMessage_Variant.confirmLogIn,
     3 : ServerMessage_Variant.accountRegistrationResult,
+    4 : ServerMessage_Variant.accountRegistrationCodeResult,
     0 : ServerMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3])
+    ..oo(0, [1, 2, 3, 4])
     ..aOM<ServerMessage_ConfirmKeyExchange>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmKeyExchange', subBuilder: ServerMessage_ConfirmKeyExchange.create)
     ..aOM<ServerMessage_ConfirmLogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmLogIn', subBuilder: ServerMessage_ConfirmLogIn.create)
     ..aOM<ServerMessage_AccountRegistrationResult>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationResult', subBuilder: ServerMessage_AccountRegistrationResult.create)
+    ..aOM<ServerMessage_AccountRegistrationCodeResult>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationCodeResult', subBuilder: ServerMessage_AccountRegistrationCodeResult.create)
     ..hasRequiredFields = false
   ;
 
@@ -201,6 +279,7 @@ class ServerMessage extends $pb.GeneratedMessage {
     ServerMessage_ConfirmKeyExchange? confirmKeyExchange,
     ServerMessage_ConfirmLogIn? confirmLogIn,
     ServerMessage_AccountRegistrationResult? accountRegistrationResult,
+    ServerMessage_AccountRegistrationCodeResult? accountRegistrationCodeResult,
   }) {
     final _result = create();
     if (confirmKeyExchange != null) {
@@ -211,6 +290,9 @@ class ServerMessage extends $pb.GeneratedMessage {
     }
     if (accountRegistrationResult != null) {
       _result.accountRegistrationResult = accountRegistrationResult;
+    }
+    if (accountRegistrationCodeResult != null) {
+      _result.accountRegistrationCodeResult = accountRegistrationCodeResult;
     }
     return _result;
   }
@@ -270,5 +352,16 @@ class ServerMessage extends $pb.GeneratedMessage {
   void clearAccountRegistrationResult() => clearField(3);
   @$pb.TagNumber(3)
   ServerMessage_AccountRegistrationResult ensureAccountRegistrationResult() => $_ensure(2);
+
+  @$pb.TagNumber(4)
+  ServerMessage_AccountRegistrationCodeResult get accountRegistrationCodeResult => $_getN(3);
+  @$pb.TagNumber(4)
+  set accountRegistrationCodeResult(ServerMessage_AccountRegistrationCodeResult v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasAccountRegistrationCodeResult() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAccountRegistrationCodeResult() => clearField(4);
+  @$pb.TagNumber(4)
+  ServerMessage_AccountRegistrationCodeResult ensureAccountRegistrationCodeResult() => $_ensure(3);
 }
 

@@ -217,7 +217,10 @@ func (server *Server) processIncomingMessages() {
 			t.LogIn.Password = ""
 
 		case *pb.ClientMessage_AccountRegistration_:
-			server.registerAccount(&messageContainer, t.AccountRegistration)
+			server.accountRegistrationResponse(&messageContainer, t.AccountRegistration)
+
+		case *pb.ClientMessage_AccountRegistrationCode_:
+
 		}
 	}
 }

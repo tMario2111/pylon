@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:pylon/proto/clientmessage.pb.dart';
 
+import 'package:pointycastle/pointycastle.dart' as pc;
+
 import 'email_verification_route.dart';
 
 import '../connection/connection.dart';
+import '../connection/crypto_util.dart';
 
 import '../constants.dart';
 
@@ -56,6 +59,22 @@ class _RegisterRouteState extends State<RegisterRoute> {
         setState(() {});
       }
     };
+  }
+
+  void sendAccountRegistrationMessage() {
+    final publicKey = generateKeysFromPassword(_passwordController.text)
+        .publicKey as pc.RSAPublicKey;
+
+    Connection().sendMessage(
+      ClientMessage(
+        accountRegistration: ClientMessage_AccountRegistration(
+          email: _emailController.text,
+          username: _usernameController.text,
+          password: _passwordController.text,
+          publicKey: encodePublicKeyToPemPKCS1(publicKey),
+        ),
+      ),
+    );
   }
 
   @override
@@ -175,18 +194,7 @@ class _RegisterRouteState extends State<RegisterRoute> {
                     height: 50.0,
                     child: PylonButton(
                       label: "CREATE ACCOUNT",
-                      onPressed: () {
-                        Connection().sendMessage(
-                          ClientMessage(
-                            accountRegistration:
-                                ClientMessage_AccountRegistration(
-                              email: _emailController.text,
-                              username: _usernameController.text,
-                              password: _passwordController.text,
-                            ),
-                          ),
-                        );
-                      },
+                      onPressed: sendAccountRegistrationMessage,
                     ),
                   ),
                   const SizedBox(

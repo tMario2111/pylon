@@ -18,9 +18,16 @@ message ServerMessage {
         optional string password_error = 4;
     }
 
+    message AccountRegistrationCodeResult {
+        bool successful = 1;
+        bool criticalError = 2;
+        optional string error = 3;
+    }
+
     oneof variant {
         ConfirmKeyExchange confirm_key_exchange = 1;
         ConfirmLogIn confirm_log_in = 2;
         AccountRegistrationResult account_registration_result = 3;
+        AccountRegistrationCodeResult account_registration_code_result = 4;
     }
 }
