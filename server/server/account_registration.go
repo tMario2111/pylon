@@ -225,8 +225,41 @@ func (server *Server) accountRegistrationVerificationCode(messageContainer *Mess
 
 	successful, critical, errMessage := isVerificationCodeValid(message.Code, messageContainer.storage)
 
+	// TODO: Code cleanup and better error handling
 	if successful {
+		storage := messageContainer.storage
 
+		username, ok := (*storage)["username"]
+		if !ok {
+			return
+		}
+
+		email, ok := (*storage)["email"]
+		if !ok {
+			return
+		}
+
+		password, ok := (*storage)["password"]
+		if !ok {
+			return
+		}
+
+		public_key, ok := (*storage)["public_key"]
+		if !ok {
+			return
+		}
+
+		db := server.db
+		stmt, err := db.Prepare("INSERT INTO users (username, email, password, public_key) VALUES (?, ?, ?, ?);")
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+		_, err = stmt.Exec(username, email, password, public_key)
+		if err != nil {
+			println(err.Error())
+			return
+		}
 	}
 
 	newMessage, err := processServerMessage(&pb.ServerMessage{
@@ -274,11 +307,11 @@ func isVerificationCodeValid(code string, storage *map[string]string) (
 			successful, critical, errMessage = false, true, defaultErrorMessage
 			return
 		}
+		tries--
 		if tries == 0 {
 			successful, critical, errMessage = false, true, "Number of tries exceeded, please try again"
 			return
 		}
-		tries--
 		(*storage)["tries"] = strconv.FormatInt(tries, 10)
 		successful, critical, errMessage = false, false, "Incorrect code, "+(*storage)["tries"]+" remaining tries"
 		return

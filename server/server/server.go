@@ -220,7 +220,7 @@ func (server *Server) processIncomingMessages() {
 			server.accountRegistrationResponse(&messageContainer, t.AccountRegistration)
 
 		case *pb.ClientMessage_AccountRegistrationCode_:
-
+			server.accountRegistrationVerificationCode(&messageContainer, t.AccountRegistrationCode)
 		}
 	}
 }

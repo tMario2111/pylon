@@ -3,6 +3,7 @@ import 'package:pylon/connection/connection.dart';
 import 'package:pylon/proto/clientmessage.pb.dart';
 
 import '../constants.dart';
+import '../misc.dart';
 
 import '../widgets/pylon_text_field.dart';
 import '../widgets/pylon_button.dart';
@@ -77,7 +78,7 @@ class _LoginRouteState extends State<LoginRoute> {
                     width: 250.0,
                     height: 50.0,
                     child: PylonButton(
-                      label: "Log in",
+                      label: 'Log in',
                       onPressed: () {
                         Connection().sendMessage(
                           ClientMessage(
@@ -101,7 +102,7 @@ class _LoginRouteState extends State<LoginRoute> {
                       children: [
                         TextButton(
                           child: const Text(
-                            "Create account",
+                            'Create account',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.normal,
@@ -117,12 +118,15 @@ class _LoginRouteState extends State<LoginRoute> {
                           },
                         ),
                         TextButton(
-                          child: const Text("Forgot password",
+                          child: const Text('Forgot password',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.normal,
                               )),
-                          onPressed: () {},
+                          onPressed: () {
+                            Misc.showSnackBar(
+                                context, 'Feature not implemented yet :(');
+                          },
                         ),
                       ],
                     ),

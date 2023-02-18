@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
+import '../connection/connection.dart';
+
 import '../widgets/pylon_button.dart';
 import '../widgets/pylon_text_field.dart';
 
@@ -14,6 +16,12 @@ class EmailVerificationRoute extends StatefulWidget {
 
 class _EmailVerificationRouteState extends State<EmailVerificationRoute> {
   final _verificationCodeController = TextEditingController();
+
+  _EmailVerificationRouteState() {
+    Connection().messageHandler = (message) {
+      if (message.hasAccountRegistrationCodeResult()) {}
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
