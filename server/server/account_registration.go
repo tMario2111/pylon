@@ -70,8 +70,6 @@ func (server *Server) accountRegistrationResponse(
 	(*storage)["username"] = message.Username
 	(*storage)["public_key"] = message.PublicKey
 
-	log.Println(message.PublicKey)
-
 	(*storage)["timestamp"] = strconv.FormatInt(time.Now().Unix(), 10)
 	(*storage)["tries"] = strconv.FormatInt(VERIFICATION_CODE_TRIES, 10)
 
