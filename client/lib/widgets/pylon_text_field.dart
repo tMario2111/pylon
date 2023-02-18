@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../constants.dart';
 
@@ -9,6 +10,7 @@ class PylonTextField extends StatelessWidget {
     this.obscureText = false,
     this.errorBorder = false,
     this.onFocusChange,
+    this.verificationCodeField = false,
     super.key,
   });
 
@@ -17,6 +19,7 @@ class PylonTextField extends StatelessWidget {
   final bool obscureText;
   final bool errorBorder;
   final void Function(bool)? onFocusChange;
+  final bool verificationCodeField;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,14 @@ class PylonTextField extends StatelessWidget {
               cursorColor: mainColor,
               obscureText: obscureText,
               controller: controller,
+              inputFormatters: verificationCodeField
+                  ? [
+                      FilteringTextInputFormatter.allow(
+                        RegExp('[0-9a-zA-Z]'),
+                      ),
+                      LengthLimitingTextInputFormatter(8),
+                    ]
+                  : null,
             ),
           ),
         ),

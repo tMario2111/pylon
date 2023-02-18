@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pylon/proto/clientmessage.pb.dart';
 
 import '../constants.dart';
+import '../misc.dart';
 
 import '../connection/connection.dart';
 
@@ -16,10 +18,26 @@ class EmailVerificationRoute extends StatefulWidget {
 
 class _EmailVerificationRouteState extends State<EmailVerificationRoute> {
   final _verificationCodeController = TextEditingController();
+  String? _verificationCodeErrorMessage;
 
   _EmailVerificationRouteState() {
     Connection().messageHandler = (message) {
-      if (message.hasAccountRegistrationCodeResult()) {}
+      if (message.hasAccountRegistrationCodeResult()) {
+        final result = message.accountRegistrationCodeResult;
+        if (result.successful) {
+          Misc.showSnackBar(
+              context, "Account created successfully, please log in");
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        } else if (result.criticalError) {
+          Misc.showSnackBar(context, result.error);
+          Navigator.of(context).pop();
+        } else {
+          setState(() {
+            _verificationCodeErrorMessage = result.error;
+          });
+        }
+      }
     };
   }
 
@@ -75,6 +93,13 @@ class _EmailVerificationRouteState extends State<EmailVerificationRoute> {
               child: PylonTextField(
                 label: 'VERIFICATION CODE',
                 controller: _verificationCodeController,
+                errorBorder: _verificationCodeErrorMessage != null,
+                verificationCodeField: true,
+                onFocusChange: (focused) {
+                  setState(() {
+                    _verificationCodeErrorMessage = null;
+                  });
+                },
               ),
             ),
             const SizedBox(
@@ -85,9 +110,26 @@ class _EmailVerificationRouteState extends State<EmailVerificationRoute> {
               height: 50.0,
               child: PylonButton(
                 label: "Submit",
-                onPressed: () {},
+                onPressed: () {
+                  Connection().sendMessage(ClientMessage(
+                    accountRegistrationCode:
+                        ClientMessage_AccountRegistrationCode(
+                      code: _verificationCodeController.text,
+                    ),
+                  ));
+                },
               ),
             ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            if (_verificationCodeErrorMessage != null)
+              Center(
+                child: Text(
+                  _verificationCodeErrorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              )
           ],
         ),
       ),
