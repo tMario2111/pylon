@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:pylon/proto/clientmessage.pb.dart';
 
 import 'package:pointycastle/pointycastle.dart' as pc;
+import 'package:pylon/proto/servermessage.pb.dart';
 
 import 'email_verification_route.dart';
 
@@ -33,32 +34,36 @@ class _RegisterRouteState extends State<RegisterRoute> {
   String? _passwordErrorMessage;
   String? _confirmPasswordErrorMessage;
 
-  _RegisterRouteState() {
-    Connection().messageHandler = (message) {
-      if (message.hasAccountRegistrationResult()) {
-        if (!message.accountRegistrationResult.successful) {
-          if (message.accountRegistrationResult.hasEmailError()) {
-            _emailErrorMessage = message.accountRegistrationResult.emailError;
-          }
-          if (message.accountRegistrationResult.hasUsernameError()) {
-            _usernameErrorMessage =
-                message.accountRegistrationResult.usernameError;
-          }
-          if (message.accountRegistrationResult.hasPasswordError()) {
-            _passwordErrorMessage =
-                message.accountRegistrationResult.passwordError;
-          }
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const EmailVerificationRoute(),
-            ),
-          );
+  void _messageHandler(ServerMessage message) async {
+    if (message.hasAccountRegistrationResult()) {
+      if (!message.accountRegistrationResult.successful) {
+        if (message.accountRegistrationResult.hasEmailError()) {
+          _emailErrorMessage = message.accountRegistrationResult.emailError;
         }
-        setState(() {});
+        if (message.accountRegistrationResult.hasUsernameError()) {
+          _usernameErrorMessage =
+              message.accountRegistrationResult.usernameError;
+        }
+        if (message.accountRegistrationResult.hasPasswordError()) {
+          _passwordErrorMessage =
+              message.accountRegistrationResult.passwordError;
+        }
+      } else {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const EmailVerificationRoute(),
+          ),
+        );
+        // Reassign the message handler
+        Connection().messageHandler = _messageHandler;
       }
-    };
+      setState(() {});
+    }
+  }
+
+  _RegisterRouteState() {
+    Connection().messageHandler = _messageHandler;
   }
 
   void sendAccountRegistrationMessage() {

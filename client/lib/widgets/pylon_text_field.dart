@@ -63,7 +63,7 @@ class PylonTextField extends StatelessWidget {
               inputFormatters: verificationCodeField
                   ? [
                       FilteringTextInputFormatter.allow(
-                        RegExp('[0-9a-zA-Z]'),
+                        RegExp('[0-9A-Z]'),
                       ),
                       LengthLimitingTextInputFormatter(8),
                     ]
