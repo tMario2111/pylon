@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 
@@ -15,18 +16,16 @@ class StartupRoute extends StatefulWidget {
 
 class _StartupRouteState extends State<StartupRoute> {
   _StartupRouteState() {
+    Connection().receiveListener = (message) {
+      if (message is SendPort) {
+        Connection().sendPort = message;
+      }
+      if (message is IsConnected) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: ((context) => const LoginRoute())));
+      }
+    };
     Connection();
-    _finishLoading();
-  }
-
-  void _finishLoading() async {
-    while (!Connection().isConnected()) {
-      await Future.delayed(const Duration(milliseconds: 100));
-    }
-    if (mounted) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: ((context) => const LoginRoute())));
-    }
   }
 
   @override

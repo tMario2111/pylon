@@ -34,7 +34,10 @@ class _RegisterRouteState extends State<RegisterRoute> {
   String? _passwordErrorMessage;
   String? _confirmPasswordErrorMessage;
 
-  void _messageHandler(ServerMessage message) async {
+  void _messageHandler(dynamic message) async {
+    if (message is! ServerMessage) {
+      return;
+    }
     if (message.hasAccountRegistrationResult()) {
       if (!message.accountRegistrationResult.successful) {
         if (message.accountRegistrationResult.hasEmailError()) {
@@ -56,30 +59,30 @@ class _RegisterRouteState extends State<RegisterRoute> {
           ),
         );
         // Reassign the message handler
-        Connection().messageHandler = _messageHandler;
+        Connection().receiveListener = _messageHandler;
       }
       setState(() {});
     }
   }
 
   _RegisterRouteState() {
-    Connection().messageHandler = _messageHandler;
+    Connection().receiveListener = _messageHandler;
   }
 
   void sendAccountRegistrationMessage() {
     final publicKey = generateKeysFromPassword(_passwordController.text)
         .publicKey as pc.RSAPublicKey;
 
-    Connection().sendMessage(
-      ClientMessage(
-        accountRegistration: ClientMessage_AccountRegistration(
-          email: _emailController.text,
-          username: _usernameController.text,
-          password: _passwordController.text,
-          publicKey: encodePublicKeyToPemPKCS1(publicKey),
-        ),
-      ),
-    );
+    Connection().sendPort.send(
+          ClientMessage(
+            accountRegistration: ClientMessage_AccountRegistration(
+              email: _emailController.text,
+              username: _usernameController.text,
+              password: _passwordController.text,
+              publicKey: encodePublicKeyToPemPKCS1(publicKey),
+            ),
+          ),
+        );
   }
 
   @override

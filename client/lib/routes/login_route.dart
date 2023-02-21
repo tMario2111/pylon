@@ -80,14 +80,14 @@ class _LoginRouteState extends State<LoginRoute> {
                     child: PylonButton(
                       label: 'Log in',
                       onPressed: () {
-                        Connection().sendMessage(
-                          ClientMessage(
-                            logIn: ClientMessage_LogIn(
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                            ),
-                          ),
-                        );
+                        Connection().sendPort.send(
+                              ClientMessage(
+                                logIn: ClientMessage_LogIn(
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                ),
+                              ),
+                            );
                       },
                     ),
                   ),

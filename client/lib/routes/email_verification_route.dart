@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pylon/proto/clientmessage.pb.dart';
+import 'package:pylon/proto/servermessage.pb.dart';
 
 import '../constants.dart';
 import '../misc.dart';
@@ -21,7 +22,10 @@ class _EmailVerificationRouteState extends State<EmailVerificationRoute> {
   String? _verificationCodeErrorMessage;
 
   _EmailVerificationRouteState() {
-    Connection().messageHandler = (message) {
+    Connection().receiveListener = (message) {
+      if (message is! ServerMessage) {
+        return;
+      }
       if (message.hasAccountRegistrationCodeResult()) {
         final result = message.accountRegistrationCodeResult;
         if (result.successful) {
@@ -111,12 +115,14 @@ class _EmailVerificationRouteState extends State<EmailVerificationRoute> {
               child: PylonButton(
                 label: "Submit",
                 onPressed: () {
-                  Connection().sendMessage(ClientMessage(
-                    accountRegistrationCode:
-                        ClientMessage_AccountRegistrationCode(
-                      code: _verificationCodeController.text,
-                    ),
-                  ));
+                  Connection().sendPort.send(
+                        ClientMessage(
+                          accountRegistrationCode:
+                              ClientMessage_AccountRegistrationCode(
+                            code: _verificationCodeController.text,
+                          ),
+                        ),
+                      );
                 },
               ),
             ),
