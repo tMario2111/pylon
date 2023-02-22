@@ -121,6 +121,9 @@ void _isolate(List<dynamic> args) async {
   receivePort.listen((message) {
     if (message is ClientMessage) {
       socket.add(processClientMessage(message, privateKey, serverPublicKey));
+    } else if (message is pc.AsymmetricKeyPair<pc.PublicKey, pc.PrivateKey>) {
+      privateKey = message.privateKey as pc.RSAPrivateKey;
+      publicKey = message.publicKey as pc.RSAPublicKey;
     }
   });
 }

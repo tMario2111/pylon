@@ -1,6 +1,8 @@
 package server
 
 import (
+	"crypto/x509"
+	"encoding/pem"
 	"log"
 	pb "pylon/proto"
 
@@ -9,17 +11,18 @@ import (
 
 func (server *Server) logInResponse(messageContainer *Message, message *pb.ClientMessage_LogIn) {
 
-	rows, err := server.db.Query("SELECT password FROM users WHERE email = ?", message.Email)
+	rows, err := server.db.Query("SELECT password, public_key FROM users WHERE email = ?", message.Email)
 	if err != nil {
 		log.Println(err.Error())
 		return
 	}
 	defer rows.Close()
 
+	publicKeyPem := ""
 	successful := false
 	for rows.Next() {
 		hashedPassword := ""
-		err := rows.Scan(&hashedPassword)
+		err := rows.Scan(&hashedPassword, &publicKeyPem)
 		if err != nil {
 			log.Println(err.Error())
 			return
@@ -39,4 +42,16 @@ func (server *Server) logInResponse(messageContainer *Message, message *pb.Clien
 		return
 	}
 	messageContainer.connection.Write(newMessage)
+
+	// Change key
+	if successful {
+		block, _ := pem.Decode([]byte(publicKeyPem))
+		*messageContainer.publicKey, err = x509.ParsePKCS1PublicKey(block.Bytes)
+
+		// This is pretty fatal, maybe add better error handling (client-side)
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+	}
 }

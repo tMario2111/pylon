@@ -85,7 +85,7 @@ String encodePrivateKeyToPemPKCS1(pc.RSAPrivateKey key) {
 
 pc.AsymmetricKeyPair<pc.PublicKey, pc.PrivateKey> generateKeysFromPassword(
     String password) {
-  // Hope that flutter's hashCode is alright
+  // Hope that dart's hashCode is alright
   final random = Random(password.hashCode);
 
   final fortunaRandom = pc.SecureRandom('Fortuna');

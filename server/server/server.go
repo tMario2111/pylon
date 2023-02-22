@@ -175,7 +175,6 @@ func (server *Server) processIncomingMessages() {
 	for messageContainer := range server.messageChannel {
 		connection := messageContainer.connection
 		messageBytes := messageContainer.content
-		// storage := messageContainer.storage
 
 		message := &pb.ClientMessage{}
 		err := proto.Unmarshal(messageBytes, message)

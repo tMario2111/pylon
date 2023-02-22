@@ -4,6 +4,7 @@ import 'package:pylon/proto/clientmessage.pb.dart';
 import 'package:pylon/proto/servermessage.pb.dart';
 
 import '../connection/connection.dart';
+import '../connection/crypto_util.dart';
 
 import '../constants.dart';
 import '../misc.dart';
@@ -12,6 +13,7 @@ import '../widgets/pylon_text_field.dart';
 import '../widgets/pylon_button.dart';
 
 import 'register_route.dart';
+import 'main_route.dart';
 
 class LoginRoute extends StatefulWidget {
   const LoginRoute({super.key});
@@ -41,8 +43,22 @@ class _LoginRouteState extends State<LoginRoute> {
         _emailErrorMessage = 'Incorrect email or password';
         _passwordErrorMessage = _emailErrorMessage;
         setState(() {});
+      } else {
+        _logIn();
       }
     }
+  }
+
+  void _logIn() {
+    Connection()
+        .sendPort
+        .send(generateKeysFromPassword(_passwordController.text));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainRoute(),
+      ),
+    );
   }
 
   @override
