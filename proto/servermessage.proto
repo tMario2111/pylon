@@ -8,7 +8,7 @@ message ServerMessage {
     message ConfirmKeyExchange {}
 
     message ConfirmLogIn {
-        int32 id = 1;
+        bool successful = 1;
     }
 
     message AccountRegistrationResult {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:email_validator/email_validator.dart';
-import 'package:pylon/proto/clientmessage.pb.dart';
 
 import 'package:pointycastle/pointycastle.dart' as pc;
+
+import 'package:pylon/proto/clientmessage.pb.dart';
 import 'package:pylon/proto/servermessage.pb.dart';
 
 import 'email_verification_route.dart';

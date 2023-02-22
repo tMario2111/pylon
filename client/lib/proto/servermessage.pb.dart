@@ -40,17 +40,17 @@ class ServerMessage_ConfirmKeyExchange extends $pb.GeneratedMessage {
 
 class ServerMessage_ConfirmLogIn extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.ConfirmLogIn', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.O3)
+    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'successful')
     ..hasRequiredFields = false
   ;
 
   ServerMessage_ConfirmLogIn._() : super();
   factory ServerMessage_ConfirmLogIn({
-    $core.int? id,
+    $core.bool? successful,
   }) {
     final _result = create();
-    if (id != null) {
-      _result.id = id;
+    if (successful != null) {
+      _result.successful = successful;
     }
     return _result;
   }
@@ -76,13 +76,13 @@ class ServerMessage_ConfirmLogIn extends $pb.GeneratedMessage {
   static ServerMessage_ConfirmLogIn? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.int get id => $_getIZ(0);
+  $core.bool get successful => $_getBF(0);
   @$pb.TagNumber(1)
-  set id($core.int v) { $_setSignedInt32(0, v); }
+  set successful($core.bool v) { $_setBool(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasSuccessful() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearSuccessful() => clearField(1);
 }
 
 class ServerMessage_AccountRegistrationResult extends $pb.GeneratedMessage {

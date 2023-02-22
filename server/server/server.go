@@ -11,7 +11,6 @@ import (
 	pb "pylon/proto"
 	"strconv"
 
-	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -204,17 +203,7 @@ func (server *Server) processIncomingMessages() {
 			connection.Write(newMessage)
 
 		case *pb.ClientMessage_LogIn_:
-			log.Print(t.LogIn.Email, " ")
-			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(t.LogIn.Password), bcrypt.DefaultCost)
-			if err != nil {
-				log.Println(err.Error())
-				continue
-			}
-			log.Print(hashedPassword, "\n")
-
-			// Pretty crude clear but w/e
-			t.LogIn.Email = ""
-			t.LogIn.Password = ""
+			server.logInResponse(&messageContainer, t.LogIn)
 
 		case *pb.ClientMessage_AccountRegistration_:
 			server.accountRegistrationResponse(&messageContainer, t.AccountRegistration)
