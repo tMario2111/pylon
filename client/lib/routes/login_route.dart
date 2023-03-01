@@ -64,7 +64,7 @@ class _LoginRouteState extends State<LoginRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Constants.backgroundColor,
+      backgroundColor: Constants.mainBackgroundColor,
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(

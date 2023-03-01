@@ -54,7 +54,7 @@ class _EmailVerificationRouteState extends State<EmailVerificationRoute> {
         shadowColor: Colors.transparent,
       ),
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constants.backgroundColor,
+      backgroundColor: Constants.mainBackgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -95,7 +95,7 @@ class _RegisterRouteState extends State<RegisterRoute> {
         shadowColor: Colors.transparent,
       ),
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constants.backgroundColor,
+      backgroundColor: Constants.mainBackgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
