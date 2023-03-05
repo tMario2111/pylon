@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:math';
 
+import 'package:pointycastle/api.dart';
 import 'package:pointycastle/asymmetric/oaep.dart' as pc;
 import 'package:pointycastle/asymmetric/rsa.dart' as pc;
 import 'package:pointycastle/digests/sha256.dart' as pc;
@@ -93,7 +94,12 @@ List<int> processClientMessage(
   key = rsaProcessInBlocks(rsaEncrypter, key);
   iv = rsaProcessInBlocks(rsaEncrypter, iv);
 
-  final cipherLen = getLenghtAsBase16(ciphertext);
+  final cipherLen = ByteData(4);
+  cipherLen.setUint32(0, ciphertext.length, Endian.little);
 
-  return key + iv + signature.bytes + cipherLen + ciphertext;
+  return key +
+      iv +
+      signature.bytes +
+      cipherLen.buffer.asUint8List() +
+      ciphertext;
 }

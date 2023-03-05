@@ -4,12 +4,12 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"database/sql"
+	"encoding/binary"
 	"encoding/pem"
 	"io"
 	"log"
 	"net"
 	pb "pylon/proto"
-	"strconv"
 
 	"google.golang.org/protobuf/proto"
 )
@@ -139,14 +139,7 @@ func (server *Server) read(connection net.Conn) {
 				newBytesToRead = MESSAGE_HEADER_LEN
 
 			case messagePartHeader:
-				var bytesToReadUint64 uint64
-				bytesToReadUint64, err = strconv.ParseUint(
-					string(data[:bytesToRead]), MESSAGE_HEADER_BASE, 32)
-				if err != nil {
-					log.Println(err.Error())
-					return
-				}
-				newBytesToRead = int(bytesToReadUint64)
+				newBytesToRead = int(binary.LittleEndian.Uint32(data[:bytesToRead]))
 
 			case messagePartContent:
 				plaintext, err :=

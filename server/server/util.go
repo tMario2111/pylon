@@ -2,7 +2,6 @@ package server
 
 import (
 	"math/rand"
-	"strconv"
 )
 
 const (
@@ -27,14 +26,6 @@ func clearBytes(data *[]byte) {
 	for i := 0; i < len(*data); i++ {
 		(*data)[i] = 0
 	}
-}
-
-func getLenghtAsBase16(str []byte) []byte {
-	size := strconv.FormatUint(uint64(len(str)), MESSAGE_HEADER_BASE)
-	for len(size) < MESSAGE_HEADER_LEN {
-		size = "0" + size
-	}
-	return []byte(size)
 }
 
 func GenerateEmailCode() string {

@@ -9,6 +9,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
+	"encoding/binary"
 	"io"
 	pb "pylon/proto"
 
@@ -140,13 +141,14 @@ func processServerMessage(message *pb.ServerMessage, clientPublicKey *rsa.Public
 		return make([]byte, 0), err
 	}
 
-	cipherLen := getLenghtAsBase16(ciphertext)
+	var cipherLen [4]byte
+	binary.LittleEndian.PutUint32(cipherLen[0:4], uint32(len(ciphertext)))
 
 	var result []byte
 	result = append(result, key...)
 	result = append(result, iv...)
 	result = append(result, signature...)
-	result = append(result, cipherLen...)
+	result = append(result, cipherLen[0:4]...)
 	result = append(result, ciphertext...)
 
 	return result, nil

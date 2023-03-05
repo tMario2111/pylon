@@ -164,12 +164,9 @@ void _read(Socket socket, StreamController<List<int>> controller,
 
         case _MessagePart.header:
           messagePart = _MessagePart.content;
-          newBytesToRead = int.parse(
-            utf8.decode(
-              data.sublist(0, messageHeaderLength),
-            ),
-            radix: messageHeaderBase,
-          );
+          final blob = ByteData.sublistView(
+              Uint8List.fromList(data.sublist(0, messageHeaderLength)));
+          newBytesToRead = blob.getUint32(0, Endian.little);
           break;
 
         case _MessagePart.content:
