@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../pages/chats_page.dart';
+import '../pages/people_page.dart';
+
 import '../constants.dart';
 
 class MainRoute extends StatefulWidget {
@@ -11,6 +14,11 @@ class MainRoute extends StatefulWidget {
 
 class _MainRouteState extends State<MainRoute> {
   var _currentPageIndex = 0;
+
+  final _pages = const [
+    ChatsPage(),
+    PeoplePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +49,7 @@ class _MainRouteState extends State<MainRoute> {
           ),
         ],
       ),
+      body: _pages[_currentPageIndex],
     );
   }
 }

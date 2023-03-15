@@ -8,6 +8,7 @@ import (
 	"encoding/pem"
 	"io"
 	"log"
+	"math/rand"
 	"net"
 	pb "pylon/proto"
 
@@ -43,8 +44,6 @@ func NewServer() (server *Server) {
 
 	server.quitChannel = make(chan struct{})
 	server.messageChannel = make(chan Message, 100) // TODO: No magic numbers
-
-	//auth := smtp.PlainAuth()
 
 	return server
 }
@@ -181,7 +180,7 @@ func (server *Server) processIncomingMessages() {
 			*messageContainer.publicKey, err = x509.ParsePKCS1PublicKey(block.Bytes)
 			if err != nil {
 				log.Println(err.Error())
-				return
+				continue
 			}
 			println("Key exchange successful")
 			newMessage, err := processServerMessage(&pb.ServerMessage{
@@ -190,7 +189,7 @@ func (server *Server) processIncomingMessages() {
 				*messageContainer.publicKey, server.privateKey)
 			if err != nil {
 				log.Println(err.Error())
-				return
+				continue
 			}
 			connection.Write(newMessage)
 
@@ -202,6 +201,42 @@ func (server *Server) processIncomingMessages() {
 
 		case *pb.ClientMessage_AccountRegistrationCode_:
 			server.accountRegistrationVerificationCode(&messageContainer, t.AccountRegistrationCode)
+
+		case *pb.ClientMessage_RequestUserList_:
+			var users []*pb.ServerMessage_SendUserList_User
+			// TODO: Exclude current user id (and maybe also the ones already chatted with)
+			rows, err := server.db.Query("SELECT id, username FROM users")
+			if err != nil {
+				log.Println(err.Error())
+				continue
+			}
+			var count = 10
+			for rows.Next() && count > 0 {
+				var id uint32
+				var username string
+				err := rows.Scan(&id, &username)
+				if err != nil {
+					log.Println(err.Error())
+					continue
+				}
+				users = append(users, &pb.ServerMessage_SendUserList_User{Id: id, Username: username})
+				count--
+			}
+			rows.Close()
+
+			// Why use complicated algorithm when simple algorithm does the job
+			rand.Shuffle(len(users), func(i, j int) {
+				users[i], users[j] = users[j], users[i]
+			})
+
+			newMessage, err := processServerMessage(&pb.ServerMessage{Variant: &pb.ServerMessage_SendUserList_{
+				SendUserList: &pb.ServerMessage_SendUserList{Users: users}}},
+				*messageContainer.publicKey, server.privateKey)
+			if err != nil {
+				log.Println(err.Error())
+				continue
+			}
+			connection.Write(newMessage)
 		}
 	}
 }

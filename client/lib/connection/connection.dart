@@ -16,6 +16,25 @@ import 'crypto_util.dart';
 import '../proto/clientmessage.pb.dart';
 import '../proto/servermessage.pb.dart';
 
+/*
+
+DISCLAIMER
+
+Honestly, this whole file is a complete mess. I hate Flutter isolates and higher
+level languages. There are like 4 controllers doing different things and also
+some listener functions that just seem to work. Also, flutter isolates don't
+work with web, so something has to be done. This file really needs to be 
+rewritten but I don't have the mental capacity to do so right now. I don't know
+if I will make this project public sometime, but if someone sees this, please
+fix this code.
+Sincerely, tMario2111
+
+
+
+TODO: Fix web
+TODO: Rewrite the whole file in a sane way
+*/
+
 enum _MessagePart {
   key,
   iv,
@@ -93,7 +112,7 @@ void _isolate(List<dynamic> args) async {
   pc.RSAPublicKey publicKey = args[2];
   pc.RSAPublicKey serverPublicKey = args[3];
 
-  // TODO: Remove sleep in production
+  // TODO: Remove sleep in production and fix the race condition
   Future.delayed(const Duration(seconds: 1));
 
   final receivePort = ReceivePort();
@@ -114,7 +133,10 @@ void _isolate(List<dynamic> args) async {
 
   final controller = StreamController<List<int>>();
 
-  _read(socket, controller, privateKey, serverPublicKey);
+  final keyChannel =
+      StreamController<pc.AsymmetricKeyPair<pc.PublicKey, pc.PrivateKey>>();
+
+  _read(socket, controller, privateKey, serverPublicKey, keyChannel);
 
   _processIncomingMessages(responsePort, controller);
 
@@ -124,12 +146,22 @@ void _isolate(List<dynamic> args) async {
     } else if (message is pc.AsymmetricKeyPair<pc.PublicKey, pc.PrivateKey>) {
       privateKey = message.privateKey as pc.RSAPrivateKey;
       publicKey = message.publicKey as pc.RSAPublicKey;
+      keyChannel.add(message);
     }
   });
 }
 
-void _read(Socket socket, StreamController<List<int>> controller,
-    pc.RSAPrivateKey privateKey, pc.RSAPublicKey serverPublicKey) {
+void _read(
+    Socket socket,
+    StreamController<List<int>> controller,
+    pc.RSAPrivateKey privateKey,
+    pc.RSAPublicKey serverPublicKey,
+    StreamController<pc.AsymmetricKeyPair<pc.PublicKey, pc.PrivateKey>>
+        keyChannel) {
+  keyChannel.stream.listen((event) {
+    privateKey = event.privateKey as pc.RSAPrivateKey;
+  });
+
   var data = <int>[];
   var messagePart = _MessagePart.key;
   var bytesToRead = rsaCipherLength;

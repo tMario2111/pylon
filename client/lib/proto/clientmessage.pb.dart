@@ -253,11 +253,41 @@ class ClientMessage_AccountRegistrationCode extends $pb.GeneratedMessage {
   void clearCode() => clearField(1);
 }
 
+class ClientMessage_RequestUserList extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.RequestUserList', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  ClientMessage_RequestUserList._() : super();
+  factory ClientMessage_RequestUserList() => create();
+  factory ClientMessage_RequestUserList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientMessage_RequestUserList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ClientMessage_RequestUserList clone() => ClientMessage_RequestUserList()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ClientMessage_RequestUserList copyWith(void Function(ClientMessage_RequestUserList) updates) => super.copyWith((message) => updates(message as ClientMessage_RequestUserList)) as ClientMessage_RequestUserList; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_RequestUserList create() => ClientMessage_RequestUserList._();
+  ClientMessage_RequestUserList createEmptyInstance() => create();
+  static $pb.PbList<ClientMessage_RequestUserList> createRepeated() => $pb.PbList<ClientMessage_RequestUserList>();
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_RequestUserList getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientMessage_RequestUserList>(create);
+  static ClientMessage_RequestUserList? _defaultInstance;
+}
+
 enum ClientMessage_Variant {
   sendPublicKey, 
   logIn, 
   accountRegistration, 
   accountRegistrationCode, 
+  requestUserList, 
   notSet
 }
 
@@ -267,14 +297,16 @@ class ClientMessage extends $pb.GeneratedMessage {
     2 : ClientMessage_Variant.logIn,
     3 : ClientMessage_Variant.accountRegistration,
     4 : ClientMessage_Variant.accountRegistrationCode,
+    5 : ClientMessage_Variant.requestUserList,
     0 : ClientMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4])
+    ..oo(0, [1, 2, 3, 4, 5])
     ..aOM<ClientMessage_SendPublicKey>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendPublicKey', subBuilder: ClientMessage_SendPublicKey.create)
     ..aOM<ClientMessage_LogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'logIn', subBuilder: ClientMessage_LogIn.create)
     ..aOM<ClientMessage_AccountRegistration>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistration', subBuilder: ClientMessage_AccountRegistration.create)
     ..aOM<ClientMessage_AccountRegistrationCode>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationCode', subBuilder: ClientMessage_AccountRegistrationCode.create)
+    ..aOM<ClientMessage_RequestUserList>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'requestUserList', subBuilder: ClientMessage_RequestUserList.create)
     ..hasRequiredFields = false
   ;
 
@@ -284,6 +316,7 @@ class ClientMessage extends $pb.GeneratedMessage {
     ClientMessage_LogIn? logIn,
     ClientMessage_AccountRegistration? accountRegistration,
     ClientMessage_AccountRegistrationCode? accountRegistrationCode,
+    ClientMessage_RequestUserList? requestUserList,
   }) {
     final _result = create();
     if (sendPublicKey != null) {
@@ -297,6 +330,9 @@ class ClientMessage extends $pb.GeneratedMessage {
     }
     if (accountRegistrationCode != null) {
       _result.accountRegistrationCode = accountRegistrationCode;
+    }
+    if (requestUserList != null) {
+      _result.requestUserList = requestUserList;
     }
     return _result;
   }
@@ -367,5 +403,16 @@ class ClientMessage extends $pb.GeneratedMessage {
   void clearAccountRegistrationCode() => clearField(4);
   @$pb.TagNumber(4)
   ClientMessage_AccountRegistrationCode ensureAccountRegistrationCode() => $_ensure(3);
+
+  @$pb.TagNumber(5)
+  ClientMessage_RequestUserList get requestUserList => $_getN(4);
+  @$pb.TagNumber(5)
+  set requestUserList(ClientMessage_RequestUserList v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasRequestUserList() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearRequestUserList() => clearField(5);
+  @$pb.TagNumber(5)
+  ClientMessage_RequestUserList ensureRequestUserList() => $_ensure(4);
 }
 

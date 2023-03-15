@@ -24,10 +24,19 @@ message ServerMessage {
         optional string error = 3;
     }
 
+    message SendUserList {
+        message User {
+            string username = 1;
+            uint32 id = 2;
+        }
+        repeated User users = 1;
+    }
+
     oneof variant {
         ConfirmKeyExchange confirm_key_exchange = 1;
         ConfirmLogIn confirm_log_in = 2;
         AccountRegistrationResult account_registration_result = 3;
         AccountRegistrationCodeResult account_registration_code_result = 4;
+        SendUserList send_user_list = 5;
     }
 }

@@ -249,11 +249,114 @@ class ServerMessage_AccountRegistrationCodeResult extends $pb.GeneratedMessage {
   void clearError() => clearField(3);
 }
 
+class ServerMessage_SendUserList_User extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.SendUserList.User', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'username')
+    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  ServerMessage_SendUserList_User._() : super();
+  factory ServerMessage_SendUserList_User({
+    $core.String? username,
+    $core.int? id,
+  }) {
+    final _result = create();
+    if (username != null) {
+      _result.username = username;
+    }
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory ServerMessage_SendUserList_User.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ServerMessage_SendUserList_User.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ServerMessage_SendUserList_User clone() => ServerMessage_SendUserList_User()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ServerMessage_SendUserList_User copyWith(void Function(ServerMessage_SendUserList_User) updates) => super.copyWith((message) => updates(message as ServerMessage_SendUserList_User)) as ServerMessage_SendUserList_User; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_SendUserList_User create() => ServerMessage_SendUserList_User._();
+  ServerMessage_SendUserList_User createEmptyInstance() => create();
+  static $pb.PbList<ServerMessage_SendUserList_User> createRepeated() => $pb.PbList<ServerMessage_SendUserList_User>();
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_SendUserList_User getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServerMessage_SendUserList_User>(create);
+  static ServerMessage_SendUserList_User? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get username => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set username($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUsername() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUsername() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get id => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set id($core.int v) { $_setUnsignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearId() => clearField(2);
+}
+
+class ServerMessage_SendUserList extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.SendUserList', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..pc<ServerMessage_SendUserList_User>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'users', $pb.PbFieldType.PM, subBuilder: ServerMessage_SendUserList_User.create)
+    ..hasRequiredFields = false
+  ;
+
+  ServerMessage_SendUserList._() : super();
+  factory ServerMessage_SendUserList({
+    $core.Iterable<ServerMessage_SendUserList_User>? users,
+  }) {
+    final _result = create();
+    if (users != null) {
+      _result.users.addAll(users);
+    }
+    return _result;
+  }
+  factory ServerMessage_SendUserList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ServerMessage_SendUserList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ServerMessage_SendUserList clone() => ServerMessage_SendUserList()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ServerMessage_SendUserList copyWith(void Function(ServerMessage_SendUserList) updates) => super.copyWith((message) => updates(message as ServerMessage_SendUserList)) as ServerMessage_SendUserList; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_SendUserList create() => ServerMessage_SendUserList._();
+  ServerMessage_SendUserList createEmptyInstance() => create();
+  static $pb.PbList<ServerMessage_SendUserList> createRepeated() => $pb.PbList<ServerMessage_SendUserList>();
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_SendUserList getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServerMessage_SendUserList>(create);
+  static ServerMessage_SendUserList? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<ServerMessage_SendUserList_User> get users => $_getList(0);
+}
+
 enum ServerMessage_Variant {
   confirmKeyExchange, 
   confirmLogIn, 
   accountRegistrationResult, 
   accountRegistrationCodeResult, 
+  sendUserList, 
   notSet
 }
 
@@ -263,14 +366,16 @@ class ServerMessage extends $pb.GeneratedMessage {
     2 : ServerMessage_Variant.confirmLogIn,
     3 : ServerMessage_Variant.accountRegistrationResult,
     4 : ServerMessage_Variant.accountRegistrationCodeResult,
+    5 : ServerMessage_Variant.sendUserList,
     0 : ServerMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4])
+    ..oo(0, [1, 2, 3, 4, 5])
     ..aOM<ServerMessage_ConfirmKeyExchange>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmKeyExchange', subBuilder: ServerMessage_ConfirmKeyExchange.create)
     ..aOM<ServerMessage_ConfirmLogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmLogIn', subBuilder: ServerMessage_ConfirmLogIn.create)
     ..aOM<ServerMessage_AccountRegistrationResult>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationResult', subBuilder: ServerMessage_AccountRegistrationResult.create)
     ..aOM<ServerMessage_AccountRegistrationCodeResult>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationCodeResult', subBuilder: ServerMessage_AccountRegistrationCodeResult.create)
+    ..aOM<ServerMessage_SendUserList>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendUserList', subBuilder: ServerMessage_SendUserList.create)
     ..hasRequiredFields = false
   ;
 
@@ -280,6 +385,7 @@ class ServerMessage extends $pb.GeneratedMessage {
     ServerMessage_ConfirmLogIn? confirmLogIn,
     ServerMessage_AccountRegistrationResult? accountRegistrationResult,
     ServerMessage_AccountRegistrationCodeResult? accountRegistrationCodeResult,
+    ServerMessage_SendUserList? sendUserList,
   }) {
     final _result = create();
     if (confirmKeyExchange != null) {
@@ -293,6 +399,9 @@ class ServerMessage extends $pb.GeneratedMessage {
     }
     if (accountRegistrationCodeResult != null) {
       _result.accountRegistrationCodeResult = accountRegistrationCodeResult;
+    }
+    if (sendUserList != null) {
+      _result.sendUserList = sendUserList;
     }
     return _result;
   }
@@ -363,5 +472,16 @@ class ServerMessage extends $pb.GeneratedMessage {
   void clearAccountRegistrationCodeResult() => clearField(4);
   @$pb.TagNumber(4)
   ServerMessage_AccountRegistrationCodeResult ensureAccountRegistrationCodeResult() => $_ensure(3);
+
+  @$pb.TagNumber(5)
+  ServerMessage_SendUserList get sendUserList => $_getN(4);
+  @$pb.TagNumber(5)
+  set sendUserList(ServerMessage_SendUserList v) { setField(5, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasSendUserList() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearSendUserList() => clearField(5);
+  @$pb.TagNumber(5)
+  ServerMessage_SendUserList ensureSendUserList() => $_ensure(4);
 }
 

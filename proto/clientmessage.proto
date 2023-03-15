@@ -25,10 +25,13 @@ message ClientMessage {
         string code = 1;
     }
 
+    message RequestUserList {}
+
     oneof variant {
         SendPublicKey send_public_key = 1;
         LogIn log_in = 2;
         AccountRegistration account_registration = 3;
         AccountRegistrationCode account_registration_code = 4;
+        RequestUserList request_user_list = 5;
     }
 }

@@ -46,12 +46,13 @@ func (server *Server) logInResponse(messageContainer *Message, message *pb.Clien
 	// Change key
 	if successful {
 		block, _ := pem.Decode([]byte(publicKeyPem))
-		*messageContainer.publicKey, err = x509.ParsePKCS1PublicKey(block.Bytes)
+		publicKey, err := x509.ParsePKCS1PublicKey(block.Bytes)
 
 		// This is pretty fatal, maybe add better error handling (client-side)
 		if err != nil {
 			log.Println(err.Error())
 			return
 		}
+		*messageContainer.publicKey = publicKey
 	}
 }
