@@ -20,6 +20,7 @@ type Message struct {
 	connection net.Conn
 	publicKey  **rsa.PublicKey
 	storage    *map[string]string
+	id         *int
 }
 
 type Server struct {
@@ -110,6 +111,9 @@ func (server *Server) read(connection net.Conn) {
 
 	var clientPublicKey *rsa.PublicKey = nil
 
+	var id *int = new(int)
+	*id = 0
+
 	for {
 		bufferByteCount, err := connection.Read(buffer)
 		if err != nil {
@@ -148,7 +152,7 @@ func (server *Server) read(connection net.Conn) {
 					continue
 				}
 				server.messageChannel <- Message{
-					content: plaintext, connection: connection, publicKey: &clientPublicKey, storage: &storage}
+					content: plaintext, connection: connection, publicKey: &clientPublicKey, storage: &storage, id: id}
 				newBytesToRead = RSA_CIPHER_LEN
 			}
 
@@ -205,7 +209,7 @@ func (server *Server) processIncomingMessages() {
 		case *pb.ClientMessage_RequestUserList_:
 			var users []*pb.ServerMessage_SendUserList_User
 			// TODO: Exclude current user id (and maybe also the ones already chatted with)
-			rows, err := server.db.Query("SELECT id, username FROM users")
+			rows, err := server.db.Query("SELECT id, username FROM users WHERE id != ?", *messageContainer.id)
 			if err != nil {
 				log.Println(err.Error())
 				continue
