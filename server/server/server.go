@@ -15,12 +15,18 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+const GUEST_USER_ID = 0
+
+type User struct {
+	id        int
+	publicKey *rsa.PublicKey
+	storage   map[string]string
+}
+
 type Message struct {
 	content    []byte
 	connection net.Conn
-	publicKey  **rsa.PublicKey
-	storage    *map[string]string
-	id         *int
+	user       *User
 }
 
 type Server struct {
@@ -107,12 +113,7 @@ func (server *Server) read(connection net.Conn) {
 	iv := make([]byte, RSA_CIPHER_LEN)
 	signature := make([]byte, RSA_CIPHER_LEN)
 
-	var storage = make(map[string]string)
-
-	var clientPublicKey *rsa.PublicKey = nil
-
-	var id *int = new(int)
-	*id = 0
+	user := User{id: GUEST_USER_ID, publicKey: nil, storage: make(map[string]string)}
 
 	for {
 		bufferByteCount, err := connection.Read(buffer)
@@ -146,13 +147,13 @@ func (server *Server) read(connection net.Conn) {
 
 			case messagePartContent:
 				plaintext, err :=
-					unprocessClientMessage(key, iv, signature, data[:bytesToRead], server.privateKey, clientPublicKey)
+					unprocessClientMessage(key, iv, signature, data[:bytesToRead], server.privateKey, user.publicKey)
 				if err != nil {
 					log.Println(err.Error())
 					continue
 				}
 				server.messageChannel <- Message{
-					content: plaintext, connection: connection, publicKey: &clientPublicKey, storage: &storage, id: id}
+					content: plaintext, connection: connection, user: &user}
 				newBytesToRead = RSA_CIPHER_LEN
 			}
 
@@ -171,6 +172,7 @@ func (server *Server) processIncomingMessages() {
 	for messageContainer := range server.messageChannel {
 		connection := messageContainer.connection
 		messageBytes := messageContainer.content
+		user := messageContainer.user
 
 		message := &pb.ClientMessage{}
 		err := proto.Unmarshal(messageBytes, message)
@@ -181,7 +183,7 @@ func (server *Server) processIncomingMessages() {
 
 		case *pb.ClientMessage_SendPublicKey_:
 			block, _ := pem.Decode([]byte(t.SendPublicKey.KeyPem))
-			*messageContainer.publicKey, err = x509.ParsePKCS1PublicKey(block.Bytes)
+			user.publicKey, err = x509.ParsePKCS1PublicKey(block.Bytes)
 			if err != nil {
 				log.Println(err.Error())
 				continue
@@ -190,7 +192,7 @@ func (server *Server) processIncomingMessages() {
 			newMessage, err := processServerMessage(&pb.ServerMessage{
 				Variant: &pb.ServerMessage_ConfirmKeyExchange_{
 					ConfirmKeyExchange: &pb.ServerMessage_ConfirmKeyExchange{}}},
-				*messageContainer.publicKey, server.privateKey)
+				user.publicKey, server.privateKey)
 			if err != nil {
 				log.Println(err.Error())
 				continue
@@ -209,7 +211,7 @@ func (server *Server) processIncomingMessages() {
 		case *pb.ClientMessage_RequestUserList_:
 			var users []*pb.ServerMessage_SendUserList_User
 			// TODO: Exclude current user id (and maybe also the ones already chatted with)
-			rows, err := server.db.Query("SELECT id, username FROM users WHERE id != ?", *messageContainer.id)
+			rows, err := server.db.Query("SELECT id, username FROM users WHERE id != ?", user.id)
 			if err != nil {
 				log.Println(err.Error())
 				continue
@@ -235,7 +237,7 @@ func (server *Server) processIncomingMessages() {
 
 			newMessage, err := processServerMessage(&pb.ServerMessage{Variant: &pb.ServerMessage_SendUserList_{
 				SendUserList: &pb.ServerMessage_SendUserList{Users: users}}},
-				*messageContainer.publicKey, server.privateKey)
+				user.publicKey, server.privateKey)
 			if err != nil {
 				log.Println(err.Error())
 				continue

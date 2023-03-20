@@ -17,6 +17,8 @@ import '../constants.dart';
 import '../widgets/pylon_text_field.dart';
 import '../widgets/pylon_button.dart';
 
+// TODO: Confirm password condition might not work as expected
+
 class RegisterRoute extends StatefulWidget {
   const RegisterRoute({super.key});
 

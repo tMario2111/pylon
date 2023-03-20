@@ -11,6 +11,8 @@ import (
 
 func (server *Server) logInResponse(messageContainer *Message, message *pb.ClientMessage_LogIn) {
 
+	user := messageContainer.user
+
 	rows, err := server.db.Query("SELECT id, password, public_key FROM users WHERE email = ?", message.Email)
 	if err != nil {
 		log.Println(err.Error())
@@ -37,7 +39,7 @@ func (server *Server) logInResponse(messageContainer *Message, message *pb.Clien
 	newMessage, err := processServerMessage(&pb.ServerMessage{
 		Variant: &pb.ServerMessage_ConfirmLogIn_{
 			ConfirmLogIn: &pb.ServerMessage_ConfirmLogIn{Successful: successful}}},
-		*messageContainer.publicKey, server.privateKey)
+		user.publicKey, server.privateKey)
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -46,7 +48,7 @@ func (server *Server) logInResponse(messageContainer *Message, message *pb.Clien
 
 	// Change key
 	if successful {
-		*messageContainer.id = id
+		user.id = id
 
 		block, _ := pem.Decode([]byte(publicKeyPem))
 		publicKey, err := x509.ParsePKCS1PublicKey(block.Bytes)
@@ -56,6 +58,6 @@ func (server *Server) logInResponse(messageContainer *Message, message *pb.Clien
 			log.Println(err.Error())
 			return
 		}
-		*messageContainer.publicKey = publicKey
+		user.publicKey = publicKey
 	}
 }

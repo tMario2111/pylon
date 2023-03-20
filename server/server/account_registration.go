@@ -22,6 +22,8 @@ const (
 func (server *Server) accountRegistrationResponse(
 	messageContainer *Message, message *pb.ClientMessage_AccountRegistration) {
 
+	user := messageContainer.user
+
 	emailValid, emailErr := isEmailValid(message.Email, server.db)
 	usernameValid, usernameErr := isUsernameValid(message.Username, server.db)
 	passwordValid, passwordErr := isPasswordValid(message.Password)
@@ -41,7 +43,7 @@ func (server *Server) accountRegistrationResponse(
 		newMessage, err := processServerMessage(&pb.ServerMessage{
 			Variant: &pb.ServerMessage_AccountRegistrationResult_{
 				AccountRegistrationResult: &regResult,
-			}}, *messageContainer.publicKey, server.privateKey)
+			}}, user.publicKey, server.privateKey)
 		if err != nil {
 			log.Println(err.Error())
 			return
@@ -62,21 +64,19 @@ func (server *Server) accountRegistrationResponse(
 		return
 	}
 
-	storage := messageContainer.storage
+	user.storage["code"] = code
+	user.storage["password"] = string(hashedPassword)
+	user.storage["email"] = message.Email
+	user.storage["username"] = message.Username
+	user.storage["public_key"] = message.PublicKey
 
-	(*storage)["code"] = code
-	(*storage)["password"] = string(hashedPassword)
-	(*storage)["email"] = message.Email
-	(*storage)["username"] = message.Username
-	(*storage)["public_key"] = message.PublicKey
-
-	(*storage)["timestamp"] = strconv.FormatInt(time.Now().Unix(), 10)
-	(*storage)["tries"] = strconv.FormatInt(VERIFICATION_CODE_TRIES, 10)
+	user.storage["timestamp"] = strconv.FormatInt(time.Now().Unix(), 10)
+	user.storage["tries"] = strconv.FormatInt(VERIFICATION_CODE_TRIES, 10)
 
 	newMessage, err := processServerMessage(&pb.ServerMessage{
 		Variant: &pb.ServerMessage_AccountRegistrationResult_{
 			AccountRegistrationResult: &pb.ServerMessage_AccountRegistrationResult{Successful: true}}},
-		*messageContainer.publicKey, server.privateKey)
+		user.publicKey, server.privateKey)
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -223,28 +223,28 @@ func sendCodeVerificationEmail(email string) (string, error) {
 func (server *Server) accountRegistrationVerificationCode(messageContainer *Message,
 	message *pb.ClientMessage_AccountRegistrationCode) {
 
-	successful, critical, errMessage := isVerificationCodeValid(message.Code, messageContainer.storage)
+	user := messageContainer.user
+	successful, critical, errMessage := isVerificationCodeValid(message.Code, user.storage)
 
 	// TODO: Code cleanup and better error handling
 	if successful {
-		storage := messageContainer.storage
 
-		username, ok := (*storage)["username"]
+		username, ok := user.storage["username"]
 		if !ok {
 			return
 		}
 
-		email, ok := (*storage)["email"]
+		email, ok := user.storage["email"]
 		if !ok {
 			return
 		}
 
-		password, ok := (*storage)["password"]
+		password, ok := user.storage["password"]
 		if !ok {
 			return
 		}
 
-		public_key, ok := (*storage)["public_key"]
+		public_key, ok := user.storage["public_key"]
 		if !ok {
 			return
 		}
@@ -266,7 +266,7 @@ func (server *Server) accountRegistrationVerificationCode(messageContainer *Mess
 		Variant: &pb.ServerMessage_AccountRegistrationCodeResult_{
 			AccountRegistrationCodeResult: &pb.ServerMessage_AccountRegistrationCodeResult{
 				Successful: successful, CriticalError: critical, Error: &errMessage}}},
-		*messageContainer.publicKey, server.privateKey)
+		user.publicKey, server.privateKey)
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -274,12 +274,12 @@ func (server *Server) accountRegistrationVerificationCode(messageContainer *Mess
 	messageContainer.connection.Write(newMessage)
 }
 
-func isVerificationCodeValid(code string, storage *map[string]string) (
+func isVerificationCodeValid(code string, storage map[string]string) (
 	successful bool, critical bool, errMessage string) {
 
 	const defaultErrorMessage = "An error has occurred, please try again"
 
-	timestampStr, ok := (*storage)["timestamp"]
+	timestampStr, ok := storage["timestamp"]
 	if !ok {
 		successful, critical, errMessage = false, true, defaultErrorMessage
 		return
@@ -295,13 +295,13 @@ func isVerificationCodeValid(code string, storage *map[string]string) (
 		return
 	}
 
-	storedCode, ok := (*storage)["code"]
+	storedCode, ok := storage["code"]
 	if !ok {
 		successful, critical, errMessage = false, true, defaultErrorMessage
 		return
 	}
 	if code != storedCode {
-		triesStr := (*storage)["tries"]
+		triesStr := storage["tries"]
 		tries, err := strconv.ParseInt(triesStr, 10, 32)
 		if err != nil {
 			successful, critical, errMessage = false, true, defaultErrorMessage
@@ -312,8 +312,8 @@ func isVerificationCodeValid(code string, storage *map[string]string) (
 			successful, critical, errMessage = false, true, "Number of tries exceeded, please try again"
 			return
 		}
-		(*storage)["tries"] = strconv.FormatInt(tries, 10)
-		successful, critical, errMessage = false, false, "Incorrect code, "+(*storage)["tries"]+" remaining tries"
+		storage["tries"] = strconv.FormatInt(tries, 10)
+		successful, critical, errMessage = false, false, "Incorrect code, "+storage["tries"]+" remaining tries"
 		return
 	}
 
