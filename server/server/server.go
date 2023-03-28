@@ -188,7 +188,6 @@ func (server *Server) processIncomingMessages() {
 				log.Println(err.Error())
 				continue
 			}
-			println("Key exchange successful")
 			newMessage, err := processServerMessage(&pb.ServerMessage{
 				Variant: &pb.ServerMessage_ConfirmKeyExchange_{
 					ConfirmKeyExchange: &pb.ServerMessage_ConfirmKeyExchange{}}},

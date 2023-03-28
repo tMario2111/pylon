@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
+	log.SetFlags(2 | 3)
 	log.Println("Server started running")
-	log.SetFlags(0) // Temporary
 	rand.Seed(time.Now().UnixNano())
 
 	s := server.NewServer()
