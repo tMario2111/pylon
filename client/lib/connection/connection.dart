@@ -112,13 +112,23 @@ void _isolate(List<dynamic> args) async {
   pc.RSAPublicKey publicKey = args[2];
   pc.RSAPublicKey serverPublicKey = args[3];
 
-  // TODO: Remove sleep in production and fix the race condition
-  Future.delayed(const Duration(seconds: 1));
-
   final receivePort = ReceivePort();
   responsePort.send(receivePort.sendPort);
 
-  final socket = await Socket.connect('localhost', 8888);
+  var ok = false;
+
+  late Socket socket;
+  while (!ok) {
+    ok = true;
+    try {
+      socket = await Socket.connect('localhost', 8888);
+    } catch (e) {
+      print(e);
+      ok = false;
+      await Future.delayed(const Duration(seconds: 1));
+    }
+  }
+
   socket.add(
     processClientMessage(
       ClientMessage(
