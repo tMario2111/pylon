@@ -45,6 +45,8 @@ class _LoginRouteState extends State<LoginRoute> {
         _passwordErrorMessage = _emailErrorMessage;
         setState(() {});
       } else {
+        Connection().id = message.confirmLogIn.id;
+        print(Connection().id); // TODO: Remove
         _logIn();
       }
     }

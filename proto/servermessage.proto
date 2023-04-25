@@ -9,6 +9,7 @@ message ServerMessage {
 
     message ConfirmLogIn {
         bool successful = 1;
+        int32 id = 2;
     }
 
     message AccountRegistrationResult {

@@ -66,6 +66,7 @@ class _PeoplePageState extends State<PeoplePage> {
                       builder: (context) => ChatRoute(
                         chatId: 0,
                         chatName: users[index].username,
+                        recipientId: users[index].id,
                       ),
                     ),
                   );

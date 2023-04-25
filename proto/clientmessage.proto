@@ -25,6 +25,16 @@ message ClientMessage {
         string code = 1;
     }
 
+    message CreateChat {
+        string name = 1;
+
+        message IdKeyPair {
+            uint32 id = 1;
+            string key = 2;
+        }
+        repeated IdKeyPair id_key_pairs = 2;
+    }
+
     message RequestUserList {}
 
     oneof variant {
@@ -33,5 +43,6 @@ message ClientMessage {
         AccountRegistration account_registration = 3;
         AccountRegistrationCode account_registration_code = 4;
         RequestUserList request_user_list = 5;
+        CreateChat create_chat = 6;
     }
 }

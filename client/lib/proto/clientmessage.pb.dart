@@ -253,6 +253,122 @@ class ClientMessage_AccountRegistrationCode extends $pb.GeneratedMessage {
   void clearCode() => clearField(1);
 }
 
+class ClientMessage_CreateChat_IdKeyPair extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.CreateChat.IdKeyPair', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.OU3)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
+    ..hasRequiredFields = false
+  ;
+
+  ClientMessage_CreateChat_IdKeyPair._() : super();
+  factory ClientMessage_CreateChat_IdKeyPair({
+    $core.int? id,
+    $core.String? key,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    if (key != null) {
+      _result.key = key;
+    }
+    return _result;
+  }
+  factory ClientMessage_CreateChat_IdKeyPair.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientMessage_CreateChat_IdKeyPair.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ClientMessage_CreateChat_IdKeyPair clone() => ClientMessage_CreateChat_IdKeyPair()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ClientMessage_CreateChat_IdKeyPair copyWith(void Function(ClientMessage_CreateChat_IdKeyPair) updates) => super.copyWith((message) => updates(message as ClientMessage_CreateChat_IdKeyPair)) as ClientMessage_CreateChat_IdKeyPair; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_CreateChat_IdKeyPair create() => ClientMessage_CreateChat_IdKeyPair._();
+  ClientMessage_CreateChat_IdKeyPair createEmptyInstance() => create();
+  static $pb.PbList<ClientMessage_CreateChat_IdKeyPair> createRepeated() => $pb.PbList<ClientMessage_CreateChat_IdKeyPair>();
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_CreateChat_IdKeyPair getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientMessage_CreateChat_IdKeyPair>(create);
+  static ClientMessage_CreateChat_IdKeyPair? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get id => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set id($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get key => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set key($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasKey() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearKey() => clearField(2);
+}
+
+class ClientMessage_CreateChat extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.CreateChat', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..pc<ClientMessage_CreateChat_IdKeyPair>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'idKeyPairs', $pb.PbFieldType.PM, subBuilder: ClientMessage_CreateChat_IdKeyPair.create)
+    ..hasRequiredFields = false
+  ;
+
+  ClientMessage_CreateChat._() : super();
+  factory ClientMessage_CreateChat({
+    $core.String? name,
+    $core.Iterable<ClientMessage_CreateChat_IdKeyPair>? idKeyPairs,
+  }) {
+    final _result = create();
+    if (name != null) {
+      _result.name = name;
+    }
+    if (idKeyPairs != null) {
+      _result.idKeyPairs.addAll(idKeyPairs);
+    }
+    return _result;
+  }
+  factory ClientMessage_CreateChat.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientMessage_CreateChat.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ClientMessage_CreateChat clone() => ClientMessage_CreateChat()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ClientMessage_CreateChat copyWith(void Function(ClientMessage_CreateChat) updates) => super.copyWith((message) => updates(message as ClientMessage_CreateChat)) as ClientMessage_CreateChat; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_CreateChat create() => ClientMessage_CreateChat._();
+  ClientMessage_CreateChat createEmptyInstance() => create();
+  static $pb.PbList<ClientMessage_CreateChat> createRepeated() => $pb.PbList<ClientMessage_CreateChat>();
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_CreateChat getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientMessage_CreateChat>(create);
+  static ClientMessage_CreateChat? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get name => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set name($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<ClientMessage_CreateChat_IdKeyPair> get idKeyPairs => $_getList(1);
+}
+
 class ClientMessage_RequestUserList extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.RequestUserList', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
     ..hasRequiredFields = false
@@ -288,6 +404,7 @@ enum ClientMessage_Variant {
   accountRegistration, 
   accountRegistrationCode, 
   requestUserList, 
+  createChat, 
   notSet
 }
 
@@ -298,15 +415,17 @@ class ClientMessage extends $pb.GeneratedMessage {
     3 : ClientMessage_Variant.accountRegistration,
     4 : ClientMessage_Variant.accountRegistrationCode,
     5 : ClientMessage_Variant.requestUserList,
+    6 : ClientMessage_Variant.createChat,
     0 : ClientMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5])
+    ..oo(0, [1, 2, 3, 4, 5, 6])
     ..aOM<ClientMessage_SendPublicKey>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendPublicKey', subBuilder: ClientMessage_SendPublicKey.create)
     ..aOM<ClientMessage_LogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'logIn', subBuilder: ClientMessage_LogIn.create)
     ..aOM<ClientMessage_AccountRegistration>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistration', subBuilder: ClientMessage_AccountRegistration.create)
     ..aOM<ClientMessage_AccountRegistrationCode>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationCode', subBuilder: ClientMessage_AccountRegistrationCode.create)
     ..aOM<ClientMessage_RequestUserList>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'requestUserList', subBuilder: ClientMessage_RequestUserList.create)
+    ..aOM<ClientMessage_CreateChat>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createChat', subBuilder: ClientMessage_CreateChat.create)
     ..hasRequiredFields = false
   ;
 
@@ -317,6 +436,7 @@ class ClientMessage extends $pb.GeneratedMessage {
     ClientMessage_AccountRegistration? accountRegistration,
     ClientMessage_AccountRegistrationCode? accountRegistrationCode,
     ClientMessage_RequestUserList? requestUserList,
+    ClientMessage_CreateChat? createChat,
   }) {
     final _result = create();
     if (sendPublicKey != null) {
@@ -333,6 +453,9 @@ class ClientMessage extends $pb.GeneratedMessage {
     }
     if (requestUserList != null) {
       _result.requestUserList = requestUserList;
+    }
+    if (createChat != null) {
+      _result.createChat = createChat;
     }
     return _result;
   }
@@ -414,5 +537,16 @@ class ClientMessage extends $pb.GeneratedMessage {
   void clearRequestUserList() => clearField(5);
   @$pb.TagNumber(5)
   ClientMessage_RequestUserList ensureRequestUserList() => $_ensure(4);
+
+  @$pb.TagNumber(6)
+  ClientMessage_CreateChat get createChat => $_getN(5);
+  @$pb.TagNumber(6)
+  set createChat(ClientMessage_CreateChat v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasCreateChat() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearCreateChat() => clearField(6);
+  @$pb.TagNumber(6)
+  ClientMessage_CreateChat ensureCreateChat() => $_ensure(5);
 }
 

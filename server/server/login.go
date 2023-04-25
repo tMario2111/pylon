@@ -22,7 +22,7 @@ func (server *Server) logInResponse(messageContainer *Message, message *pb.Clien
 
 	publicKeyPem := ""
 	successful := false
-	var id int
+	var id int = 0
 	for rows.Next() {
 		hashedPassword := ""
 		err := rows.Scan(&id, &hashedPassword, &publicKeyPem)
@@ -38,7 +38,7 @@ func (server *Server) logInResponse(messageContainer *Message, message *pb.Clien
 
 	newMessage, err := processServerMessage(&pb.ServerMessage{
 		Variant: &pb.ServerMessage_ConfirmLogIn_{
-			ConfirmLogIn: &pb.ServerMessage_ConfirmLogIn{Successful: successful}}},
+			ConfirmLogIn: &pb.ServerMessage_ConfirmLogIn{Successful: successful, Id: int32(id)}}},
 		user.publicKey, server.privateKey)
 	if err != nil {
 		log.Println(err.Error())

@@ -17,8 +17,9 @@ const ClientMessage$json = const {
     const {'1': 'account_registration', '3': 3, '4': 1, '5': 11, '6': '.main.ClientMessage.AccountRegistration', '9': 0, '10': 'accountRegistration'},
     const {'1': 'account_registration_code', '3': 4, '4': 1, '5': 11, '6': '.main.ClientMessage.AccountRegistrationCode', '9': 0, '10': 'accountRegistrationCode'},
     const {'1': 'request_user_list', '3': 5, '4': 1, '5': 11, '6': '.main.ClientMessage.RequestUserList', '9': 0, '10': 'requestUserList'},
+    const {'1': 'create_chat', '3': 6, '4': 1, '5': 11, '6': '.main.ClientMessage.CreateChat', '9': 0, '10': 'createChat'},
   ],
-  '3': const [ClientMessage_SendPublicKey$json, ClientMessage_LogIn$json, ClientMessage_AccountRegistration$json, ClientMessage_AccountRegistrationCode$json, ClientMessage_RequestUserList$json],
+  '3': const [ClientMessage_SendPublicKey$json, ClientMessage_LogIn$json, ClientMessage_AccountRegistration$json, ClientMessage_AccountRegistrationCode$json, ClientMessage_CreateChat$json, ClientMessage_RequestUserList$json],
   '8': const [
     const {'1': 'variant'},
   ],
@@ -61,9 +62,28 @@ const ClientMessage_AccountRegistrationCode$json = const {
 };
 
 @$core.Deprecated('Use clientMessageDescriptor instead')
+const ClientMessage_CreateChat$json = const {
+  '1': 'CreateChat',
+  '2': const [
+    const {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'id_key_pairs', '3': 2, '4': 3, '5': 11, '6': '.main.ClientMessage.CreateChat.IdKeyPair', '10': 'idKeyPairs'},
+  ],
+  '3': const [ClientMessage_CreateChat_IdKeyPair$json],
+};
+
+@$core.Deprecated('Use clientMessageDescriptor instead')
+const ClientMessage_CreateChat_IdKeyPair$json = const {
+  '1': 'IdKeyPair',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 13, '10': 'id'},
+    const {'1': 'key', '3': 2, '4': 1, '5': 9, '10': 'key'},
+  ],
+};
+
+@$core.Deprecated('Use clientMessageDescriptor instead')
 const ClientMessage_RequestUserList$json = const {
   '1': 'RequestUserList',
 };
 
 /// Descriptor for `ClientMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List clientMessageDescriptor = $convert.base64Decode('Cg1DbGllbnRNZXNzYWdlEksKD3NlbmRfcHVibGljX2tleRgBIAEoCzIhLm1haW4uQ2xpZW50TWVzc2FnZS5TZW5kUHVibGljS2V5SABSDXNlbmRQdWJsaWNLZXkSMgoGbG9nX2luGAIgASgLMhkubWFpbi5DbGllbnRNZXNzYWdlLkxvZ0luSABSBWxvZ0luElwKFGFjY291bnRfcmVnaXN0cmF0aW9uGAMgASgLMicubWFpbi5DbGllbnRNZXNzYWdlLkFjY291bnRSZWdpc3RyYXRpb25IAFITYWNjb3VudFJlZ2lzdHJhdGlvbhJpChlhY2NvdW50X3JlZ2lzdHJhdGlvbl9jb2RlGAQgASgLMisubWFpbi5DbGllbnRNZXNzYWdlLkFjY291bnRSZWdpc3RyYXRpb25Db2RlSABSF2FjY291bnRSZWdpc3RyYXRpb25Db2RlElEKEXJlcXVlc3RfdXNlcl9saXN0GAUgASgLMiMubWFpbi5DbGllbnRNZXNzYWdlLlJlcXVlc3RVc2VyTGlzdEgAUg9yZXF1ZXN0VXNlckxpc3QaKAoNU2VuZFB1YmxpY0tleRIXCgdrZXlfcGVtGAEgASgJUgZrZXlQZW0aOQoFTG9nSW4SFAoFZW1haWwYASABKAlSBWVtYWlsEhoKCHBhc3N3b3JkGAIgASgJUghwYXNzd29yZBqCAQoTQWNjb3VudFJlZ2lzdHJhdGlvbhIUCgVlbWFpbBgBIAEoCVIFZW1haWwSGgoIdXNlcm5hbWUYAiABKAlSCHVzZXJuYW1lEhoKCHBhc3N3b3JkGAMgASgJUghwYXNzd29yZBIdCgpwdWJsaWNfa2V5GAQgASgJUglwdWJsaWNLZXkaLQoXQWNjb3VudFJlZ2lzdHJhdGlvbkNvZGUSEgoEY29kZRgBIAEoCVIEY29kZRoRCg9SZXF1ZXN0VXNlckxpc3RCCQoHdmFyaWFudA==');
+final $typed_data.Uint8List clientMessageDescriptor = $convert.base64Decode('Cg1DbGllbnRNZXNzYWdlEksKD3NlbmRfcHVibGljX2tleRgBIAEoCzIhLm1haW4uQ2xpZW50TWVzc2FnZS5TZW5kUHVibGljS2V5SABSDXNlbmRQdWJsaWNLZXkSMgoGbG9nX2luGAIgASgLMhkubWFpbi5DbGllbnRNZXNzYWdlLkxvZ0luSABSBWxvZ0luElwKFGFjY291bnRfcmVnaXN0cmF0aW9uGAMgASgLMicubWFpbi5DbGllbnRNZXNzYWdlLkFjY291bnRSZWdpc3RyYXRpb25IAFITYWNjb3VudFJlZ2lzdHJhdGlvbhJpChlhY2NvdW50X3JlZ2lzdHJhdGlvbl9jb2RlGAQgASgLMisubWFpbi5DbGllbnRNZXNzYWdlLkFjY291bnRSZWdpc3RyYXRpb25Db2RlSABSF2FjY291bnRSZWdpc3RyYXRpb25Db2RlElEKEXJlcXVlc3RfdXNlcl9saXN0GAUgASgLMiMubWFpbi5DbGllbnRNZXNzYWdlLlJlcXVlc3RVc2VyTGlzdEgAUg9yZXF1ZXN0VXNlckxpc3QSQQoLY3JlYXRlX2NoYXQYBiABKAsyHi5tYWluLkNsaWVudE1lc3NhZ2UuQ3JlYXRlQ2hhdEgAUgpjcmVhdGVDaGF0GigKDVNlbmRQdWJsaWNLZXkSFwoHa2V5X3BlbRgBIAEoCVIGa2V5UGVtGjkKBUxvZ0luEhQKBWVtYWlsGAEgASgJUgVlbWFpbBIaCghwYXNzd29yZBgCIAEoCVIIcGFzc3dvcmQaggEKE0FjY291bnRSZWdpc3RyYXRpb24SFAoFZW1haWwYASABKAlSBWVtYWlsEhoKCHVzZXJuYW1lGAIgASgJUgh1c2VybmFtZRIaCghwYXNzd29yZBgDIAEoCVIIcGFzc3dvcmQSHQoKcHVibGljX2tleRgEIAEoCVIJcHVibGljS2V5Gi0KF0FjY291bnRSZWdpc3RyYXRpb25Db2RlEhIKBGNvZGUYASABKAlSBGNvZGUamwEKCkNyZWF0ZUNoYXQSEgoEbmFtZRgBIAEoCVIEbmFtZRJKCgxpZF9rZXlfcGFpcnMYAiADKAsyKC5tYWluLkNsaWVudE1lc3NhZ2UuQ3JlYXRlQ2hhdC5JZEtleVBhaXJSCmlkS2V5UGFpcnMaLQoJSWRLZXlQYWlyEg4KAmlkGAEgASgNUgJpZBIQCgNrZXkYAiABKAlSA2tleRoRCg9SZXF1ZXN0VXNlckxpc3RCCQoHdmFyaWFudA==');
