@@ -33,11 +33,16 @@ message ServerMessage {
         repeated User users = 1;
     }
 
+    message SendPublicKey {
+        string public_key = 1;
+    }
+
     oneof variant {
         ConfirmKeyExchange confirm_key_exchange = 1;
         ConfirmLogIn confirm_log_in = 2;
         AccountRegistrationResult account_registration_result = 3;
         AccountRegistrationCodeResult account_registration_code_result = 4;
         SendUserList send_user_list = 5;
+        SendPublicKey send_public_key = 6;
     }
 }

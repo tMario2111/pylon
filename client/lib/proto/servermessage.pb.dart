@@ -365,12 +365,60 @@ class ServerMessage_SendUserList extends $pb.GeneratedMessage {
   $core.List<ServerMessage_SendUserList_User> get users => $_getList(0);
 }
 
+class ServerMessage_SendPublicKey extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.SendPublicKey', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'publicKey')
+    ..hasRequiredFields = false
+  ;
+
+  ServerMessage_SendPublicKey._() : super();
+  factory ServerMessage_SendPublicKey({
+    $core.String? publicKey,
+  }) {
+    final _result = create();
+    if (publicKey != null) {
+      _result.publicKey = publicKey;
+    }
+    return _result;
+  }
+  factory ServerMessage_SendPublicKey.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ServerMessage_SendPublicKey.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ServerMessage_SendPublicKey clone() => ServerMessage_SendPublicKey()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ServerMessage_SendPublicKey copyWith(void Function(ServerMessage_SendPublicKey) updates) => super.copyWith((message) => updates(message as ServerMessage_SendPublicKey)) as ServerMessage_SendPublicKey; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_SendPublicKey create() => ServerMessage_SendPublicKey._();
+  ServerMessage_SendPublicKey createEmptyInstance() => create();
+  static $pb.PbList<ServerMessage_SendPublicKey> createRepeated() => $pb.PbList<ServerMessage_SendPublicKey>();
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_SendPublicKey getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServerMessage_SendPublicKey>(create);
+  static ServerMessage_SendPublicKey? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get publicKey => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set publicKey($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPublicKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPublicKey() => clearField(1);
+}
+
 enum ServerMessage_Variant {
   confirmKeyExchange, 
   confirmLogIn, 
   accountRegistrationResult, 
   accountRegistrationCodeResult, 
   sendUserList, 
+  sendPublicKey, 
   notSet
 }
 
@@ -381,15 +429,17 @@ class ServerMessage extends $pb.GeneratedMessage {
     3 : ServerMessage_Variant.accountRegistrationResult,
     4 : ServerMessage_Variant.accountRegistrationCodeResult,
     5 : ServerMessage_Variant.sendUserList,
+    6 : ServerMessage_Variant.sendPublicKey,
     0 : ServerMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5])
+    ..oo(0, [1, 2, 3, 4, 5, 6])
     ..aOM<ServerMessage_ConfirmKeyExchange>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmKeyExchange', subBuilder: ServerMessage_ConfirmKeyExchange.create)
     ..aOM<ServerMessage_ConfirmLogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmLogIn', subBuilder: ServerMessage_ConfirmLogIn.create)
     ..aOM<ServerMessage_AccountRegistrationResult>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationResult', subBuilder: ServerMessage_AccountRegistrationResult.create)
     ..aOM<ServerMessage_AccountRegistrationCodeResult>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationCodeResult', subBuilder: ServerMessage_AccountRegistrationCodeResult.create)
     ..aOM<ServerMessage_SendUserList>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendUserList', subBuilder: ServerMessage_SendUserList.create)
+    ..aOM<ServerMessage_SendPublicKey>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendPublicKey', subBuilder: ServerMessage_SendPublicKey.create)
     ..hasRequiredFields = false
   ;
 
@@ -400,6 +450,7 @@ class ServerMessage extends $pb.GeneratedMessage {
     ServerMessage_AccountRegistrationResult? accountRegistrationResult,
     ServerMessage_AccountRegistrationCodeResult? accountRegistrationCodeResult,
     ServerMessage_SendUserList? sendUserList,
+    ServerMessage_SendPublicKey? sendPublicKey,
   }) {
     final _result = create();
     if (confirmKeyExchange != null) {
@@ -416,6 +467,9 @@ class ServerMessage extends $pb.GeneratedMessage {
     }
     if (sendUserList != null) {
       _result.sendUserList = sendUserList;
+    }
+    if (sendPublicKey != null) {
+      _result.sendPublicKey = sendPublicKey;
     }
     return _result;
   }
@@ -497,5 +551,16 @@ class ServerMessage extends $pb.GeneratedMessage {
   void clearSendUserList() => clearField(5);
   @$pb.TagNumber(5)
   ServerMessage_SendUserList ensureSendUserList() => $_ensure(4);
+
+  @$pb.TagNumber(6)
+  ServerMessage_SendPublicKey get sendPublicKey => $_getN(5);
+  @$pb.TagNumber(6)
+  set sendPublicKey(ServerMessage_SendPublicKey v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasSendPublicKey() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearSendPublicKey() => clearField(6);
+  @$pb.TagNumber(6)
+  ServerMessage_SendPublicKey ensureSendPublicKey() => $_ensure(5);
 }
 

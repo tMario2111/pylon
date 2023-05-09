@@ -46,7 +46,6 @@ class _LoginRouteState extends State<LoginRoute> {
         setState(() {});
       } else {
         Connection().id = message.confirmLogIn.id;
-        print(Connection().id); // TODO: Remove
         _logIn();
       }
     }

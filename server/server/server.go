@@ -242,6 +242,31 @@ func (server *Server) processIncomingMessages() {
 				continue
 			}
 			connection.Write(newMessage)
+
+		case *pb.ClientMessage_RequestPublicKey_:
+			rows, err := server.db.Query("SELECT public_key FROM users WHERE id = ?", t.RequestPublicKey.Id)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			for rows.Next() {
+				var publicKey = ""
+				err := rows.Scan(&publicKey)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+				newMessage, err := processServerMessage(&pb.ServerMessage{
+					Variant: &pb.ServerMessage_SendPublicKey_{
+						SendPublicKey: &pb.ServerMessage_SendPublicKey{PublicKey: publicKey}}},
+					user.publicKey, server.privateKey)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+				connection.Write(newMessage)
+			}
+			rows.Close()
 		}
 	}
 }

@@ -17,8 +17,9 @@ const ServerMessage$json = const {
     const {'1': 'account_registration_result', '3': 3, '4': 1, '5': 11, '6': '.main.ServerMessage.AccountRegistrationResult', '9': 0, '10': 'accountRegistrationResult'},
     const {'1': 'account_registration_code_result', '3': 4, '4': 1, '5': 11, '6': '.main.ServerMessage.AccountRegistrationCodeResult', '9': 0, '10': 'accountRegistrationCodeResult'},
     const {'1': 'send_user_list', '3': 5, '4': 1, '5': 11, '6': '.main.ServerMessage.SendUserList', '9': 0, '10': 'sendUserList'},
+    const {'1': 'send_public_key', '3': 6, '4': 1, '5': 11, '6': '.main.ServerMessage.SendPublicKey', '9': 0, '10': 'sendPublicKey'},
   ],
-  '3': const [ServerMessage_ConfirmKeyExchange$json, ServerMessage_ConfirmLogIn$json, ServerMessage_AccountRegistrationResult$json, ServerMessage_AccountRegistrationCodeResult$json, ServerMessage_SendUserList$json],
+  '3': const [ServerMessage_ConfirmKeyExchange$json, ServerMessage_ConfirmLogIn$json, ServerMessage_AccountRegistrationResult$json, ServerMessage_AccountRegistrationCodeResult$json, ServerMessage_SendUserList$json, ServerMessage_SendPublicKey$json],
   '8': const [
     const {'1': 'variant'},
   ],
@@ -85,5 +86,13 @@ const ServerMessage_SendUserList_User$json = const {
   ],
 };
 
+@$core.Deprecated('Use serverMessageDescriptor instead')
+const ServerMessage_SendPublicKey$json = const {
+  '1': 'SendPublicKey',
+  '2': const [
+    const {'1': 'public_key', '3': 1, '4': 1, '5': 9, '10': 'publicKey'},
+  ],
+};
+
 /// Descriptor for `ServerMessage`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List serverMessageDescriptor = $convert.base64Decode('Cg1TZXJ2ZXJNZXNzYWdlEloKFGNvbmZpcm1fa2V5X2V4Y2hhbmdlGAEgASgLMiYubWFpbi5TZXJ2ZXJNZXNzYWdlLkNvbmZpcm1LZXlFeGNoYW5nZUgAUhJjb25maXJtS2V5RXhjaGFuZ2USSAoOY29uZmlybV9sb2dfaW4YAiABKAsyIC5tYWluLlNlcnZlck1lc3NhZ2UuQ29uZmlybUxvZ0luSABSDGNvbmZpcm1Mb2dJbhJvChthY2NvdW50X3JlZ2lzdHJhdGlvbl9yZXN1bHQYAyABKAsyLS5tYWluLlNlcnZlck1lc3NhZ2UuQWNjb3VudFJlZ2lzdHJhdGlvblJlc3VsdEgAUhlhY2NvdW50UmVnaXN0cmF0aW9uUmVzdWx0EnwKIGFjY291bnRfcmVnaXN0cmF0aW9uX2NvZGVfcmVzdWx0GAQgASgLMjEubWFpbi5TZXJ2ZXJNZXNzYWdlLkFjY291bnRSZWdpc3RyYXRpb25Db2RlUmVzdWx0SABSHWFjY291bnRSZWdpc3RyYXRpb25Db2RlUmVzdWx0EkgKDnNlbmRfdXNlcl9saXN0GAUgASgLMiAubWFpbi5TZXJ2ZXJNZXNzYWdlLlNlbmRVc2VyTGlzdEgAUgxzZW5kVXNlckxpc3QaFAoSQ29uZmlybUtleUV4Y2hhbmdlGj4KDENvbmZpcm1Mb2dJbhIeCgpzdWNjZXNzZnVsGAEgASgIUgpzdWNjZXNzZnVsEg4KAmlkGAIgASgFUgJpZBrvAQoZQWNjb3VudFJlZ2lzdHJhdGlvblJlc3VsdBIeCgpzdWNjZXNzZnVsGAEgASgIUgpzdWNjZXNzZnVsEiQKC2VtYWlsX2Vycm9yGAIgASgJSABSCmVtYWlsRXJyb3KIAQESKgoOdXNlcm5hbWVfZXJyb3IYAyABKAlIAVINdXNlcm5hbWVFcnJvcogBARIqCg5wYXNzd29yZF9lcnJvchgEIAEoCUgCUg1wYXNzd29yZEVycm9yiAEBQg4KDF9lbWFpbF9lcnJvckIRCg9fdXNlcm5hbWVfZXJyb3JCEQoPX3Bhc3N3b3JkX2Vycm9yGooBCh1BY2NvdW50UmVnaXN0cmF0aW9uQ29kZVJlc3VsdBIeCgpzdWNjZXNzZnVsGAEgASgIUgpzdWNjZXNzZnVsEiQKDWNyaXRpY2FsRXJyb3IYAiABKAhSDWNyaXRpY2FsRXJyb3ISGQoFZXJyb3IYAyABKAlIAFIFZXJyb3KIAQFCCAoGX2Vycm9yGn8KDFNlbmRVc2VyTGlzdBI7CgV1c2VycxgBIAMoCzIlLm1haW4uU2VydmVyTWVzc2FnZS5TZW5kVXNlckxpc3QuVXNlclIFdXNlcnMaMgoEVXNlchIaCgh1c2VybmFtZRgBIAEoCVIIdXNlcm5hbWUSDgoCaWQYAiABKA1SAmlkQgkKB3ZhcmlhbnQ=');
+final $typed_data.Uint8List serverMessageDescriptor = $convert.base64Decode('Cg1TZXJ2ZXJNZXNzYWdlEloKFGNvbmZpcm1fa2V5X2V4Y2hhbmdlGAEgASgLMiYubWFpbi5TZXJ2ZXJNZXNzYWdlLkNvbmZpcm1LZXlFeGNoYW5nZUgAUhJjb25maXJtS2V5RXhjaGFuZ2USSAoOY29uZmlybV9sb2dfaW4YAiABKAsyIC5tYWluLlNlcnZlck1lc3NhZ2UuQ29uZmlybUxvZ0luSABSDGNvbmZpcm1Mb2dJbhJvChthY2NvdW50X3JlZ2lzdHJhdGlvbl9yZXN1bHQYAyABKAsyLS5tYWluLlNlcnZlck1lc3NhZ2UuQWNjb3VudFJlZ2lzdHJhdGlvblJlc3VsdEgAUhlhY2NvdW50UmVnaXN0cmF0aW9uUmVzdWx0EnwKIGFjY291bnRfcmVnaXN0cmF0aW9uX2NvZGVfcmVzdWx0GAQgASgLMjEubWFpbi5TZXJ2ZXJNZXNzYWdlLkFjY291bnRSZWdpc3RyYXRpb25Db2RlUmVzdWx0SABSHWFjY291bnRSZWdpc3RyYXRpb25Db2RlUmVzdWx0EkgKDnNlbmRfdXNlcl9saXN0GAUgASgLMiAubWFpbi5TZXJ2ZXJNZXNzYWdlLlNlbmRVc2VyTGlzdEgAUgxzZW5kVXNlckxpc3QSSwoPc2VuZF9wdWJsaWNfa2V5GAYgASgLMiEubWFpbi5TZXJ2ZXJNZXNzYWdlLlNlbmRQdWJsaWNLZXlIAFINc2VuZFB1YmxpY0tleRoUChJDb25maXJtS2V5RXhjaGFuZ2UaPgoMQ29uZmlybUxvZ0luEh4KCnN1Y2Nlc3NmdWwYASABKAhSCnN1Y2Nlc3NmdWwSDgoCaWQYAiABKAVSAmlkGu8BChlBY2NvdW50UmVnaXN0cmF0aW9uUmVzdWx0Eh4KCnN1Y2Nlc3NmdWwYASABKAhSCnN1Y2Nlc3NmdWwSJAoLZW1haWxfZXJyb3IYAiABKAlIAFIKZW1haWxFcnJvcogBARIqCg51c2VybmFtZV9lcnJvchgDIAEoCUgBUg11c2VybmFtZUVycm9yiAEBEioKDnBhc3N3b3JkX2Vycm9yGAQgASgJSAJSDXBhc3N3b3JkRXJyb3KIAQFCDgoMX2VtYWlsX2Vycm9yQhEKD191c2VybmFtZV9lcnJvckIRCg9fcGFzc3dvcmRfZXJyb3IaigEKHUFjY291bnRSZWdpc3RyYXRpb25Db2RlUmVzdWx0Eh4KCnN1Y2Nlc3NmdWwYASABKAhSCnN1Y2Nlc3NmdWwSJAoNY3JpdGljYWxFcnJvchgCIAEoCFINY3JpdGljYWxFcnJvchIZCgVlcnJvchgDIAEoCUgAUgVlcnJvcogBAUIICgZfZXJyb3IafwoMU2VuZFVzZXJMaXN0EjsKBXVzZXJzGAEgAygLMiUubWFpbi5TZXJ2ZXJNZXNzYWdlLlNlbmRVc2VyTGlzdC5Vc2VyUgV1c2VycxoyCgRVc2VyEhoKCHVzZXJuYW1lGAEgASgJUgh1c2VybmFtZRIOCgJpZBgCIAEoDVICaWQaLgoNU2VuZFB1YmxpY0tleRIdCgpwdWJsaWNfa2V5GAEgASgJUglwdWJsaWNLZXlCCQoHdmFyaWFudA==');

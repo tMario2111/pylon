@@ -11,6 +11,8 @@ import '../connection/consts.dart';
 import 'package:pylon/proto/clientmessage.pb.dart';
 import 'package:pylon/proto/servermessage.pb.dart';
 
+import 'package:encrypt/encrypt.dart' as enc;
+
 class ChatRoute extends StatefulWidget {
   const ChatRoute(
       {required this.chatId,
@@ -27,6 +29,35 @@ class ChatRoute extends StatefulWidget {
 }
 
 class _ChatRouteState extends State<ChatRoute> {
+  int? _chatId;
+  String? _chatName;
+  int? _recipientId;
+
+  var _initialized = false;
+
+  void _setup() {
+    _initialized = true;
+
+    _chatId = widget.chatId;
+    _chatName = widget.chatName;
+    _recipientId = widget.recipientId;
+
+    Connection().receiveListener = _messageHandler;
+    Connection()
+        .sendPort
+        // .send(ClientMessage_RequestPublicKey(id: widget.recipientId!));
+        .send(ClientMessage(
+            requestPublicKey:
+                ClientMessage_RequestPublicKey(id: _recipientId)));
+  }
+
+  void _messageHandler(dynamic message) {
+    if (message is! ServerMessage) return;
+    if (message.hasSendPublicKey()) {
+      ;
+    }
+  }
+
   void _createChat() {
     final random = Random.secure();
 
@@ -35,12 +66,14 @@ class _ChatRouteState extends State<ChatRoute> {
       key[i] = random.nextInt(256);
     }
 
-    final message = ClientMessage_CreateChat();
-    message.name = '';
+    final chatCreationMessage = ClientMessage_CreateChat();
+    chatCreationMessage.name = '';
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_initialized) _setup();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.chatName),
