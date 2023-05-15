@@ -54,6 +54,8 @@ class Connection {
   late final pc.RSAPublicKey _publicKey;
   late final pc.RSAPublicKey _serverPublicKey;
 
+  pc.RSAPublicKey get publicKey => _publicKey;
+
   int? id;
 
   final receivePort = ReceivePort();

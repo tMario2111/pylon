@@ -267,6 +267,38 @@ func (server *Server) processIncomingMessages() {
 				connection.Write(newMessage)
 			}
 			rows.Close()
+
+		case *pb.ClientMessage_CreateChat_:
+			stmt, err := server.db.Prepare("INSERT INTO chats (name, creator_id) VALUES (?, ?);")
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			res, err := stmt.Exec(t.CreateChat.Name, messageContainer.user.id)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			chatId, err := res.LastInsertId()
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+
+			stmt, err = server.db.Prepare("INSERT INTO participants (user_id, chat_id, shared_key) VALUES (?, ?, ?);")
+			if err != nil {
+				log.Println(err.Error())
+			}
+			_, err = stmt.Exec(messageContainer.user.id, chatId, t.CreateChat.SelfKey)
+			if err != nil {
+				log.Println(err.Error())
+			}
+
+			// HARDCODED
+			_, err = stmt.Exec(t.CreateChat.OtherKeys[0].Id, chatId, t.CreateChat.OtherKeys[0].Key)
+			if err != nil {
+				log.Println(err.Error())
+			}
 		}
 	}
 }

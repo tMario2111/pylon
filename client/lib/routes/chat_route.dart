@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:pylon/connection/crypto_util.dart';
 
 import '../constants.dart';
 
@@ -10,6 +11,10 @@ import '../connection/consts.dart';
 
 import 'package:pylon/proto/clientmessage.pb.dart';
 import 'package:pylon/proto/servermessage.pb.dart';
+
+import 'package:pointycastle/pointycastle.dart' as pc;
+import 'package:pointycastle/asymmetric/oaep.dart' as pc;
+import 'package:pointycastle/asymmetric/rsa.dart' as pc;
 
 import 'package:encrypt/encrypt.dart' as enc;
 
@@ -32,6 +37,7 @@ class _ChatRouteState extends State<ChatRoute> {
   int? _chatId;
   String? _chatName;
   int? _recipientId;
+  pc.RSAPublicKey? _recipientPublicKey;
 
   var _initialized = false;
 
@@ -43,18 +49,15 @@ class _ChatRouteState extends State<ChatRoute> {
     _recipientId = widget.recipientId;
 
     Connection().receiveListener = _messageHandler;
-    Connection()
-        .sendPort
-        // .send(ClientMessage_RequestPublicKey(id: widget.recipientId!));
-        .send(ClientMessage(
-            requestPublicKey:
-                ClientMessage_RequestPublicKey(id: _recipientId)));
+    Connection().sendPort.send(ClientMessage(
+        requestPublicKey: ClientMessage_RequestPublicKey(id: _recipientId)));
   }
 
   void _messageHandler(dynamic message) {
     if (message is! ServerMessage) return;
     if (message.hasSendPublicKey()) {
-      ;
+      _recipientPublicKey = enc.RSAKeyParser()
+          .parse(message.sendPublicKey.publicKey) as pc.RSAPublicKey;
     }
   }
 
@@ -68,6 +71,28 @@ class _ChatRouteState extends State<ChatRoute> {
 
     final chatCreationMessage = ClientMessage_CreateChat();
     chatCreationMessage.name = '';
+
+    // Hardcoded for DMs only
+    {
+      final encrypter = pc.OAEPEncoding.withSHA256(pc.RSAEngine())
+        ..init(true,
+            pc.PublicKeyParameter<pc.RSAPublicKey>(Connection().publicKey));
+      final encrypedKey = rsaProcessInBlocks(encrypter, key);
+      chatCreationMessage.selfKey = String.fromCharCodes(encrypedKey);
+    }
+
+    {
+      final encrypter = pc.OAEPEncoding.withSHA256(pc.RSAEngine())
+        ..init(
+            true,
+            pc.PublicKeyParameter<pc.RSAPublicKey>(
+                _recipientPublicKey as pc.RSAPublicKey));
+      final encryptedKey = rsaProcessInBlocks(encrypter, key);
+      chatCreationMessage.otherKeys.add(ClientMessage_CreateChat_IdKeyPair(
+          id: _recipientId, key: String.fromCharCodes(encryptedKey)));
+    }
+
+    Connection().sendPort.send(ClientMessage(createChat: chatCreationMessage));
   }
 
   @override
@@ -111,7 +136,8 @@ class _ChatRouteState extends State<ChatRoute> {
                   width: 40.0,
                   height: 40.0,
                   child: FloatingActionButton(
-                      onPressed: _createChat,
+                      // TODO: Modify this
+                      onPressed: _chatId == 0 ? _createChat : null,
                       backgroundColor: Constants.mainColor,
                       child: const Icon(
                         Icons.send,
