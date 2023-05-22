@@ -209,8 +209,14 @@ func (server *Server) processIncomingMessages() {
 
 		case *pb.ClientMessage_RequestUserList_:
 			var users []*pb.ServerMessage_SendUserList_User
-			// TODO: Exclude current user id (and maybe also the ones already chatted with)
-			rows, err := server.db.Query("SELECT id, username FROM users WHERE id != ?", user.id)
+
+			// This query is a bit weird - it does work but it's convoluted. Maybe rethink (?)
+			rows, err := server.db.Query(
+				`SELECT id, username FROM users WHERE id != ? AND id NOT IN 
+					(SELECT user_id FROM participants WHERE chat_id IN 
+						(SELECT chat_id FROM participants WHERE user_id = ?)
+					AND user_id != ?)`,
+				user.id, user.id, user.id)
 			if err != nil {
 				log.Println(err.Error())
 				continue
