@@ -45,6 +45,8 @@ message ClientMessage {
 
     message RequestUserList {}
 
+    message RequestChatList {}
+
     oneof variant {
         SendPublicKey send_public_key = 1;
         LogIn log_in = 2;
@@ -53,5 +55,6 @@ message ClientMessage {
         RequestUserList request_user_list = 5;
         CreateChat create_chat = 6;
         RequestPublicKey request_public_key = 7;
+        RequestChatList request_chat_list = 8;
     }
 }

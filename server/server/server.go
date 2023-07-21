@@ -186,7 +186,7 @@ func (server *Server) processIncomingMessages() {
 			user.publicKey, err = x509.ParsePKCS1PublicKey(block.Bytes)
 			if err != nil {
 				log.Println(err.Error())
-				continue
+				return
 			}
 			newMessage, err := processServerMessage(&pb.ServerMessage{
 				Variant: &pb.ServerMessage_ConfirmKeyExchange_{
@@ -194,7 +194,7 @@ func (server *Server) processIncomingMessages() {
 				user.publicKey, server.privateKey)
 			if err != nil {
 				log.Println(err.Error())
-				continue
+				return
 			}
 			connection.Write(newMessage)
 
@@ -219,7 +219,7 @@ func (server *Server) processIncomingMessages() {
 				user.id, user.id, user.id)
 			if err != nil {
 				log.Println(err.Error())
-				continue
+				return
 			}
 			var count = 10
 			for rows.Next() && count > 0 {
@@ -228,7 +228,7 @@ func (server *Server) processIncomingMessages() {
 				err := rows.Scan(&id, &username)
 				if err != nil {
 					log.Println(err.Error())
-					continue
+					return
 				}
 				users = append(users, &pb.ServerMessage_SendUserList_User{Id: id, Username: username})
 				count--
@@ -245,7 +245,7 @@ func (server *Server) processIncomingMessages() {
 				user.publicKey, server.privateKey)
 			if err != nil {
 				log.Println(err.Error())
-				continue
+				return
 			}
 			connection.Write(newMessage)
 
@@ -253,7 +253,7 @@ func (server *Server) processIncomingMessages() {
 			rows, err := server.db.Query("SELECT public_key FROM users WHERE id = ?", t.RequestPublicKey.Id)
 			if err != nil {
 				log.Println(err.Error())
-				return
+				continue
 			}
 			for rows.Next() {
 				var publicKey = ""
@@ -294,17 +294,53 @@ func (server *Server) processIncomingMessages() {
 			stmt, err = server.db.Prepare("INSERT INTO participants (user_id, chat_id, shared_key) VALUES (?, ?, ?);")
 			if err != nil {
 				log.Println(err.Error())
+				return
 			}
 			_, err = stmt.Exec(messageContainer.user.id, chatId, t.CreateChat.SelfKey)
 			if err != nil {
 				log.Println(err.Error())
+				return
 			}
 
 			// HARDCODED
 			_, err = stmt.Exec(t.CreateChat.OtherKeys[0].Id, chatId, t.CreateChat.OtherKeys[0].Key)
 			if err != nil {
 				log.Println(err.Error())
+				return
 			}
+
+		case *pb.ClientMessage_RequestChatList_:
+			rows, err := server.db.Query(
+				`SELECT chat_id, username FROM participants p, users u WHERE u.id = p.user_id AND user_id != ? AND 
+				chat_id = (SELECT chat_id FROM participants WHERE user_id = ?)`,
+				messageContainer.user.id, messageContainer.user.id)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+
+			var chats []*pb.ServerMessage_SendChatList_Chat
+			for rows.Next() {
+				var chatId uint32
+				var username string
+				err := rows.Scan(&chatId, &username)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+				chats = append(chats, &pb.ServerMessage_SendChatList_Chat{Id: chatId, RecipientUsername: username})
+			}
+			rows.Close()
+
+			newMessage, err := processServerMessage(&pb.ServerMessage{Variant: &pb.ServerMessage_SendChatList_{
+				SendChatList: &pb.ServerMessage_SendChatList{Chats: chats}}},
+				user.publicKey, server.privateKey)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+
+			connection.Write(newMessage)
 		}
 	}
 }
