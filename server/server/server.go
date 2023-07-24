@@ -311,8 +311,14 @@ func (server *Server) processIncomingMessages() {
 
 		case *pb.ClientMessage_RequestChatList_:
 			rows, err := server.db.Query(
-				`SELECT chat_id, username FROM participants p, users u WHERE u.id = p.user_id AND user_id != ? AND 
-				chat_id = (SELECT chat_id FROM participants WHERE user_id = ?)`,
+				`SELECT participants.chat_id, users.username
+				FROM users
+				JOIN participants ON users.id = participants.user_id
+				WHERE participants.chat_id IN (
+					SELECT chat_id
+					FROM participants
+					WHERE user_id = ?
+				) AND users.id != ?;`,
 				messageContainer.user.id, messageContainer.user.id)
 			if err != nil {
 				log.Println(err.Error())
