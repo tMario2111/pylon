@@ -177,7 +177,7 @@ func (server *Server) processIncomingMessages() {
 		message := &pb.ClientMessage{}
 		err := proto.Unmarshal(messageBytes, message)
 		if err != nil {
-			println(err.Error())
+			log.Println(err.Error())
 		}
 		switch t := message.Variant.(type) {
 
@@ -311,7 +311,7 @@ func (server *Server) processIncomingMessages() {
 
 		case *pb.ClientMessage_RequestChatList_:
 			rows, err := server.db.Query(
-				`SELECT participants.chat_id, users.username
+				`SELECT participants.chat_id, users.username, users.id
 				FROM users
 				JOIN participants ON users.id = participants.user_id
 				WHERE participants.chat_id IN (
@@ -329,12 +329,14 @@ func (server *Server) processIncomingMessages() {
 			for rows.Next() {
 				var chatId uint32
 				var username string
-				err := rows.Scan(&chatId, &username)
+				var userId uint32
+				err := rows.Scan(&chatId, &username, &userId)
 				if err != nil {
 					log.Println(err.Error())
 					return
 				}
-				chats = append(chats, &pb.ServerMessage_SendChatList_Chat{Id: chatId, RecipientUsername: username})
+				chats = append(chats, &pb.ServerMessage_SendChatList_Chat{
+					Id: chatId, RecipientUsername: username, RecipientId: userId})
 			}
 			rows.Close()
 

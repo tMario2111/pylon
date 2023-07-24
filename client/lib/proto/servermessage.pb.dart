@@ -416,6 +416,7 @@ class ServerMessage_SendChatList_Chat extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.SendChatList.Chat', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.OU3)
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'recipientUsername')
+    ..a<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'recipientId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -423,6 +424,7 @@ class ServerMessage_SendChatList_Chat extends $pb.GeneratedMessage {
   factory ServerMessage_SendChatList_Chat({
     $core.int? id,
     $core.String? recipientUsername,
+    $core.int? recipientId,
   }) {
     final _result = create();
     if (id != null) {
@@ -430,6 +432,9 @@ class ServerMessage_SendChatList_Chat extends $pb.GeneratedMessage {
     }
     if (recipientUsername != null) {
       _result.recipientUsername = recipientUsername;
+    }
+    if (recipientId != null) {
+      _result.recipientId = recipientId;
     }
     return _result;
   }
@@ -471,6 +476,15 @@ class ServerMessage_SendChatList_Chat extends $pb.GeneratedMessage {
   $core.bool hasRecipientUsername() => $_has(1);
   @$pb.TagNumber(2)
   void clearRecipientUsername() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get recipientId => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set recipientId($core.int v) { $_setUnsignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasRecipientId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearRecipientId() => clearField(3);
 }
 
 class ServerMessage_SendChatList extends $pb.GeneratedMessage {

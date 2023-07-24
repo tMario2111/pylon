@@ -34,7 +34,9 @@ func newDb() (*sql.DB, error) {
 		user_id INTEGER NOT NULL,
 		chat_id INTEGER NOT NULL,
 		content TEXT NOT NULL,
-		timestamp INTEGER NOT NULL
+		timestamp INTEGER NOT NULL,
+		iv TEXT NOT NULL,
+		signature TEXT NOT NULL
 	);
 
 	CREATE TABLE IF NOT EXISTS participants

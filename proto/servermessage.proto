@@ -41,6 +41,7 @@ message ServerMessage {
         message Chat {
             uint32 id = 1;
             string recipient_username = 2;
+            uint32 recipient_id = 3;
         }
         repeated Chat chats = 1;
     }

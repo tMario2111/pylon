@@ -85,8 +85,10 @@ class _ChatsPageState extends State<ChatsPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ChatRoute(
-                          chatId: chats[index].id,
-                          chatName: chats[index].recipientUsername),
+                        chatId: chats[index].id,
+                        chatName: chats[index].recipientUsername,
+                        recipientId: chats[index].recipientId,
+                      ),
                     ),
                   );
                 },

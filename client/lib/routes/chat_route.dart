@@ -39,6 +39,8 @@ class _ChatRouteState extends State<ChatRoute> {
   int? _recipientId;
   pc.RSAPublicKey? _recipientPublicKey;
 
+  final _messageFieldController = TextEditingController();
+
   var _initialized = false;
 
   void _setup() {
@@ -95,6 +97,12 @@ class _ChatRouteState extends State<ChatRoute> {
     Connection().sendPort.send(ClientMessage(createChat: chatCreationMessage));
   }
 
+  void _sendMessage() {
+    if (_messageFieldController.text.isEmpty) {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!_initialized) _setup();
@@ -119,10 +127,11 @@ class _ChatRouteState extends State<ChatRoute> {
                     ),
                     padding:
                         const EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                    child: const TextField(
+                    child: TextField(
+                      controller: _messageFieldController,
                       minLines: null,
                       maxLines: null,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         isDense: true,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -136,8 +145,7 @@ class _ChatRouteState extends State<ChatRoute> {
                   width: 40.0,
                   height: 40.0,
                   child: FloatingActionButton(
-                      // TODO: Modify this
-                      onPressed: _chatId == 0 ? _createChat : null,
+                      onPressed: _chatId == 0 ? _createChat : _sendMessage,
                       backgroundColor: Constants.mainColor,
                       child: const Icon(
                         Icons.send,
