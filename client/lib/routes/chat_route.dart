@@ -15,6 +15,8 @@ import 'package:pylon/proto/servermessage.pb.dart';
 import 'package:pointycastle/pointycastle.dart' as pc;
 import 'package:pointycastle/asymmetric/oaep.dart' as pc;
 import 'package:pointycastle/asymmetric/rsa.dart' as pc;
+import 'package:pointycastle/digests/sha256.dart' as pc;
+import 'package:pointycastle/signers/rsa_signer.dart' as pc;
 
 import 'package:encrypt/encrypt.dart' as enc;
 
@@ -38,10 +40,13 @@ class _ChatRouteState extends State<ChatRoute> {
   String? _chatName;
   int? _recipientId;
   pc.RSAPublicKey? _recipientPublicKey;
+  Uint8List? _chatSharedKey;
 
   final _messageFieldController = TextEditingController();
 
   var _initialized = false;
+
+  final _random = Random.secure();
 
   void _setup() {
     _initialized = true;
@@ -53,6 +58,12 @@ class _ChatRouteState extends State<ChatRoute> {
     Connection().receiveListener = _messageHandler;
     Connection().sendPort.send(ClientMessage(
         requestPublicKey: ClientMessage_RequestPublicKey(id: _recipientId)));
+
+    if (_chatId != 0) {
+      Connection().sendPort.send(ClientMessage(
+          requestChatSharedKey:
+              ClientMessage_RequestChatSharedKey(chatId: _chatId)));
+    }
   }
 
   void _messageHandler(dynamic message) {
@@ -60,15 +71,23 @@ class _ChatRouteState extends State<ChatRoute> {
     if (message.hasSendPublicKey()) {
       _recipientPublicKey = enc.RSAKeyParser()
           .parse(message.sendPublicKey.publicKey) as pc.RSAPublicKey;
+    } else if (message.hasSendChatSharedKey()) {
+      _decryptChatSharedKey(message.sendChatSharedKey.key);
     }
   }
 
-  void _createChat() {
-    final random = Random.secure();
+  void _decryptChatSharedKey(final String key) {
+    final rsaDecrypter = pc.OAEPEncoding.withSHA256(pc.RSAEngine())
+      ..init(false,
+          pc.PrivateKeyParameter<pc.RSAPrivateKey>(Connection().privateKey));
+    _chatSharedKey =
+        rsaProcessInBlocks(rsaDecrypter, Uint8List.fromList(key.codeUnits));
+  }
 
+  void _createChat() {
     var key = Uint8List(aesKeyLength);
     for (int i = 0; i < key.length; i++) {
-      key[i] = random.nextInt(256);
+      key[i] = _random.nextInt(256);
     }
 
     final chatCreationMessage = ClientMessage_CreateChat();
@@ -98,9 +117,20 @@ class _ChatRouteState extends State<ChatRoute> {
   }
 
   void _sendMessage() {
+    // Maybe hide send button when field is empty
     if (_messageFieldController.text.isEmpty) {
       return;
     }
+
+    final text = _messageFieldController.text;
+
+    final signer = pc.RSASigner(pc.SHA256Digest(), '0609608648016503040201')
+      ..init(true,
+          pc.PrivateKeyParameter<pc.RSAPrivateKey>(Connection().privateKey));
+    final signature =
+        signer.generateSignature(Uint8List.fromList(text.codeUnits));
+
+    // Work in progress
   }
 
   @override

@@ -47,6 +47,10 @@ message ClientMessage {
 
     message RequestChatList {}
 
+    message RequestChatSharedKey {
+        uint32 chat_id = 1;
+    }
+
     oneof variant {
         SendPublicKey send_public_key = 1;
         LogIn log_in = 2;
@@ -56,5 +60,6 @@ message ClientMessage {
         CreateChat create_chat = 6;
         RequestPublicKey request_public_key = 7;
         RequestChatList request_chat_list = 8;
+        RequestChatSharedKey request_chat_shared_key = 9;
     }
 }

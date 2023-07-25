@@ -349,6 +349,33 @@ func (server *Server) processIncomingMessages() {
 			}
 
 			connection.Write(newMessage)
+
+		case *pb.ClientMessage_RequestChatSharedKey_:
+			rows, err := server.db.Query(`SELECT shared_key FROM participants WHERE 
+				user_id = ? AND chat_id = ?;`, messageContainer.user.id, t.RequestChatSharedKey.ChatId)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+
+			for rows.Next() {
+				var sharedKey = ""
+				err := rows.Scan(&sharedKey)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+
+				newMessage, err := processServerMessage(&pb.ServerMessage{
+					Variant: &pb.ServerMessage_SendChatSharedKey_{
+						SendChatSharedKey: &pb.ServerMessage_SendChatSharedKey{Key: sharedKey}}},
+					user.publicKey, server.privateKey)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+				connection.Write(newMessage)
+			}
 		}
 	}
 }

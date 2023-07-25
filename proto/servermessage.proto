@@ -46,6 +46,10 @@ message ServerMessage {
         repeated Chat chats = 1;
     }
 
+    message SendChatSharedKey {
+        string key = 1;
+    }
+
     oneof variant {
         ConfirmKeyExchange confirm_key_exchange = 1;
         ConfirmLogIn confirm_log_in = 2;
@@ -54,5 +58,6 @@ message ServerMessage {
         SendUserList send_user_list = 5;
         SendPublicKey send_public_key = 6;
         SendChatList send_chat_list = 7;
+        SendChatSharedKey send_chat_shared_key = 8;
     }
 }

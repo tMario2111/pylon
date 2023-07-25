@@ -528,6 +528,53 @@ class ServerMessage_SendChatList extends $pb.GeneratedMessage {
   $core.List<ServerMessage_SendChatList_Chat> get chats => $_getList(0);
 }
 
+class ServerMessage_SendChatSharedKey extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage.SendChatSharedKey', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
+    ..hasRequiredFields = false
+  ;
+
+  ServerMessage_SendChatSharedKey._() : super();
+  factory ServerMessage_SendChatSharedKey({
+    $core.String? key,
+  }) {
+    final _result = create();
+    if (key != null) {
+      _result.key = key;
+    }
+    return _result;
+  }
+  factory ServerMessage_SendChatSharedKey.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ServerMessage_SendChatSharedKey.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ServerMessage_SendChatSharedKey clone() => ServerMessage_SendChatSharedKey()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ServerMessage_SendChatSharedKey copyWith(void Function(ServerMessage_SendChatSharedKey) updates) => super.copyWith((message) => updates(message as ServerMessage_SendChatSharedKey)) as ServerMessage_SendChatSharedKey; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_SendChatSharedKey create() => ServerMessage_SendChatSharedKey._();
+  ServerMessage_SendChatSharedKey createEmptyInstance() => create();
+  static $pb.PbList<ServerMessage_SendChatSharedKey> createRepeated() => $pb.PbList<ServerMessage_SendChatSharedKey>();
+  @$core.pragma('dart2js:noInline')
+  static ServerMessage_SendChatSharedKey getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ServerMessage_SendChatSharedKey>(create);
+  static ServerMessage_SendChatSharedKey? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get key => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set key($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKey() => clearField(1);
+}
+
 enum ServerMessage_Variant {
   confirmKeyExchange, 
   confirmLogIn, 
@@ -536,6 +583,7 @@ enum ServerMessage_Variant {
   sendUserList, 
   sendPublicKey, 
   sendChatList, 
+  sendChatSharedKey, 
   notSet
 }
 
@@ -548,10 +596,11 @@ class ServerMessage extends $pb.GeneratedMessage {
     5 : ServerMessage_Variant.sendUserList,
     6 : ServerMessage_Variant.sendPublicKey,
     7 : ServerMessage_Variant.sendChatList,
+    8 : ServerMessage_Variant.sendChatSharedKey,
     0 : ServerMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ServerMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8])
     ..aOM<ServerMessage_ConfirmKeyExchange>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmKeyExchange', subBuilder: ServerMessage_ConfirmKeyExchange.create)
     ..aOM<ServerMessage_ConfirmLogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'confirmLogIn', subBuilder: ServerMessage_ConfirmLogIn.create)
     ..aOM<ServerMessage_AccountRegistrationResult>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistrationResult', subBuilder: ServerMessage_AccountRegistrationResult.create)
@@ -559,6 +608,7 @@ class ServerMessage extends $pb.GeneratedMessage {
     ..aOM<ServerMessage_SendUserList>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendUserList', subBuilder: ServerMessage_SendUserList.create)
     ..aOM<ServerMessage_SendPublicKey>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendPublicKey', subBuilder: ServerMessage_SendPublicKey.create)
     ..aOM<ServerMessage_SendChatList>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendChatList', subBuilder: ServerMessage_SendChatList.create)
+    ..aOM<ServerMessage_SendChatSharedKey>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendChatSharedKey', subBuilder: ServerMessage_SendChatSharedKey.create)
     ..hasRequiredFields = false
   ;
 
@@ -571,6 +621,7 @@ class ServerMessage extends $pb.GeneratedMessage {
     ServerMessage_SendUserList? sendUserList,
     ServerMessage_SendPublicKey? sendPublicKey,
     ServerMessage_SendChatList? sendChatList,
+    ServerMessage_SendChatSharedKey? sendChatSharedKey,
   }) {
     final _result = create();
     if (confirmKeyExchange != null) {
@@ -593,6 +644,9 @@ class ServerMessage extends $pb.GeneratedMessage {
     }
     if (sendChatList != null) {
       _result.sendChatList = sendChatList;
+    }
+    if (sendChatSharedKey != null) {
+      _result.sendChatSharedKey = sendChatSharedKey;
     }
     return _result;
   }
@@ -696,5 +750,16 @@ class ServerMessage extends $pb.GeneratedMessage {
   void clearSendChatList() => clearField(7);
   @$pb.TagNumber(7)
   ServerMessage_SendChatList ensureSendChatList() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  ServerMessage_SendChatSharedKey get sendChatSharedKey => $_getN(7);
+  @$pb.TagNumber(8)
+  set sendChatSharedKey(ServerMessage_SendChatSharedKey v) { setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasSendChatSharedKey() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearSendChatSharedKey() => clearField(8);
+  @$pb.TagNumber(8)
+  ServerMessage_SendChatSharedKey ensureSendChatSharedKey() => $_ensure(7);
 }
 

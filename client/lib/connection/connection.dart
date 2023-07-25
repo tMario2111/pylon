@@ -55,6 +55,7 @@ class Connection {
   late final pc.RSAPublicKey _serverPublicKey;
 
   pc.RSAPublicKey get publicKey => _publicKey;
+  pc.RSAPrivateKey get privateKey => _privateKey;
 
   int? id;
 

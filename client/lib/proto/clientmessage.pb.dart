@@ -488,6 +488,53 @@ class ClientMessage_RequestChatList extends $pb.GeneratedMessage {
   static ClientMessage_RequestChatList? _defaultInstance;
 }
 
+class ClientMessage_RequestChatSharedKey extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.RequestChatSharedKey', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chatId', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  ClientMessage_RequestChatSharedKey._() : super();
+  factory ClientMessage_RequestChatSharedKey({
+    $core.int? chatId,
+  }) {
+    final _result = create();
+    if (chatId != null) {
+      _result.chatId = chatId;
+    }
+    return _result;
+  }
+  factory ClientMessage_RequestChatSharedKey.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientMessage_RequestChatSharedKey.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ClientMessage_RequestChatSharedKey clone() => ClientMessage_RequestChatSharedKey()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ClientMessage_RequestChatSharedKey copyWith(void Function(ClientMessage_RequestChatSharedKey) updates) => super.copyWith((message) => updates(message as ClientMessage_RequestChatSharedKey)) as ClientMessage_RequestChatSharedKey; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_RequestChatSharedKey create() => ClientMessage_RequestChatSharedKey._();
+  ClientMessage_RequestChatSharedKey createEmptyInstance() => create();
+  static $pb.PbList<ClientMessage_RequestChatSharedKey> createRepeated() => $pb.PbList<ClientMessage_RequestChatSharedKey>();
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_RequestChatSharedKey getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientMessage_RequestChatSharedKey>(create);
+  static ClientMessage_RequestChatSharedKey? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatId() => clearField(1);
+}
+
 enum ClientMessage_Variant {
   sendPublicKey, 
   logIn, 
@@ -497,6 +544,7 @@ enum ClientMessage_Variant {
   createChat, 
   requestPublicKey, 
   requestChatList, 
+  requestChatSharedKey, 
   notSet
 }
 
@@ -510,10 +558,11 @@ class ClientMessage extends $pb.GeneratedMessage {
     6 : ClientMessage_Variant.createChat,
     7 : ClientMessage_Variant.requestPublicKey,
     8 : ClientMessage_Variant.requestChatList,
+    9 : ClientMessage_Variant.requestChatSharedKey,
     0 : ClientMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9])
     ..aOM<ClientMessage_SendPublicKey>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendPublicKey', subBuilder: ClientMessage_SendPublicKey.create)
     ..aOM<ClientMessage_LogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'logIn', subBuilder: ClientMessage_LogIn.create)
     ..aOM<ClientMessage_AccountRegistration>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistration', subBuilder: ClientMessage_AccountRegistration.create)
@@ -522,6 +571,7 @@ class ClientMessage extends $pb.GeneratedMessage {
     ..aOM<ClientMessage_CreateChat>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createChat', subBuilder: ClientMessage_CreateChat.create)
     ..aOM<ClientMessage_RequestPublicKey>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'requestPublicKey', subBuilder: ClientMessage_RequestPublicKey.create)
     ..aOM<ClientMessage_RequestChatList>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'requestChatList', subBuilder: ClientMessage_RequestChatList.create)
+    ..aOM<ClientMessage_RequestChatSharedKey>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'requestChatSharedKey', subBuilder: ClientMessage_RequestChatSharedKey.create)
     ..hasRequiredFields = false
   ;
 
@@ -535,6 +585,7 @@ class ClientMessage extends $pb.GeneratedMessage {
     ClientMessage_CreateChat? createChat,
     ClientMessage_RequestPublicKey? requestPublicKey,
     ClientMessage_RequestChatList? requestChatList,
+    ClientMessage_RequestChatSharedKey? requestChatSharedKey,
   }) {
     final _result = create();
     if (sendPublicKey != null) {
@@ -560,6 +611,9 @@ class ClientMessage extends $pb.GeneratedMessage {
     }
     if (requestChatList != null) {
       _result.requestChatList = requestChatList;
+    }
+    if (requestChatSharedKey != null) {
+      _result.requestChatSharedKey = requestChatSharedKey;
     }
     return _result;
   }
@@ -674,5 +728,16 @@ class ClientMessage extends $pb.GeneratedMessage {
   void clearRequestChatList() => clearField(8);
   @$pb.TagNumber(8)
   ClientMessage_RequestChatList ensureRequestChatList() => $_ensure(7);
+
+  @$pb.TagNumber(9)
+  ClientMessage_RequestChatSharedKey get requestChatSharedKey => $_getN(8);
+  @$pb.TagNumber(9)
+  set requestChatSharedKey(ClientMessage_RequestChatSharedKey v) { setField(9, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasRequestChatSharedKey() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearRequestChatSharedKey() => clearField(9);
+  @$pb.TagNumber(9)
+  ClientMessage_RequestChatSharedKey ensureRequestChatSharedKey() => $_ensure(8);
 }
 
