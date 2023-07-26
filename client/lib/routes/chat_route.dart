@@ -9,6 +9,8 @@ import '../constants.dart';
 import '../connection/connection.dart';
 import '../connection/consts.dart';
 
+import '../connection/crypto_util.dart';
+
 import 'package:pylon/proto/clientmessage.pb.dart';
 import 'package:pylon/proto/servermessage.pb.dart';
 
@@ -79,7 +81,7 @@ class _ChatRouteState extends State<ChatRoute> {
   void _decryptChatSharedKey(final String key) {
     final rsaDecrypter = pc.OAEPEncoding.withSHA256(pc.RSAEngine())
       ..init(false,
-          pc.PrivateKeyParameter<pc.RSAPrivateKey>(Connection().privateKey));
+          pc.PrivateKeyParameter<pc.RSAPrivateKey>(Connection().privateKey!));
     _chatSharedKey =
         rsaProcessInBlocks(rsaDecrypter, Uint8List.fromList(key.codeUnits));
   }
@@ -97,7 +99,7 @@ class _ChatRouteState extends State<ChatRoute> {
     {
       final encrypter = pc.OAEPEncoding.withSHA256(pc.RSAEngine())
         ..init(true,
-            pc.PublicKeyParameter<pc.RSAPublicKey>(Connection().publicKey));
+            pc.PublicKeyParameter<pc.RSAPublicKey>(Connection().publicKey!));
       final encrypedKey = rsaProcessInBlocks(encrypter, key);
       chatCreationMessage.selfKey = String.fromCharCodes(encrypedKey);
     }
@@ -126,7 +128,7 @@ class _ChatRouteState extends State<ChatRoute> {
 
     final signer = pc.RSASigner(pc.SHA256Digest(), '0609608648016503040201')
       ..init(true,
-          pc.PrivateKeyParameter<pc.RSAPrivateKey>(Connection().privateKey));
+          pc.PrivateKeyParameter<pc.RSAPrivateKey>(Connection().privateKey!));
     final signature =
         signer.generateSignature(Uint8List.fromList(text.codeUnits));
 

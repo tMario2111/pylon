@@ -52,9 +52,9 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   void _logIn() {
-    Connection()
-        .sendPort
-        .send(generateKeysFromPassword(_passwordController.text));
+    final keyPair = generateKeysFromPassword(_passwordController.text);
+    Connection().sendPort.send(keyPair);
+    Connection().updateKeyPair(keyPair);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

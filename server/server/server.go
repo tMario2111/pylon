@@ -275,6 +275,7 @@ func (server *Server) processIncomingMessages() {
 			rows.Close()
 
 		case *pb.ClientMessage_CreateChat_:
+			// TODO: Check if chat already exists
 			stmt, err := server.db.Prepare("INSERT INTO chats (name, creator_id) VALUES (?, ?);")
 			if err != nil {
 				log.Println(err.Error())

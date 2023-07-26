@@ -50,12 +50,12 @@ class Connection {
     return _instance;
   }
 
-  late final pc.RSAPrivateKey _privateKey;
-  late final pc.RSAPublicKey _publicKey;
+  pc.RSAPrivateKey? _privateKey;
+  pc.RSAPublicKey? _publicKey;
   late final pc.RSAPublicKey _serverPublicKey;
 
-  pc.RSAPublicKey get publicKey => _publicKey;
-  pc.RSAPrivateKey get privateKey => _privateKey;
+  pc.RSAPublicKey? get publicKey => _publicKey;
+  pc.RSAPrivateKey? get privateKey => _privateKey;
 
   int? id;
 
@@ -66,6 +66,12 @@ class Connection {
 
   Connection._internal() {
     _init();
+  }
+
+  void updateKeyPair(
+      pc.AsymmetricKeyPair<pc.PublicKey, pc.PrivateKey> keyPair) {
+    _publicKey = keyPair.publicKey as pc.RSAPublicKey;
+    _privateKey = keyPair.privateKey as pc.RSAPrivateKey;
   }
 
   void _init() async {
