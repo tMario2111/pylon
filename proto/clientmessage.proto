@@ -51,6 +51,18 @@ message ClientMessage {
         uint32 chat_id = 1;
     }
 
+    message SendMessage {
+        uint32 chat_id = 1;
+        string content = 2;
+        string iv = 3;
+        string signature = 4;
+    }
+
+    message GetMessages {
+        uint32 chat_id = 1;
+        uint32 count = 2;
+    }
+
     oneof variant {
         SendPublicKey send_public_key = 1;
         LogIn log_in = 2;
@@ -61,5 +73,7 @@ message ClientMessage {
         RequestPublicKey request_public_key = 7;
         RequestChatList request_chat_list = 8;
         RequestChatSharedKey request_chat_shared_key = 9;
+        SendMessage send_message = 10;
+        GetMessages get_messages = 11;
     }
 }

@@ -535,6 +535,156 @@ class ClientMessage_RequestChatSharedKey extends $pb.GeneratedMessage {
   void clearChatId() => clearField(1);
 }
 
+class ClientMessage_SendMessage extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.SendMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chatId', $pb.PbFieldType.OU3)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'content')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iv')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'signature')
+    ..hasRequiredFields = false
+  ;
+
+  ClientMessage_SendMessage._() : super();
+  factory ClientMessage_SendMessage({
+    $core.int? chatId,
+    $core.String? content,
+    $core.String? iv,
+    $core.String? signature,
+  }) {
+    final _result = create();
+    if (chatId != null) {
+      _result.chatId = chatId;
+    }
+    if (content != null) {
+      _result.content = content;
+    }
+    if (iv != null) {
+      _result.iv = iv;
+    }
+    if (signature != null) {
+      _result.signature = signature;
+    }
+    return _result;
+  }
+  factory ClientMessage_SendMessage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientMessage_SendMessage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ClientMessage_SendMessage clone() => ClientMessage_SendMessage()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ClientMessage_SendMessage copyWith(void Function(ClientMessage_SendMessage) updates) => super.copyWith((message) => updates(message as ClientMessage_SendMessage)) as ClientMessage_SendMessage; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_SendMessage create() => ClientMessage_SendMessage._();
+  ClientMessage_SendMessage createEmptyInstance() => create();
+  static $pb.PbList<ClientMessage_SendMessage> createRepeated() => $pb.PbList<ClientMessage_SendMessage>();
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_SendMessage getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientMessage_SendMessage>(create);
+  static ClientMessage_SendMessage? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get content => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set content($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasContent() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearContent() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get iv => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set iv($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasIv() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearIv() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get signature => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set signature($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasSignature() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSignature() => clearField(4);
+}
+
+class ClientMessage_GetMessages extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage.GetMessages', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
+    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'chatId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'count', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  ClientMessage_GetMessages._() : super();
+  factory ClientMessage_GetMessages({
+    $core.int? chatId,
+    $core.int? count,
+  }) {
+    final _result = create();
+    if (chatId != null) {
+      _result.chatId = chatId;
+    }
+    if (count != null) {
+      _result.count = count;
+    }
+    return _result;
+  }
+  factory ClientMessage_GetMessages.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ClientMessage_GetMessages.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ClientMessage_GetMessages clone() => ClientMessage_GetMessages()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ClientMessage_GetMessages copyWith(void Function(ClientMessage_GetMessages) updates) => super.copyWith((message) => updates(message as ClientMessage_GetMessages)) as ClientMessage_GetMessages; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_GetMessages create() => ClientMessage_GetMessages._();
+  ClientMessage_GetMessages createEmptyInstance() => create();
+  static $pb.PbList<ClientMessage_GetMessages> createRepeated() => $pb.PbList<ClientMessage_GetMessages>();
+  @$core.pragma('dart2js:noInline')
+  static ClientMessage_GetMessages getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ClientMessage_GetMessages>(create);
+  static ClientMessage_GetMessages? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get count => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set count($core.int v) { $_setUnsignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCount() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCount() => clearField(2);
+}
+
 enum ClientMessage_Variant {
   sendPublicKey, 
   logIn, 
@@ -545,6 +695,8 @@ enum ClientMessage_Variant {
   requestPublicKey, 
   requestChatList, 
   requestChatSharedKey, 
+  sendMessage, 
+  getMessages, 
   notSet
 }
 
@@ -559,10 +711,12 @@ class ClientMessage extends $pb.GeneratedMessage {
     7 : ClientMessage_Variant.requestPublicKey,
     8 : ClientMessage_Variant.requestChatList,
     9 : ClientMessage_Variant.requestChatSharedKey,
+    10 : ClientMessage_Variant.sendMessage,
+    11 : ClientMessage_Variant.getMessages,
     0 : ClientMessage_Variant.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ClientMessage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'main'), createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    ..oo(0, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
     ..aOM<ClientMessage_SendPublicKey>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendPublicKey', subBuilder: ClientMessage_SendPublicKey.create)
     ..aOM<ClientMessage_LogIn>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'logIn', subBuilder: ClientMessage_LogIn.create)
     ..aOM<ClientMessage_AccountRegistration>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountRegistration', subBuilder: ClientMessage_AccountRegistration.create)
@@ -572,6 +726,8 @@ class ClientMessage extends $pb.GeneratedMessage {
     ..aOM<ClientMessage_RequestPublicKey>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'requestPublicKey', subBuilder: ClientMessage_RequestPublicKey.create)
     ..aOM<ClientMessage_RequestChatList>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'requestChatList', subBuilder: ClientMessage_RequestChatList.create)
     ..aOM<ClientMessage_RequestChatSharedKey>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'requestChatSharedKey', subBuilder: ClientMessage_RequestChatSharedKey.create)
+    ..aOM<ClientMessage_SendMessage>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sendMessage', subBuilder: ClientMessage_SendMessage.create)
+    ..aOM<ClientMessage_GetMessages>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'getMessages', subBuilder: ClientMessage_GetMessages.create)
     ..hasRequiredFields = false
   ;
 
@@ -586,6 +742,8 @@ class ClientMessage extends $pb.GeneratedMessage {
     ClientMessage_RequestPublicKey? requestPublicKey,
     ClientMessage_RequestChatList? requestChatList,
     ClientMessage_RequestChatSharedKey? requestChatSharedKey,
+    ClientMessage_SendMessage? sendMessage,
+    ClientMessage_GetMessages? getMessages,
   }) {
     final _result = create();
     if (sendPublicKey != null) {
@@ -614,6 +772,12 @@ class ClientMessage extends $pb.GeneratedMessage {
     }
     if (requestChatSharedKey != null) {
       _result.requestChatSharedKey = requestChatSharedKey;
+    }
+    if (sendMessage != null) {
+      _result.sendMessage = sendMessage;
+    }
+    if (getMessages != null) {
+      _result.getMessages = getMessages;
     }
     return _result;
   }
@@ -739,5 +903,27 @@ class ClientMessage extends $pb.GeneratedMessage {
   void clearRequestChatSharedKey() => clearField(9);
   @$pb.TagNumber(9)
   ClientMessage_RequestChatSharedKey ensureRequestChatSharedKey() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  ClientMessage_SendMessage get sendMessage => $_getN(9);
+  @$pb.TagNumber(10)
+  set sendMessage(ClientMessage_SendMessage v) { setField(10, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasSendMessage() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearSendMessage() => clearField(10);
+  @$pb.TagNumber(10)
+  ClientMessage_SendMessage ensureSendMessage() => $_ensure(9);
+
+  @$pb.TagNumber(11)
+  ClientMessage_GetMessages get getMessages => $_getN(10);
+  @$pb.TagNumber(11)
+  set getMessages(ClientMessage_GetMessages v) { setField(11, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasGetMessages() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearGetMessages() => clearField(11);
+  @$pb.TagNumber(11)
+  ClientMessage_GetMessages ensureGetMessages() => $_ensure(10);
 }
 

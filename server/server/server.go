@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"net"
 	pb "pylon/proto"
+	"time"
 
 	"google.golang.org/protobuf/proto"
 )
@@ -276,6 +277,8 @@ func (server *Server) processIncomingMessages() {
 
 		case *pb.ClientMessage_CreateChat_:
 			// TODO: Check if chat already exists
+			// Maybe SELECT COUNT(*) > 0 FROM (SELECT chat_id FROM participants WHERE user_id = 1 AND chat_id =
+			//     (SELECT chat_id FROM participants WHERE user_id = 5))
 			stmt, err := server.db.Prepare("INSERT INTO chats (name, creator_id) VALUES (?, ?);")
 			if err != nil {
 				log.Println(err.Error())
@@ -377,6 +380,58 @@ func (server *Server) processIncomingMessages() {
 				}
 				connection.Write(newMessage)
 			}
+
+		case *pb.ClientMessage_SendMessage_:
+			stmt, err := server.db.Prepare(`INSERT INTO messages (user_id, chat_id, content, timestamp, iv, signature)
+				VALUES (?, ?, ?, ?, ?, ?);`)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			_, err = stmt.Exec(messageContainer.user.id, t.SendMessage.ChatId, t.SendMessage.Content, time.Now().Unix(),
+				t.SendMessage.Iv, t.SendMessage.Signature)
+			if err != nil {
+				println(err.Error())
+			}
+
+		case *pb.ClientMessage_GetMessages_:
+			rows, err := server.db.Query(`SELECT id, user_id, content, timestamp, iv, signature FROM messages WHERE
+				chat_id = ? ORDER BY timestamp DESC`, t.GetMessages.ChatId)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+
+			count := t.GetMessages.Count
+			var messages []*pb.ServerMessage_SendMessages_Message
+
+			var id uint32
+			var userId uint32
+			var content string
+			var timestamp uint64
+			var iv string
+			var signature string
+			for rows.Next() && count > 0 {
+				err := rows.Scan(&id, &userId, &content, &timestamp, &iv, &signature)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+				messages = append(messages, &pb.ServerMessage_SendMessages_Message{
+					Id: id, UserId: userId, Content: content, Timestamp: timestamp, Iv: iv, Signature: signature,
+				})
+				count--
+			}
+
+			newMessage, err := processServerMessage(&pb.ServerMessage{Variant: &pb.ServerMessage_SendMessages_{
+				SendMessages: &pb.ServerMessage_SendMessages{Messages: messages}}},
+				user.publicKey, server.privateKey)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+
+			connection.Write(newMessage)
 		}
 	}
 }

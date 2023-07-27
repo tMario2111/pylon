@@ -9,8 +9,6 @@ import '../constants.dart';
 import '../connection/connection.dart';
 import '../connection/consts.dart';
 
-import '../connection/crypto_util.dart';
-
 import 'package:pylon/proto/clientmessage.pb.dart';
 import 'package:pylon/proto/servermessage.pb.dart';
 
@@ -37,6 +35,20 @@ class ChatRoute extends StatefulWidget {
   State<StatefulWidget> createState() => _ChatRouteState();
 }
 
+class Message {
+  final int id;
+  final int userId;
+  final int content;
+  final int timestamp;
+
+  const Message({
+    required this.id,
+    required this.userId,
+    required this.content,
+    required this.timestamp,
+  });
+}
+
 class _ChatRouteState extends State<ChatRoute> {
   int? _chatId;
   String? _chatName;
@@ -45,6 +57,8 @@ class _ChatRouteState extends State<ChatRoute> {
   Uint8List? _chatSharedKey;
 
   final _messageFieldController = TextEditingController();
+
+  final _messages = <Message>[];
 
   var _initialized = false;
 
@@ -75,6 +89,10 @@ class _ChatRouteState extends State<ChatRoute> {
           .parse(message.sendPublicKey.publicKey) as pc.RSAPublicKey;
     } else if (message.hasSendChatSharedKey()) {
       _decryptChatSharedKey(message.sendChatSharedKey.key);
+      Connection().sendPort.send(ClientMessage(
+          getMessages: ClientMessage_GetMessages(chatId: _chatId, count: 10)));
+    } else if (message.hasSendMessages()) {
+      _decryptMessages(message.sendMessages.messages);
     }
   }
 
@@ -119,8 +137,8 @@ class _ChatRouteState extends State<ChatRoute> {
   }
 
   void _sendMessage() {
-    // Maybe hide send button when field is empty
-    if (_messageFieldController.text.isEmpty) {
+    // TODO: Maybe hide send button when field is empty
+    if (_messageFieldController.text.isEmpty || _chatSharedKey == null) {
       return;
     }
 
@@ -132,7 +150,71 @@ class _ChatRouteState extends State<ChatRoute> {
     final signature =
         signer.generateSignature(Uint8List.fromList(text.codeUnits));
 
-    // Work in progress
+    var iv = Uint8List(aesBlockSize);
+    for (int i = 0; i < iv.length; i++) {
+      iv[i] = _random.nextInt(256);
+    }
+
+    final aesEncrypter = pc.PaddedBlockCipher("AES/CBC/PKCS7")
+      ..init(
+        true,
+        pc.PaddedBlockCipherParameters(
+          pc.ParametersWithIV(pc.KeyParameter(_chatSharedKey!), iv),
+          null,
+        ),
+      );
+    final ciphertext = aesEncrypter.process(Uint8List.fromList(text.codeUnits));
+
+    final message = ClientMessage(
+      sendMessage: ClientMessage_SendMessage(
+        chatId: _chatId,
+        content: String.fromCharCodes(ciphertext),
+        iv: String.fromCharCodes(iv),
+        signature: String.fromCharCodes(signature.bytes),
+      ),
+    );
+    Connection().sendPort.send(message);
+
+    _messageFieldController.clear();
+  }
+
+  void _decryptMessages(List<ServerMessage_SendMessages_Message> messages) {
+    // TODO: Better strategy
+    // This is just testing (more or less)
+    _messages.clear();
+
+    for (final message in messages) {
+      final aesDecrypter = pc.PaddedBlockCipher("AES/CBC/PKCS7")
+        ..init(
+          false,
+          pc.PaddedBlockCipherParameters(
+            pc.ParametersWithIV(pc.KeyParameter(_chatSharedKey!),
+                Uint8List.fromList(message.iv.codeUnits)),
+            null,
+          ),
+        );
+      final output =
+          aesDecrypter.process(Uint8List.fromList(message.content.codeUnits));
+
+      final signature =
+          pc.RSASignature(Uint8List.fromList(message.signature.codeUnits));
+      final verifier = pc.RSASigner(pc.SHA256Digest(), '0609608648016503040201')
+        ..init(
+            false,
+            pc.PublicKeyParameter<pc.RSAPublicKey>(
+                message.userId == _recipientId
+                    ? _recipientPublicKey!
+                    : Connection().publicKey!));
+
+      try {
+        verifier.verifySignature(
+            Uint8List.fromList(message.content.codeUnits), signature);
+      } on ArgumentError {
+        continue;
+      }
+
+      print(String.fromCharCodes(output));
+    }
   }
 
   @override
