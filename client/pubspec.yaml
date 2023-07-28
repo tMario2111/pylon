@@ -41,6 +41,7 @@ dependencies:
   protobuf: ^2.1.0
   archive: ^3.3.5
   email_validator: ^2.1.17
+  fixnum: ^1.1.0
 
 dev_dependencies:
   flutter_test:

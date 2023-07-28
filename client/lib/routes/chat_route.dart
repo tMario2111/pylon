@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:pylon/connection/crypto_util.dart';
 
 import '../constants.dart';
@@ -19,6 +20,8 @@ import 'package:pointycastle/digests/sha256.dart' as pc;
 import 'package:pointycastle/signers/rsa_signer.dart' as pc;
 
 import 'package:encrypt/encrypt.dart' as enc;
+
+import 'package:fixnum/fixnum.dart' as fixnum;
 
 class ChatRoute extends StatefulWidget {
   const ChatRoute(
@@ -38,8 +41,8 @@ class ChatRoute extends StatefulWidget {
 class Message {
   final int id;
   final int userId;
-  final int content;
-  final int timestamp;
+  final String content;
+  final fixnum.Int64 timestamp;
 
   const Message({
     required this.id,
@@ -213,8 +216,18 @@ class _ChatRouteState extends State<ChatRoute> {
         continue;
       }
 
-      print(String.fromCharCodes(output));
+      _messages.add(Message(
+        content: String.fromCharCodes(output),
+        id: message.id,
+        userId: message.userId,
+        timestamp: message.timestamp,
+      ));
     }
+    setState(() {});
+  }
+
+  String _formatDateTime(DateTime date) {
+    return '${date.hour}:${date.minute} ${date.day}.${date.month}.${date.year}';
   }
 
   @override
@@ -227,48 +240,98 @@ class _ChatRouteState extends State<ChatRoute> {
         backgroundColor: Constants.secondaryBackgroundColor,
       ),
       backgroundColor: Constants.mainBackgroundColor,
-      body: Stack(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Constants.secondaryBackgroundColor,
-                      borderRadius: BorderRadius.circular(20),
+          ListView.separated(
+            scrollDirection: Axis.vertical,
+            itemCount: _messages.length,
+            reverse: true,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return Container(
+                padding: const EdgeInsets.all(5.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.person,
+                      size: 50.0,
                     ),
-                    padding:
-                        const EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                    child: TextField(
-                      controller: _messageFieldController,
-                      minLines: null,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        focusedErrorBorder: InputBorder.none,
+                    Flexible(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                _messages[index].userId != _recipientId
+                                    ? 'You '
+                                    : '${widget.chatName} ',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                _formatDateTime(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        _messages[index].timestamp.toInt() *
+                                            1000)),
+                                style: const TextStyle(color: Colors.grey),
+                              )
+                            ],
+                          ),
+                          Text(
+                            _messages[index].content,
+                          ),
+                        ],
                       ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+              height: 10.0,
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Constants.secondaryBackgroundColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                  child: TextField(
+                    controller: _messageFieldController,
+                    minLines: null,
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 40.0,
-                  height: 40.0,
-                  child: FloatingActionButton(
-                      onPressed: _chatId == 0 ? _createChat : _sendMessage,
-                      backgroundColor: Constants.mainColor,
-                      child: const Icon(
-                        Icons.send,
-                        color: Constants.secondaryBackgroundColor,
-                        size: 20.0,
-                      )),
-                ),
-              ],
-            ),
+              ),
+              SizedBox(
+                width: 40.0,
+                height: 40.0,
+                child: FloatingActionButton(
+                    onPressed: _chatId == 0 ? _createChat : _sendMessage,
+                    backgroundColor: Constants.mainColor,
+                    child: const Icon(
+                      Icons.send,
+                      color: Constants.secondaryBackgroundColor,
+                      size: 20.0,
+                    )),
+              ),
+            ],
           ),
         ],
       ),
