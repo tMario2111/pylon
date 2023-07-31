@@ -31,12 +31,13 @@ type Message struct {
 }
 
 type Server struct {
-	listener       net.Listener
-	quitChannel    chan struct{}
-	messageChannel chan Message
-	privateKey     *rsa.PrivateKey
-	publicKey      *rsa.PublicKey
-	db             *sql.DB
+	listener        net.Listener
+	quitChannel     chan struct{}
+	messageChannel  chan Message
+	privateKey      *rsa.PrivateKey
+	publicKey       *rsa.PublicKey
+	db              *sql.DB
+	userConnections map[int]net.Conn
 }
 
 func NewServer() (server *Server) {
@@ -52,6 +53,8 @@ func NewServer() (server *Server) {
 
 	server.quitChannel = make(chan struct{})
 	server.messageChannel = make(chan Message, 100) // TODO: No magic numbers
+
+	server.userConnections = make(map[int]net.Conn)
 
 	return server
 }
@@ -122,6 +125,7 @@ func (server *Server) read(connection net.Conn) {
 			if err != io.EOF {
 				log.Println(err.Error())
 			}
+			delete(server.userConnections, user.id)
 			return
 		}
 		data = append(data[:dataByteCount], buffer[:bufferByteCount]...)
@@ -200,7 +204,7 @@ func (server *Server) processIncomingMessages() {
 			connection.Write(newMessage)
 
 		case *pb.ClientMessage_LogIn_:
-			server.logInResponse(&messageContainer, t.LogIn)
+			server.logInResponse(&messageContainer, t.LogIn, server.userConnections)
 
 		case *pb.ClientMessage_AccountRegistration_:
 			server.accountRegistrationResponse(&messageContainer, t.AccountRegistration)
@@ -403,7 +407,7 @@ func (server *Server) processIncomingMessages() {
 			}
 
 			count := t.GetMessages.Count
-			var messages []*pb.ServerMessage_SendMessages_Message
+			var messages []*pb.ServerMessage_ChatMessage
 
 			var id uint32
 			var userId uint32
@@ -417,7 +421,7 @@ func (server *Server) processIncomingMessages() {
 					log.Println(err.Error())
 					return
 				}
-				messages = append(messages, &pb.ServerMessage_SendMessages_Message{
+				messages = append(messages, &pb.ServerMessage_ChatMessage{
 					Id: id, UserId: userId, Content: content, Timestamp: timestamp, Iv: iv, Signature: signature,
 				})
 				count--

@@ -50,16 +50,21 @@ message ServerMessage {
         string key = 1;
     }
 
+    message ChatMessage {
+        uint32 id = 1;
+        uint32 user_id = 2;
+        string content = 3;
+        uint64 timestamp = 4;
+        string iv = 5;
+        string signature = 6;
+    }
+
     message SendMessages {
-        message Message {
-            uint32 id = 1;
-            uint32 user_id = 2;
-            string content = 3;
-            uint64 timestamp = 4;
-            string iv = 5;
-            string signature = 6;
-        }
-        repeated Message messages = 1;
+        repeated ChatMessage messages = 1;
+    }
+
+    message SendLatestMessage {
+        ChatMessage message = 1;
     }
 
     oneof variant {
@@ -72,5 +77,6 @@ message ServerMessage {
         SendChatList send_chat_list = 7;
         SendChatSharedKey send_chat_shared_key = 8;
         SendMessages send_messages = 9;
+        SendLatestMessage send_latest_message = 10;
     }
 }

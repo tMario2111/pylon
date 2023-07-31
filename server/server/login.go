@@ -4,12 +4,14 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"log"
+	"net"
 	pb "pylon/proto"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (server *Server) logInResponse(messageContainer *Message, message *pb.ClientMessage_LogIn) {
+func (server *Server) logInResponse(
+	messageContainer *Message, message *pb.ClientMessage_LogIn, userConnections map[int]net.Conn) {
 
 	user := messageContainer.user
 
@@ -59,5 +61,6 @@ func (server *Server) logInResponse(messageContainer *Message, message *pb.Clien
 			return
 		}
 		user.publicKey = publicKey
+		userConnections[id] = messageContainer.connection
 	}
 }

@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:pylon/connection/crypto_util.dart';
 
 import '../constants.dart';
@@ -181,47 +180,52 @@ class _ChatRouteState extends State<ChatRoute> {
     _messageFieldController.clear();
   }
 
-  void _decryptMessages(List<ServerMessage_SendMessages_Message> messages) {
+  String? _decryptMessage(ServerMessage_ChatMessage message) {
+    final aesDecrypter = pc.PaddedBlockCipher("AES/CBC/PKCS7")
+      ..init(
+        false,
+        pc.PaddedBlockCipherParameters(
+          pc.ParametersWithIV(pc.KeyParameter(_chatSharedKey!),
+              Uint8List.fromList(message.iv.codeUnits)),
+          null,
+        ),
+      );
+    final output =
+        aesDecrypter.process(Uint8List.fromList(message.content.codeUnits));
+
+    final signature =
+        pc.RSASignature(Uint8List.fromList(message.signature.codeUnits));
+    final verifier = pc.RSASigner(pc.SHA256Digest(), '0609608648016503040201')
+      ..init(
+          false,
+          pc.PublicKeyParameter<pc.RSAPublicKey>(message.userId == _recipientId
+              ? _recipientPublicKey!
+              : Connection().publicKey!));
+    try {
+      verifier.verifySignature(
+          Uint8List.fromList(message.content.codeUnits), signature);
+    } on ArgumentError {
+      return null;
+    }
+
+    return String.fromCharCodes(output);
+  }
+
+  void _decryptMessages(List<ServerMessage_ChatMessage> messages) {
     // TODO: Better strategy
     // This is just testing (more or less)
     _messages.clear();
 
     for (final message in messages) {
-      final aesDecrypter = pc.PaddedBlockCipher("AES/CBC/PKCS7")
-        ..init(
-          false,
-          pc.PaddedBlockCipherParameters(
-            pc.ParametersWithIV(pc.KeyParameter(_chatSharedKey!),
-                Uint8List.fromList(message.iv.codeUnits)),
-            null,
-          ),
-        );
-      final output =
-          aesDecrypter.process(Uint8List.fromList(message.content.codeUnits));
-
-      final signature =
-          pc.RSASignature(Uint8List.fromList(message.signature.codeUnits));
-      final verifier = pc.RSASigner(pc.SHA256Digest(), '0609608648016503040201')
-        ..init(
-            false,
-            pc.PublicKeyParameter<pc.RSAPublicKey>(
-                message.userId == _recipientId
-                    ? _recipientPublicKey!
-                    : Connection().publicKey!));
-
-      try {
-        verifier.verifySignature(
-            Uint8List.fromList(message.content.codeUnits), signature);
-      } on ArgumentError {
-        continue;
+      final output = _decryptMessage(message);
+      if (output != null) {
+        _messages.add(Message(
+          content: output,
+          id: message.id,
+          userId: message.userId,
+          timestamp: message.timestamp,
+        ));
       }
-
-      _messages.add(Message(
-        content: String.fromCharCodes(output),
-        id: message.id,
-        userId: message.userId,
-        timestamp: message.timestamp,
-      ));
     }
     setState(() {});
   }
