@@ -384,6 +384,7 @@ func (server *Server) processIncomingMessages() {
 				}
 				connection.Write(newMessage)
 			}
+			rows.Close()
 
 		case *pb.ClientMessage_SendMessage_:
 			stmt, err := server.db.Prepare(`INSERT INTO messages (user_id, chat_id, content, timestamp, iv, signature)
@@ -392,11 +393,61 @@ func (server *Server) processIncomingMessages() {
 				log.Println(err.Error())
 				return
 			}
-			_, err = stmt.Exec(messageContainer.user.id, t.SendMessage.ChatId, t.SendMessage.Content, time.Now().Unix(),
+			timestamp := time.Now().Unix()
+			res, err := stmt.Exec(messageContainer.user.id, t.SendMessage.ChatId, t.SendMessage.Content, timestamp,
 				t.SendMessage.Iv, t.SendMessage.Signature)
 			if err != nil {
 				println(err.Error())
 			}
+			lastId, err := res.LastInsertId()
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+
+			unprocessedMessage := pb.ServerMessage{
+				Variant: &pb.ServerMessage_SendLatestMessage_{
+					SendLatestMessage: &pb.ServerMessage_SendLatestMessage{Message: &pb.ServerMessage_ChatMessage{
+						Id: uint32(lastId), UserId: uint32(messageContainer.user.id), Content: t.SendMessage.Content,
+						Timestamp: uint64(timestamp), Iv: t.SendMessage.Iv, Signature: t.SendMessage.Signature,
+					}}}}
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+
+			rows, err := server.db.Query(
+				"SELECT u.id, u.public_key FROM users u, participants p WHERE u.id = p.user_id AND p.chat_id = ?",
+				t.SendMessage.ChatId)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			var id uint32
+			var publicKey string
+			for rows.Next() {
+				err := rows.Scan(&id, &publicKey)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+				if _, exists := server.userConnections[int(id)]; !exists {
+					continue
+				}
+				block, _ := pem.Decode([]byte(publicKey))
+				decodedPublicKey, err := x509.ParsePKCS1PublicKey(block.Bytes)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+				processedMessage, err := processServerMessage(&unprocessedMessage, decodedPublicKey, server.privateKey)
+				if err != nil {
+					log.Println(err.Error())
+					return
+				}
+				server.userConnections[int(id)].Write(processedMessage)
+			}
+			rows.Close()
 
 		case *pb.ClientMessage_GetMessages_:
 			rows, err := server.db.Query(`SELECT id, user_id, content, timestamp, iv, signature FROM messages WHERE
@@ -426,6 +477,7 @@ func (server *Server) processIncomingMessages() {
 				})
 				count--
 			}
+			rows.Close()
 
 			newMessage, err := processServerMessage(&pb.ServerMessage{Variant: &pb.ServerMessage_SendMessages_{
 				SendMessages: &pb.ServerMessage_SendMessages{Messages: messages}}},

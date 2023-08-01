@@ -92,9 +92,22 @@ class _ChatRouteState extends State<ChatRoute> {
     } else if (message.hasSendChatSharedKey()) {
       _decryptChatSharedKey(message.sendChatSharedKey.key);
       Connection().sendPort.send(ClientMessage(
-          getMessages: ClientMessage_GetMessages(chatId: _chatId, count: 10)));
+          getMessages: ClientMessage_GetMessages(chatId: _chatId, count: 100)));
     } else if (message.hasSendMessages()) {
       _decryptMessages(message.sendMessages.messages);
+    } else if (message.hasSendLatestMessage()) {
+      final chatMessage = message.sendLatestMessage.message;
+      final output = _decryptMessage(chatMessage);
+      if (output != null) {
+        _messages.insert(
+            0,
+            Message(
+                id: chatMessage.id,
+                userId: chatMessage.userId,
+                content: output,
+                timestamp: chatMessage.timestamp));
+        setState(() {});
+      }
     }
   }
 
@@ -248,56 +261,58 @@ class _ChatRouteState extends State<ChatRoute> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListView.separated(
-            scrollDirection: Axis.vertical,
-            itemCount: _messages.length,
-            reverse: true,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.all(5.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.person,
-                      size: 50.0,
-                    ),
-                    Flexible(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                _messages[index].userId != _recipientId
-                                    ? 'You '
-                                    : '${widget.chatName} ',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                _formatDateTime(
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        _messages[index].timestamp.toInt() *
-                                            1000)),
-                                style: const TextStyle(color: Colors.grey),
-                              )
-                            ],
-                          ),
-                          Text(
-                            _messages[index].content,
-                          ),
-                        ],
+          Expanded(
+            child: ListView.separated(
+              scrollDirection: Axis.vertical,
+              itemCount: _messages.length,
+              reverse: true,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.person,
+                        size: 50.0,
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 10.0,
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  _messages[index].userId != _recipientId
+                                      ? 'You '
+                                      : '${widget.chatName} ',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  _formatDateTime(
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          _messages[index].timestamp.toInt() *
+                                              1000)),
+                                  style: const TextStyle(color: Colors.grey),
+                                )
+                              ],
+                            ),
+                            Text(
+                              _messages[index].content,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 10.0,
+              ),
             ),
           ),
           Row(
