@@ -584,6 +584,7 @@ class ServerMessage_ChatMessage extends $pb.GeneratedMessage {
     ..a<$fixnum.Int64>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'timestamp', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iv')
     ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'signature')
+    ..a<$core.int>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
@@ -595,6 +596,7 @@ class ServerMessage_ChatMessage extends $pb.GeneratedMessage {
     $fixnum.Int64? timestamp,
     $core.String? iv,
     $core.String? signature,
+    $core.int? type,
   }) {
     final _result = create();
     if (id != null) {
@@ -614,6 +616,9 @@ class ServerMessage_ChatMessage extends $pb.GeneratedMessage {
     }
     if (signature != null) {
       _result.signature = signature;
+    }
+    if (type != null) {
+      _result.type = type;
     }
     return _result;
   }
@@ -691,6 +696,15 @@ class ServerMessage_ChatMessage extends $pb.GeneratedMessage {
   $core.bool hasSignature() => $_has(5);
   @$pb.TagNumber(6)
   void clearSignature() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.int get type => $_getIZ(6);
+  @$pb.TagNumber(7)
+  set type($core.int v) { $_setSignedInt32(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasType() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearType() => clearField(7);
 }
 
 class ServerMessage_SendMessages extends $pb.GeneratedMessage {

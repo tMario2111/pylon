@@ -126,6 +126,7 @@ func (server *Server) read(connection net.Conn) {
 				log.Println(err.Error())
 			}
 			delete(server.userConnections, user.id)
+			log.Println("Client disconnected: ", connection.RemoteAddr())
 			return
 		}
 		data = append(data[:dataByteCount], buffer[:bufferByteCount]...)
@@ -387,15 +388,15 @@ func (server *Server) processIncomingMessages() {
 			rows.Close()
 
 		case *pb.ClientMessage_SendMessage_:
-			stmt, err := server.db.Prepare(`INSERT INTO messages (user_id, chat_id, content, timestamp, iv, signature)
-				VALUES (?, ?, ?, ?, ?, ?);`)
+			stmt, err := server.db.Prepare(`INSERT INTO messages
+				(user_id, chat_id, content, timestamp, iv, signature, type) VALUES (?, ?, ?, ?, ?, ?, ?);`)
 			if err != nil {
 				log.Println(err.Error())
 				return
 			}
 			timestamp := time.Now().Unix()
 			res, err := stmt.Exec(messageContainer.user.id, t.SendMessage.ChatId, t.SendMessage.Content, timestamp,
-				t.SendMessage.Iv, t.SendMessage.Signature)
+				t.SendMessage.Iv, t.SendMessage.Signature, t.SendMessage.Type)
 			if err != nil {
 				println(err.Error())
 			}
@@ -410,6 +411,7 @@ func (server *Server) processIncomingMessages() {
 					SendLatestMessage: &pb.ServerMessage_SendLatestMessage{Message: &pb.ServerMessage_ChatMessage{
 						Id: uint32(lastId), UserId: uint32(messageContainer.user.id), Content: t.SendMessage.Content,
 						Timestamp: uint64(timestamp), Iv: t.SendMessage.Iv, Signature: t.SendMessage.Signature,
+						Type: t.SendMessage.Type,
 					}}}}
 			if err != nil {
 				log.Println(err.Error())
@@ -450,8 +452,8 @@ func (server *Server) processIncomingMessages() {
 			rows.Close()
 
 		case *pb.ClientMessage_GetMessages_:
-			rows, err := server.db.Query(`SELECT id, user_id, content, timestamp, iv, signature FROM messages WHERE
-				chat_id = ? ORDER BY timestamp DESC`, t.GetMessages.ChatId)
+			rows, err := server.db.Query(`SELECT id, user_id, content, timestamp, iv, signature, type FROM messages 
+				WHERE chat_id = ? ORDER BY timestamp DESC`, t.GetMessages.ChatId)
 			if err != nil {
 				log.Println(err.Error())
 				return
@@ -466,14 +468,16 @@ func (server *Server) processIncomingMessages() {
 			var timestamp uint64
 			var iv string
 			var signature string
+			var messageType int32
 			for rows.Next() && count > 0 {
-				err := rows.Scan(&id, &userId, &content, &timestamp, &iv, &signature)
+				err := rows.Scan(&id, &userId, &content, &timestamp, &iv, &signature, &messageType)
 				if err != nil {
 					log.Println(err.Error())
 					return
 				}
 				messages = append(messages, &pb.ServerMessage_ChatMessage{
 					Id: id, UserId: userId, Content: content, Timestamp: timestamp, Iv: iv, Signature: signature,
+					Type: messageType,
 				})
 				count--
 			}

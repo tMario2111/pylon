@@ -57,6 +57,7 @@ message ServerMessage {
         uint64 timestamp = 4;
         string iv = 5;
         string signature = 6;
+        int32 type = 7;
     }
 
     message SendMessages {

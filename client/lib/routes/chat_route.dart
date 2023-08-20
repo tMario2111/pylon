@@ -37,6 +37,11 @@ class ChatRoute extends StatefulWidget {
   State<StatefulWidget> createState() => _ChatRouteState();
 }
 
+enum MessageType {
+  plaintext,
+  image,
+}
+
 class Message {
   final int id;
   final int userId;
@@ -186,6 +191,7 @@ class _ChatRouteState extends State<ChatRoute> {
         content: String.fromCharCodes(ciphertext),
         iv: String.fromCharCodes(iv),
         signature: String.fromCharCodes(signature.bytes),
+        type: MessageType.plaintext.index,
       ),
     );
     Connection().sendPort.send(message);

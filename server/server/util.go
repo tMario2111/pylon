@@ -22,6 +22,13 @@ const (
 	messagePartContent   messagePart = 4
 )
 
+type chatMessageType int
+
+const (
+	chatMessageTypePlaintext chatMessageType = 0
+	chatMessageTypeImage     chatMessageType = 1
+)
+
 func clearBytes(data *[]byte) {
 	for i := 0; i < len(*data); i++ {
 		(*data)[i] = 0
