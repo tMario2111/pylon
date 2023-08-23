@@ -42,6 +42,7 @@ dependencies:
   archive: ^3.3.5
   email_validator: ^2.1.17
   fixnum: ^1.1.0
+  file_picker: ^5.3.1
 
 dev_dependencies:
   flutter_test:

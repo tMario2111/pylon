@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -21,6 +22,8 @@ import 'package:pointycastle/signers/rsa_signer.dart' as pc;
 import 'package:encrypt/encrypt.dart' as enc;
 
 import 'package:fixnum/fixnum.dart' as fixnum;
+
+import 'package:file_picker/file_picker.dart';
 
 class ChatRoute extends StatefulWidget {
   const ChatRoute(
@@ -322,7 +325,43 @@ class _ChatRouteState extends State<ChatRoute> {
             ),
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              Column(
+                children: [
+                  SizedBox(
+                    width: 30.0,
+                    height: 30.0,
+                    child: FloatingActionButton(
+                        heroTag: 'btn1',
+                        onPressed: () async {
+                          final result = await FilePicker.platform.pickFiles(
+                            allowMultiple: true,
+                            type: FileType.custom,
+                            allowedExtensions: ['png', 'jpg'],
+                          );
+                          if (result != null) {
+                            final files = result.paths
+                                .map((path) => File(path!))
+                                .toList();
+                            // TODO: actually do stuff
+                            for (final file in files) {
+                              print(file.path);
+                            }
+                          }
+                        },
+                        backgroundColor: Constants.mainColor,
+                        child: const Icon(
+                          Icons.file_open,
+                          color: Constants.secondaryBackgroundColor,
+                          size: 20.0,
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  )
+                ],
+              ),
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
@@ -344,17 +383,25 @@ class _ChatRouteState extends State<ChatRoute> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 40.0,
-                height: 40.0,
-                child: FloatingActionButton(
-                    onPressed: _chatId == 0 ? _createChat : _sendMessage,
-                    backgroundColor: Constants.mainColor,
-                    child: const Icon(
-                      Icons.send,
-                      color: Constants.secondaryBackgroundColor,
-                      size: 20.0,
-                    )),
+              Column(
+                children: [
+                  SizedBox(
+                    width: 30.0,
+                    height: 30.0,
+                    child: FloatingActionButton(
+                        heroTag: 'btn2',
+                        onPressed: _chatId == 0 ? _createChat : _sendMessage,
+                        backgroundColor: Constants.mainColor,
+                        child: const Icon(
+                          Icons.send,
+                          color: Constants.secondaryBackgroundColor,
+                          size: 20.0,
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  )
+                ],
               ),
             ],
           ),
