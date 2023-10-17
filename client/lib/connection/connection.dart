@@ -17,20 +17,6 @@ import '../proto/clientmessage.pb.dart';
 import '../proto/servermessage.pb.dart';
 
 /*
-
-DISCLAIMER
-
-Honestly, this whole file is a complete mess. I hate Flutter isolates and higher
-level languages. There are like 4 controllers doing different things and also
-some listener functions that just seem to work. Also, flutter isolates don't
-work with web, so something has to be done. This file really needs to be 
-rewritten but I don't have the mental capacity to do so right now. I don't know
-if I will make this project public sometime, but if someone sees this, please
-fix this code.
-Sincerely, tMario2111
-
-
-
 TODO: Fix web
 TODO: Rewrite the whole file in a sane way
 */
