@@ -12,12 +12,12 @@ Features that are still in development:
 * Media messages (images, videos)
 
 # Running the app
-Before running the app, the keys must be set up. In the server/server directory, create a `.go` file that contantains:
+Before running the app, the keys must be set up. In the server/server directory, create a `.go` file that contains:
 ```
 const RSA_PRIVATE_KEY = "your private key goes here"
 const RSA_PUBLIC_KEY = "your public key goes here"
 ```
-Also, the server uses the `emailjs` emailing service, so you must initialize parameters as so:
+Also, the server uses the `emailjs` emailing service, so you must initialize parameters as follows:
 ```
 const (
 	EMAIL_SERVICE_ID  = "your service id goes here"
